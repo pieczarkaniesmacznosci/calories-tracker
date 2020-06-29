@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using API.Models;
+using API.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,10 +17,10 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public IEnumerable<ProductDto> Get()
         {
-            return new List<Product>(){
-                new Product{
+            return new List<ProductDto>(){
+                new ProductDto{
                     Kcal = 101d,
                     Protein = 101d,
                     Fat = 3d,
