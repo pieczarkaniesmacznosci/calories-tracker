@@ -1,6 +1,7 @@
 using API.Domain.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,9 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             // services.AddMvc();
-            services.AddControllers();
+            services.AddControllers().AddMvcOptions(options =>
+                options.OutputFormatters.Add(
+                    new XmlDataContractSerializerOutputFormatter()));
             services.AddDbContext<CaloriesLibraryContext>(options => {
                 options.UseSqlServer("DefaultConnection");
             });
@@ -63,7 +66,7 @@ namespace API
             app.UseAuthorization();
 
             app.UseStatusCodePages();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
