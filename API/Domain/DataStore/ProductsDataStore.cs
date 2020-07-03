@@ -7,6 +7,7 @@ namespace DataStore
     {
         public List<ProductDto> Products => new List<ProductDto>(){
             new ProductDto(){
+                Id = 1,
                 Name = "Chicken",
                 Kcal = 111.0d,
                 Protein = 21.0d,
@@ -14,6 +15,7 @@ namespace DataStore
                 Fat = 3.0d,
             },
             new ProductDto(){
+                Id = 2,
                 Name = "Rice",
                 Kcal = 339.5d,
                 Protein = 6.7d,
@@ -21,6 +23,7 @@ namespace DataStore
                 Fat = 0.7d,
             },
             new ProductDto(){
+                Id = 3,
                 Name = "Milky Chocolate",
                 Kcal = 580.8d,
                 Protein = 7.7d,
@@ -28,6 +31,7 @@ namespace DataStore
                 Fat = 38.4d,
             },
             new ProductDto(){
+                Id = 4,
                 Name = "White bread",
                 Kcal = 237.7d,
                 Protein = 4.0d,
