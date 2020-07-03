@@ -20,6 +20,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddMvc();
             services.AddControllers();
             services.AddDbContext<CaloriesLibraryContext>(options => {
                 options.UseSqlServer("DefaultConnection");
@@ -40,6 +41,10 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler();
+            }
 
             app.UseHttpsRedirection();
 
@@ -50,6 +55,9 @@ namespace API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             
+            //MVC middleware will handel request
+            // app.UseMvc();
+
             app.UseRouting();
 
             app.UseAuthorization();
