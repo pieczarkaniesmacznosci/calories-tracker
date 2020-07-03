@@ -22,7 +22,7 @@ namespace API
         {
             services.AddControllers();
             services.AddDbContext<CaloriesLibraryContext>(options => {
-                options.UseSqlServer("Server = (localdb)\\mssqllocaldb;Database = CaloriesTrackerLocalDb;Trusted_connection = True;");
+                options.UseSqlServer("DefaultConnection");
             });
 
             
