@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Domain.ProgramModule;
+using Autofac;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -15,11 +17,17 @@ namespace API
         public static void Main(string[] args)
         {
             var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-            
+
+
             try
             {
                 logger.Info("Initializing application...");
 
+                var containerBuilder = new ContainerBuilder();
+                containerBuilder.RegisterModule<ProgramModule>();
+                
+                var container = containerBuilder.Build();
+                
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)

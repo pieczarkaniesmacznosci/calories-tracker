@@ -5,8 +5,8 @@ namespace DataStore
 {
     public class ProductsDataStore
     {
-        public List<ProductDto> Products => new List<ProductDto>(){
-            new ProductDto(){
+        public List<ProductModel> Products => new List<ProductModel>(){
+            new ProductModel(){
                 Id = 1,
                 Name = "Chicken",
                 Kcal = 111.0d,
@@ -14,7 +14,7 @@ namespace DataStore
                 Carbohydrates = 0.0d,
                 Fat = 3.0d,
             },
-            new ProductDto(){
+            new ProductModel(){
                 Id = 2,
                 Name = "Rice",
                 Kcal = 339.5d,
@@ -22,7 +22,7 @@ namespace DataStore
                 Carbohydrates = 76.6d,
                 Fat = 0.7d,
             },
-            new ProductDto(){
+            new ProductModel(){
                 Id = 3,
                 Name = "Milky Chocolate",
                 Kcal = 580.8d,
@@ -30,7 +30,7 @@ namespace DataStore
                 Carbohydrates = 51.1d,
                 Fat = 38.4d,
             },
-            new ProductDto(){
+            new ProductModel(){
                 Id = 4,
                 Name = "White bread",
                 Kcal = 237.7d,
