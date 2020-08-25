@@ -1,6 +1,6 @@
 using Autofac;
 
-namespace API.Domain.ProgramModule
+namespace API.Web.ProgramModule
 {
     public class ProgramModule : Module
     {

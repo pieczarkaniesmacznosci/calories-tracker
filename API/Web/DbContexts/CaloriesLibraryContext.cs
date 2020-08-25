@@ -1,8 +1,8 @@
 
-using API.Domain.Entities;
+using API.Web.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Domain.DbContexts
+namespace API.Web.DbContexts
 {
     public class CaloriesLibraryContext : DbContext
     {

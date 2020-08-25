@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using API.Domain.Models;
+using API.Web.Models;
 
 namespace DataStore
 {
