@@ -435,3 +435,11 @@ $RECYCLE.BIN/
 #appsettings files
 **/appsettings.json
 **/appsettings.Development.json
+
+#db files
+*.db
+*.db-wal
+*.db-shm
+
+#settings files
+.vscode/settings.json
