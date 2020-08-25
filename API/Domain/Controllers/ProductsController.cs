@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using API.Domain.Models;
 using DataStore;
@@ -17,7 +18,7 @@ namespace Controllers
 
         public ProductsController(ILogger<ProductsController> logger)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _productsDataStore = new ProductsDataStore();
         }
 
@@ -31,12 +32,22 @@ namespace Controllers
         [Route("{id}")]
         public IActionResult GetProduct(int id)
         {
-            var productToReturn = _productsDataStore.Products.FirstOrDefault(x => x.Id == id);
+            try
+            {
+                var productToReturn = _productsDataStore.Products.FirstOrDefault(x => x.Id == id);
 
-            if(productToReturn == null){
-                return NotFound();
+                if(productToReturn == null)
+                {
+                    _logger.LogInformation($"Product with id = {id} was not found!");
+                    return NotFound();
+                }
+                return base.Ok(productToReturn);
             }
-            return base.Ok(productToReturn);
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting product with id = {id}",ex);
+                return StatusCode(500, "Error while handling the request");
+            }
         }
     }
 }

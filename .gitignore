@@ -431,3 +431,15 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+#appsettings files
+**/appsettings.json
+**/appsettings.Development.json
+
+#db files
+*.db
+*.db-wal
+*.db-shm
+
+#settings files
+.vscode/settings.json
