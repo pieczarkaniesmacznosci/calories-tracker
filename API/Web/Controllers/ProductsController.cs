@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using DataStore;
+using API.Web.Entities;
+using API.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,19 +12,18 @@ namespace Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
+        private readonly IRepository<ProductEntity> _productRepository;
 
-        private ProductsDataStore _productsDataStore { get; }
-
-        public ProductsController(ILogger<ProductsController> logger)
+        public ProductsController(ILogger<ProductsController> logger, IRepository<ProductEntity> productRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _productsDataStore = new ProductsDataStore();
+            _productRepository = productRepository;
         }
 
         [HttpGet]
         public IActionResult GetProducts()
         {
-            return Ok(_productsDataStore.Products);
+            return Ok(_productRepository.All());
         }
         
         [HttpGet]
@@ -32,7 +32,7 @@ namespace Controllers
         {
             try
             {
-                var productToReturn = _productsDataStore.Products.FirstOrDefault(x => x.Id == id);
+                var productToReturn = _productRepository.Get(id);
 
                 if(productToReturn == null)
                 {
