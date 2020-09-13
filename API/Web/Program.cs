@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using API.Web.DbContexts;
+using API.Web.Entities;
 using API.Web.ProgramModule;
+using API.Web.Repositories;
 using Autofac;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NLog.Web;
 
 namespace API
@@ -22,12 +21,6 @@ namespace API
             try
             {
                 logger.Info("Initializing application...");
-
-                var containerBuilder = new ContainerBuilder();
-                containerBuilder.RegisterModule<ProgramModule>();
-                
-                var container = containerBuilder.Build();
-                
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)

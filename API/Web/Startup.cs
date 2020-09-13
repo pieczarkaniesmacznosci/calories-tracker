@@ -1,4 +1,6 @@
 using API.Web.DbContexts;
+using API.Web.Repositories;
+using API.Web.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -6,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
+using System;
 
 namespace API
 {
@@ -26,11 +30,12 @@ namespace API
                 options.OutputFormatters.Add(
                     new XmlDataContractSerializerOutputFormatter()));
 
-            var connectionString = _configuration["connectionStrings:DefaultConnection"];
-
+             var connectionString = _configuration["DefaultConnection"];
             services.AddDbContext<CaloriesLibraryContext>(options => {
                 options.UseSqlite(connectionString);
             });
+            
+            services.AddTransient<IRepository<ProductEntity>, ProductRepository>();
 
             
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
