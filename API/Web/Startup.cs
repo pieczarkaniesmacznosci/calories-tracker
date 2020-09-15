@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
-using System;
 
 namespace API
 {
@@ -35,9 +33,8 @@ namespace API
                 options.UseSqlite(connectionString);
             });
             
-            services.AddTransient<IRepository<ProductEntity>, ProductRepository>();
+            services.AddTransient<IRepository<Product>, ProductRepository>();
 
-            
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
         }

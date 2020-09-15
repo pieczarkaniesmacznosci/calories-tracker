@@ -1,11 +1,5 @@
 using System;
-using API.Web.DbContexts;
-using API.Web.Entities;
-using API.Web.ProgramModule;
-using API.Web.Repositories;
-using Autofac;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
 

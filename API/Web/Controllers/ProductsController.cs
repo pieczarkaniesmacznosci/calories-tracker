@@ -11,9 +11,9 @@ namespace Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
-        private readonly IRepository<ProductEntity> _productRepository;
+        private readonly IRepository<Product> _productRepository;
 
-        public ProductsController(ILogger<ProductsController> logger, IRepository<ProductEntity> productRepository)
+        public ProductsController(ILogger<ProductsController> logger, IRepository<Product> productRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _productRepository = productRepository;

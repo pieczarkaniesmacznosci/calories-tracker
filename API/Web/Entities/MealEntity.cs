@@ -1,22 +1,23 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Web.Entities
 {
-    public class Product
+    public class Meal
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id {get;set;}
         [Required]
-        public string Name {get;set;}
+        public int CompositionId {get;set;}
         [Required]
-        public double Kcal {get;set;}
+        public int ProductId {get;set;}
         [Required]
-        public double Protein {get;set;}
+        public int UserId {get;set;}
         [Required]
-        public double Carbohydrates {get;set;}
+        public double Weight {get;set;}
         [Required]
-        public double Fat {get;set;}
-    }    
+        public DateTime Date {get;set;}
+    }
 }

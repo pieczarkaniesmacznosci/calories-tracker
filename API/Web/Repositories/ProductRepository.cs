@@ -4,13 +4,13 @@ using API.Web.Entities;
 
 namespace API.Web.Repositories
 {
-    public class ProductRepository : GenericRepository<ProductEntity>
+    public class ProductRepository : GenericRepository<Product>
     {
         public ProductRepository(CaloriesLibraryContext context) : base(context)
         {
         }
 
-        public override ProductEntity Update(ProductEntity entity)
+        public override Product Update(Product entity)
         {
             var product = _context.Products.Single(p => p.Id == entity.Id);
             
