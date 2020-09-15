@@ -11,6 +11,7 @@ namespace API.Web.Repositories
         T Get(int id);
         IEnumerable<T> All();
         IEnumerable<T> Find(Expression<Func<T,bool>> predicate);
+        T Delete(T entity);
         void SaveChanges();
     }
 }

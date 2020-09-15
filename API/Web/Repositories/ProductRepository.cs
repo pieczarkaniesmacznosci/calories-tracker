@@ -22,5 +22,12 @@ namespace API.Web.Repositories
 
             return base.Update(product);
         } 
+        
+        public override Product Delete(Product entity)
+        {
+            var product = _context.Products.Single(p => p.Id == entity.Id);
+
+            return base.Delete(product);
+        }
     }
 }

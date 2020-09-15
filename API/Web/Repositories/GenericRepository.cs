@@ -44,5 +44,10 @@ namespace API.Web.Repositories
         {
             return _context.Update(entity).Entity;
         }
+        
+        public virtual T Delete(T entity)
+        {
+            return _context.Remove(entity).Entity;
+        }
     }
 }
