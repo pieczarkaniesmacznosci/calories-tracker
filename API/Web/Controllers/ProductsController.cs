@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using API.Web.Entities;
+using API.Web.Logic;
 using API.Web.Models;
 using API.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -13,18 +14,18 @@ namespace Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
-        private readonly IRepository<Product> _productRepository;
+        private readonly ILogic _logic;
 
-        public ProductsController(ILogger<ProductsController> logger, IRepository<Product> productRepository)
+        public ProductsController(ILogger<ProductsController> logger, ILogic logic)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _productRepository = productRepository;
+            _logic = logic;
         }
 
         [HttpGet]
         public IActionResult GetProducts()
         {
-            return Ok(_productRepository.All());
+            return Ok(_logic.GetProducts());
         }
         
         [HttpGet]
@@ -33,7 +34,7 @@ namespace Controllers
         {
             try
             {
-                var productToReturn = _productRepository.Get(id);
+                var productToReturn = _logic.GetProduct(id);
 
                 if(productToReturn == null)
                 {
@@ -55,7 +56,7 @@ namespace Controllers
         {
             try
             {
-                 var productToReturn = _productRepository.Find(x=>x.Name.Contains(productName));
+                 var productToReturn = _logic.GetProducts(productName);
                 if(productToReturn == null)
                 {
                     _logger.LogInformation($"Product with name = {productName} was not found!");
@@ -75,22 +76,8 @@ namespace Controllers
         {
             try
             {
-                var productEntity = new Product{
-                    Name = product.Name,
-                    Kcal = product.Kcal,
-                    Protein = product.Protein,
-                    Carbohydrates= product.Carbohydrates,
-                    Fat = product.Fat
-                };
-
-                var productToReturn = _productRepository.Add(productEntity);
-                _productRepository.SaveChanges();
-                if(productToReturn == null)
-                {
-                    _logger.LogInformation($"Product with id = {product.Name} was not found!");
-                    return NotFound();
-                }
-                return base.Ok(productToReturn);
+                var result = _logic.AddProduct(product);
+                return base.Ok(result);
             }
             catch(Exception ex)
             {
@@ -104,25 +91,16 @@ namespace Controllers
         {
             try
             {
-                 var productToReturn = _productRepository.Get(product.Id);
-                if(productToReturn == null)
-                {
-                    _logger.LogInformation($"Product with id = {product.Id} was not found!");
-                    return NotFound();
-                }
+                // var productToReturn = _productRepository.Get(product.Id);
+                // if(productToReturn == null)
+                // {
+                //     _logger.LogInformation($"Product with id = {product.Id} was not found!");
+                //     return NotFound();
+                // }
 
-                var productEntity = new Product{
-                    Id = product.Id,
-                    Name = product.Name,
-                    Kcal = product.Kcal,
-                    Protein = product.Protein,
-                    Carbohydrates= product.Carbohydrates,
-                    Fat = product.Fat
-                };
-                
-                productToReturn = _productRepository.Update(productEntity);
-                _productRepository.SaveChanges();
-                return base.Ok(productToReturn);
+                var result = _logic.EditProduct(product);
+                return base.Ok(result);
+
             }
             catch(Exception ex)
             {
@@ -136,17 +114,13 @@ namespace Controllers
         {
             try
             {
-                var productToReturn = _productRepository.Find(x=>x.Id == id).SingleOrDefault();
-                if(productToReturn == null)
-                {
-                    _logger.LogInformation($"Product with id = {id} was not found!");
-                    return NotFound();
-                }
-                
-                _productRepository.Delete(productToReturn);
-                _productRepository.SaveChanges();
-
-                return base.Ok(productToReturn);
+                var result = _logic.DeleteProduct(id);
+                return base.Ok(result);
+                // if(productToReturn == null)
+                // {
+                //     _logger.LogInformation($"Product with id = {id} was not found!");
+                //     return NotFound();
+                // }
             }
             catch(Exception ex)
             {

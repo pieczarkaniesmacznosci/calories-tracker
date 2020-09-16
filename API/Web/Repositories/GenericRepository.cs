@@ -27,7 +27,7 @@ namespace API.Web.Repositories
 
         public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().AsQueryable().Where(predicate).ToList();
+            return _context.Set<T>().AsQueryable<T>().Where(predicate).ToList();
         }
 
         public virtual T Get(int id)
