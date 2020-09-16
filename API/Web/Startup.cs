@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using API.Web;
-using API.Web.Logic;
+using API.Web.Service;
 
 namespace API
 {
@@ -46,7 +46,7 @@ namespace API
             services.AddSingleton(mapper);
 
             services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<ILogic, ProductLogic>();
+            services.AddTransient<IService, ProductService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();

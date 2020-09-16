@@ -1,53 +1,36 @@
 ﻿using System;
-using System.Linq;
-using API.Web.Entities;
 using API.Web.Service;
 using API.Web.Models;
-using API.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using API.Web.Controllers;
 
 namespace Controllers
 {
     [ApiController]
     [Route("api/products")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseController
     {
         private readonly ILogger<ProductsController> _logger;
-        private readonly IService _logic;
+        private readonly IService _service;
 
-        public ProductsController(ILogger<ProductsController> logger, IService logic)
+        public ProductsController(ILogger<ProductsController> logger, IService service)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _logic = logic;
+            _service = service;
         }
 
         [HttpGet]
         public IActionResult GetProducts()
         {
-            return Ok(_logic.GetProducts());
+            return base.FromResult(_service.GetProducts());
         }
         
         [HttpGet]
         [Route("id/{id}")]
         public IActionResult GetProduct(int id)
         {
-            try
-            {
-                var productToReturn = _logic.GetProduct(id);
-
-                if(productToReturn == null)
-                {
-                    _logger.LogInformation($"Product with id = {id} was not found!");
-                    return NotFound();
-                }
-                return base.Ok(productToReturn);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogCritical($"Exception while getting product with id = {id}",ex);
-                return StatusCode(500, "Error while handling the request");
-            }
+            return base.FromResult(_service.GetProduct(id));
         }
         
         [HttpGet]
@@ -56,13 +39,10 @@ namespace Controllers
         {
             try
             {
-                 var productToReturn = _logic.GetProducts(productName);
-                if(productToReturn == null)
-                {
-                    _logger.LogInformation($"Product with name = {productName} was not found!");
-                    return NotFound();
-                }
-                return base.Ok(productToReturn);
+                var result = _logic.GetProducts(productName);
+                return this.FromResult<ProductDto>(result);
+               
+                // return base.Ok(productToReturn);
             }
             catch(Exception ex)
             {
@@ -72,7 +52,7 @@ namespace Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProduct(ProductModel product)
+        public IActionResult AddProduct(ProductDto product)
         {
             try
             {
@@ -87,7 +67,7 @@ namespace Controllers
         }
 
         [HttpPut]
-        public IActionResult EditProduct(ProductModel product)
+        public IActionResult EditProduct(ProductDto product)
         {
             try
             {

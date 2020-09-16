@@ -6,8 +6,8 @@ namespace API.Web
 {
      public class MappingProfile : Profile {
      public MappingProfile() {
-         CreateMap<Product, ProductModel>();
-         CreateMap<ProductModel, Product>();
+         CreateMap<Product, ProductDto>();
+         CreateMap<ProductDto, Product>();
      }
  }
 }
