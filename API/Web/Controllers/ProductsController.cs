@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using API.Web.Entities;
-using API.Web.Logic;
+using API.Web.Service;
 using API.Web.Models;
 using API.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +14,9 @@ namespace Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
-        private readonly ILogic _logic;
+        private readonly IService _logic;
 
-        public ProductsController(ILogger<ProductsController> logger, ILogic logic)
+        public ProductsController(ILogger<ProductsController> logger, IService logic)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _logic = logic;

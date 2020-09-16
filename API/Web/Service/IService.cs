@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using API.Web.Entities;
 using API.Web.Models;
 
-namespace API.Web.Logic
+namespace API.Web.Service
 {
-    public interface ILogic
+    public interface IService
     {
         IEnumerable<Product> GetProducts();
         Product GetProduct(int id);

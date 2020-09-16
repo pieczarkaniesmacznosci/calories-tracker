@@ -5,14 +5,14 @@ using API.Web.Models;
 using API.Web.Repositories;
 using AutoMapper;
 
-namespace API.Web.Logic
+namespace API.Web.Service
 {
-    public class ProductLogic : ILogic
+    public class ProductService : IService
     {
         private readonly IRepository<Product> _productRepository;
         private readonly IMapper _mapper;
 
-        public ProductLogic(IRepository<Product> productRepository, IMapper mapper)
+        public ProductService(IRepository<Product> productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;
