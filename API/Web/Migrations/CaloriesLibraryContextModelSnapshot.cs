@@ -22,17 +22,8 @@ namespace Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CompositionId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<double>("Weight")
                         .HasColumnType("REAL");
@@ -40,6 +31,30 @@ namespace Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Meals");
+                });
+
+            modelBuilder.Entity("API.Web.Entities.MealElement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MealId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MealId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("MealElements");
                 });
 
             modelBuilder.Entity("API.Web.Entities.Product", b =>
@@ -105,6 +120,19 @@ namespace Web.Migrations
                             Name = "White bread",
                             Protein = 4.0
                         });
+                });
+
+            modelBuilder.Entity("API.Web.Entities.MealElement", b =>
+                {
+                    b.HasOne("API.Web.Entities.Meal", null)
+                        .WithMany("MealElements")
+                        .HasForeignKey("MealId");
+
+                    b.HasOne("API.Web.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

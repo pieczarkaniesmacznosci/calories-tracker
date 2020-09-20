@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace API.Web.Controllers
 {
     [ApiController]
-    [Route("api/products")]
+    [Route("api/meals")]
     public class MealsController : BaseController
     {
         private readonly ILogger<MealsController> _logger;
@@ -33,7 +33,7 @@ namespace API.Web.Controllers
         }
         
         [HttpGet]
-        [Route("name/{mealName}")]
+        [Route("name/{mealDate}")]
         public IActionResult FindMealByDate(DateTime mealDate)
         {
             return base.FromResult(_service.GetMeals(mealDate));

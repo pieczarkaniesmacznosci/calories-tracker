@@ -11,12 +11,9 @@ namespace API.Web.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id {get;set;}
-        [Required]
-        public int MealElamentId {get;set;}
-        [Required]
-        public IEnumerable<MealElementEntity> MealElements {get;set;}
-        [Required]
-        public double Weight {get => MealElements.Sum(x=>x.Weight);}
+        //public int MealElementsId {get;set;}
+        public IEnumerable<MealElement> MealElements {get;set;}
+        public double Weight {get;set;}// => MealElements.Sum(x=>x.Weight);}
         [Required]
         public DateTime Date {get;set;}
     }

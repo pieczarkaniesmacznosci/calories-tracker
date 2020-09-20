@@ -14,6 +14,7 @@ namespace API.Web.DbContexts
 
         public DbSet<Product> Products{get; set;}
         public DbSet<Meal> Meals{get;set;}
+        public DbSet<MealElement> MealElements{get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

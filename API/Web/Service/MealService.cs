@@ -95,7 +95,7 @@ namespace API.Web.Service
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while adding meal {meal.MealCompositionId}",ex);
+                _logger.LogCritical($"Exception while adding meal from {meal.Date}",ex);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -120,7 +120,7 @@ namespace API.Web.Service
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while editing meal with id = {meal.MealCompositionId}",ex);
+                _logger.LogCritical($"Exception while editing meal from {meal.Date}",ex);
                 return new UnexpectedResult<MealDto>();
             }
         }

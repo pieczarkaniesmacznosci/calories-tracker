@@ -48,6 +48,9 @@ namespace API
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IProductService, ProductService>();
 
+            services.AddTransient<IRepository<Meal>, MealRepository>();
+            services.AddTransient<IMealService, MealService>();
+
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
         }

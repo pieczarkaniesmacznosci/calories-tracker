@@ -4,12 +4,15 @@ using AutoMapper;
 
 namespace API.Web
 {
-     public class MappingProfile : Profile {
-     public MappingProfile() {
-         CreateMap<Product, ProductDto>();
-         CreateMap<ProductDto, Product>();
-         CreateMap<Meal, MealDto>();
-         CreateMap<MealDto, Meal>();
-     }
- }
+    public class MappingProfile : Profile 
+    {
+        public MappingProfile() {
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>();
+            CreateMap<Meal, MealDto>();
+            CreateMap<MealDto, Meal>();
+            CreateMap<MealElement, MealElementDto>();
+            CreateMap<MealElementDto, MealElement>();
+        }
+    }
 }
