@@ -41,16 +41,16 @@ namespace API.Web.Service
         {
             try
             {                
-                var productToReturn = _productRepository.Get(id);
+                var product = _productRepository.Get(id);
 
-                if(productToReturn == null)
+                if(product == null)
                 {
                     _logger.LogInformation($"Product with id = {id} was not found!");
                     return new NotFoundResult<ProductDto>();
                 }
 
-                var result = _mapper.Map<ProductDto>(_productRepository.Get(id));
-                return new SuccessResult<ProductDto>(result);
+                var productDto = _mapper.Map<ProductDto>(product);
+                return new SuccessResult<ProductDto>(productDto);
             }
             catch(Exception ex)
             {
@@ -59,33 +59,93 @@ namespace API.Web.Service
             }
         }
 
-        public IEnumerable<Product> GetProducts(string productName)
+        public Result<IEnumerable<ProductDto>> GetProducts(string productName)
         {
-            return _productRepository.All().Where(x=>x.Name.StartsWith(productName,System.StringComparison.InvariantCulture));
+            try
+            { 
+                var products = _productRepository
+                    .All()
+                    .Where(x=>x.Name.StartsWith(productName,System.StringComparison.InvariantCulture))
+                    .ToList();
+
+                if(products.Count == 0)
+                {
+                    _logger.LogInformation($"No products starting with {productName} were found!");
+                    return new NotFoundResult<IEnumerable<ProductDto>>();
+                }
+
+                var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
+                return new SuccessResult<IEnumerable<ProductDto>>(productsDto);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting products",ex);
+                return new UnexpectedResult<IEnumerable<ProductDto>>();
+            }
         }
 
-        public Product AddProduct(ProductDto product)
+        public Result<ProductDto> AddProduct(ProductDto product)
         {
-            var entity = _mapper.Map<Product>(product);
-            var result = _productRepository.Add(entity);
-            _productRepository.SaveChanges();
-            return result;
+            try
+            {
+                var productEntity = _mapper.Map<Product>(product);
+                var result = _productRepository.Add(productEntity);
+                _productRepository.SaveChanges();
+                return new SuccessResult<ProductDto>(_mapper.Map<ProductDto>(result));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while adding product with name = {product.Name}",ex);
+                return new UnexpectedResult<ProductDto>();
+            }
         }
 
-        public Product EditProduct(ProductDto product)
+        public Result<ProductDto> EditProduct(ProductDto product)
         {
-            var entity = _mapper.Map<Product>(product);
-            var result = _productRepository.Update(entity);
-            _productRepository.SaveChanges();
-            return result;
+            try
+            {                
+                var productToEdit = _productRepository.Get(product.Id);
+
+                if(productToEdit == null)
+                {
+                    _logger.LogInformation($"Product with id = {product.Id} was not found!");
+                    return new NotFoundResult<ProductDto>();
+                }
+
+                var productEntity = _mapper.Map<Product>(product);
+                var result = _productRepository.Update(productEntity);
+                _productRepository.SaveChanges();
+
+                return new SuccessResult<ProductDto>(_mapper.Map<ProductDto>(result));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while adding editing with name = {product.Name}",ex);
+                return new UnexpectedResult<ProductDto>();
+            }
         }
 
-        public Product DeleteProduct(int id)
+        public Result<ProductDto> DeleteProduct(int id)
         {
-            var productToDelete = _productRepository.Find(x=>x.Id == id).SingleOrDefault();
-            var result = _productRepository.Delete(productToDelete);
-            _productRepository.SaveChanges();
-            return result;
+            try
+            {
+                var productToDelete = _productRepository.Get(id);
+
+                if(productToDelete == null)
+                {
+                    _logger.LogInformation($"Product with id = {id} was not found!");
+                    return new NotFoundResult<ProductDto>();
+                }
+
+                var result = _productRepository.Delete(productToDelete);
+                _productRepository.SaveChanges();
+                return new SuccessResult<ProductDto>(_mapper.Map<ProductDto>(result));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while deleting product with id = {id}",ex);
+                return new UnexpectedResult<ProductDto>();
+            }
         }
     }
 }
