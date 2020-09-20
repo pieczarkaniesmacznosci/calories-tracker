@@ -46,7 +46,7 @@ namespace API
             services.AddSingleton(mapper);
 
             services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<IService, ProductService>();
+            services.AddTransient<IProductService, ProductService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();

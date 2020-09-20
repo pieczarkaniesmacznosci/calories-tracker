@@ -1,5 +1,5 @@
 using API.Web.Entities;
-using API.Web.Models;
+using API.Web.Dtos;
 using AutoMapper;
 
 namespace API.Web
@@ -8,6 +8,8 @@ namespace API.Web
      public MappingProfile() {
          CreateMap<Product, ProductDto>();
          CreateMap<ProductDto, Product>();
+         CreateMap<Meal, MealDto>();
+         CreateMap<MealDto, Meal>();
      }
  }
 }

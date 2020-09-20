@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using API.Web.Models;
+using API.Web.Dtos;
 using API.Web.Result;
 
 namespace API.Web.Service
 {
-    public interface IService
+    public interface IProductService
     {
         Result<ProductDto> GetProduct(int id);
         Result<IEnumerable<ProductDto>> GetProducts();

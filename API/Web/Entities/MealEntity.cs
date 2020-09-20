@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace API.Web.Entities
 {
@@ -10,13 +12,11 @@ namespace API.Web.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id {get;set;}
         [Required]
-        public int CompositionId {get;set;}
+        public int MealElamentId {get;set;}
         [Required]
-        public int ProductId {get;set;}
+        public IEnumerable<MealElementEntity> MealElements {get;set;}
         [Required]
-        public int UserId {get;set;}
-        [Required]
-        public double Weight {get;set;}
+        public double Weight {get => MealElements.Sum(x=>x.Weight);}
         [Required]
         public DateTime Date {get;set;}
     }

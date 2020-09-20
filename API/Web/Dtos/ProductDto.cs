@@ -1,4 +1,4 @@
-namespace API.Web.Models
+namespace API.Web.Dtos
 {
     public class ProductDto
     {

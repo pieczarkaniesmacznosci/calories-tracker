@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using API.Web.Entities;
-using API.Web.Models;
+using API.Web.Dtos;
 using API.Web.Repositories;
 using API.Web.Result;
 using AutoMapper;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Web.Service
 {
-    public class ProductService : IService
+    public class ProductService : IProductService
     {
         private readonly ILogger<ProductService> _logger;
         private readonly IRepository<Product> _productRepository;
