@@ -14,7 +14,7 @@ namespace API.Web.Repositories
         {
             var meal = _context.Meals.Single(m => m.Id == entity.Id);
             
-            meal.MealElements = entity.MealElements;
+            meal.MealProducts = entity.MealProducts;
 
             return base.Update(meal);
         } 

@@ -33,28 +33,25 @@ namespace Web.Migrations
                     b.ToTable("Meals");
                 });
 
-            modelBuilder.Entity("API.Web.Entities.MealElement", b =>
+            modelBuilder.Entity("API.Web.Entities.MealProduct", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("MealId")
+                    b.Property<int>("MealId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("Weight")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("MealId");
+                    b.HasKey("MealId", "ProductId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("MealElements");
+                    b.ToTable("MealProducts");
                 });
 
             modelBuilder.Entity("API.Web.Entities.Product", b =>
@@ -73,7 +70,6 @@ namespace Web.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Protein")
@@ -122,14 +118,16 @@ namespace Web.Migrations
                         });
                 });
 
-            modelBuilder.Entity("API.Web.Entities.MealElement", b =>
+            modelBuilder.Entity("API.Web.Entities.MealProduct", b =>
                 {
-                    b.HasOne("API.Web.Entities.Meal", null)
-                        .WithMany("MealElements")
-                        .HasForeignKey("MealId");
+                    b.HasOne("API.Web.Entities.Meal", "Meal")
+                        .WithMany("MealProducts")
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Web.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("MealProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
