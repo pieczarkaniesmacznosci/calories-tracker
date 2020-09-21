@@ -1,4 +1,5 @@
 
+using System;
 using API.Web.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +22,10 @@ namespace API.Web.DbContexts
             modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
 
             PopulateProductTable(modelBuilder);
-
+            PopulateMealTable(modelBuilder);
+            PopulateMealProductTable(modelBuilder);
         }
-
+        
         private static void PopulateProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
@@ -65,5 +67,40 @@ namespace API.Web.DbContexts
                             }
                         );
         }
+        private static void PopulateMealTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Meal>().HasData(
+                            new Meal()
+                            {
+                                Id = 1,
+                                Date = DateTime.Now
+                            }
+                        );
+        }
+        private static void PopulateMealProductTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MealProduct>().HasData(
+                            new MealProduct()
+                            {
+                                Id = 1,
+                                MealId = 1,
+                                ProductId = 1,
+                                Weight = 200.0d 
+                            },new MealProduct()
+                            {
+                                Id = 2,
+                                MealId = 1,
+                                ProductId = 2,
+                                Weight = 60.0d 
+                            },new MealProduct()
+                            {
+                                Id = 3,
+                                MealId = 1,
+                                ProductId = 4,
+                                Weight = 35.0d 
+                            }
+                        );
+        }
+
     }
 }

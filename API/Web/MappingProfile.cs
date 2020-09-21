@@ -11,8 +11,8 @@ namespace API.Web
             CreateMap<ProductDto, Product>();
             CreateMap<Meal, MealDto>();
             CreateMap<MealDto, Meal>();
-            CreateMap<MealProduct, MealElementDto>();
-            CreateMap<MealElementDto, MealProduct>();
+            // CreateMap<MealProduct, MealProductDto>();
+            // CreateMap<MealProductDto, MealProduct>();
         }
     }
 }

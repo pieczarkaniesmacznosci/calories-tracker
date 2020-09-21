@@ -25,12 +25,16 @@ namespace Web.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Weight")
-                        .HasColumnType("REAL");
-
                     b.HasKey("Id");
 
                     b.ToTable("Meals");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Date = new DateTime(2020, 9, 21, 20, 39, 8, 914, DateTimeKind.Local).AddTicks(4565)
+                        });
                 });
 
             modelBuilder.Entity("API.Web.Entities.MealProduct", b =>
@@ -52,6 +56,29 @@ namespace Web.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("MealProducts");
+
+                    b.HasData(
+                        new
+                        {
+                            MealId = 1,
+                            ProductId = 1,
+                            Id = 1,
+                            Weight = 200.0
+                        },
+                        new
+                        {
+                            MealId = 1,
+                            ProductId = 2,
+                            Id = 2,
+                            Weight = 60.0
+                        },
+                        new
+                        {
+                            MealId = 1,
+                            ProductId = 4,
+                            Id = 3,
+                            Weight = 35.0
+                        });
                 });
 
             modelBuilder.Entity("API.Web.Entities.Product", b =>

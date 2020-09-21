@@ -1,6 +1,6 @@
 namespace API.Web.Entities
 {
-    public class MealElementDto
+    public class MealProductDto
     {
         public int Id {get;set;}
         public int ProductId {get;set;}
