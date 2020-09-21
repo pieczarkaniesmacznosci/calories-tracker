@@ -27,7 +27,7 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetMeals(int userId)
+        public IActionResult GetMeals()
         {
             return base.FromResult(_service.GetMeals());
         }

@@ -27,7 +27,8 @@ namespace API.Web.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<MealDto>>(_mealRepository.All());
+                var a = _mealRepository.All();
+                var result = _mapper.Map<IEnumerable<MealDto>>(a);
                 return new SuccessResult<IEnumerable<MealDto>>(result);
             }
             catch(Exception ex)
@@ -42,9 +43,7 @@ namespace API.Web.Service
             try
             {
                 var meals = _mealRepository
-                    .All()
-                    .Where(x=>x.Date.Date == mealDate.Date)
-                    .ToList();
+                    .Find(x=>x.Date.Date == mealDate.Date).ToList();
 
                 if(meals.Count == 0)
                 {

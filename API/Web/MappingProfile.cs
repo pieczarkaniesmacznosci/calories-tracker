@@ -9,10 +9,17 @@ namespace API.Web
         public MappingProfile() {
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>();
-            CreateMap<Meal, MealDto>();
+            CreateMap<Meal, MealDto>()
+                .ForMember(
+                    dest=>dest.MealProducts, 
+                    opt=>opt.MapFrom(src=>src.MealProducts));
+            CreateMap<MealDto, Meal>()
+                .ForMember(
+                    dest=>dest.MealProducts, 
+                    opt=>opt.MapFrom(src=>src.MealProducts));
             CreateMap<MealDto, Meal>();
-            // CreateMap<MealProduct, MealProductDto>();
-            // CreateMap<MealProductDto, MealProduct>();
+            CreateMap<MealProduct, MealProductDto>();
+            CreateMap<MealProductDto, MealProduct>();
         }
     }
 }
