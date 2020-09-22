@@ -8,8 +8,9 @@ namespace API.Web.Service
     public interface IMealService
     {
         Result<MealDto> GetMeal(int id);
-        Result<IEnumerable<MealDto>> GetMeals();
+        Result<IEnumerable<MealDto>> GetMeals(bool isSaved);
         Result<IEnumerable<MealDto>> GetMeals(DateTime mealDate);
+        Result<MealDto> ConsumeSavedMeal(int mealId, double portion);
         Result<MealDto> AddMeal(MealDto meal);
         Result<MealDto> EditMeal(MealDto meal);
         Result<MealDto> DeleteMeal(int id);

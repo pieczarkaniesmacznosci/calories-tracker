@@ -22,7 +22,13 @@ namespace Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateEaten")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSaved")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MealName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -33,7 +39,8 @@ namespace Web.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2020, 9, 21, 20, 39, 8, 914, DateTimeKind.Local).AddTicks(4565)
+                            DateEaten = new DateTime(2020, 9, 22, 22, 43, 56, 951, DateTimeKind.Local).AddTicks(3120),
+                            IsSaved = false
                         });
                 });
 
@@ -45,9 +52,6 @@ namespace Web.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
-
                     b.Property<double>("Weight")
                         .HasColumnType("REAL");
 
@@ -55,28 +59,25 @@ namespace Web.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("MealProducts");
+                    b.ToTable("MealProduct");
 
                     b.HasData(
                         new
                         {
                             MealId = 1,
                             ProductId = 1,
-                            Id = 1,
                             Weight = 200.0
                         },
                         new
                         {
                             MealId = 1,
                             ProductId = 2,
-                            Id = 2,
                             Weight = 60.0
                         },
                         new
                         {
                             MealId = 1,
                             ProductId = 4,
-                            Id = 3,
                             Weight = 35.0
                         });
                 });

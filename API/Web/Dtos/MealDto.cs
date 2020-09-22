@@ -7,8 +7,10 @@ namespace API.Web.Dtos
     public class MealDto
     {
         public int Id { get; set; }
-        public IEnumerable<MealProductDto> MealProducts {get;set;}
+        public bool IsSaved {get;set;}
+        public string MealName {get;set;}
         public double Weight { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime DateEaten { get; set; }
+        public IEnumerable<MealProductDto> MealProducts {get;set;}
     }
 }

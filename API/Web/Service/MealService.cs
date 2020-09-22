@@ -7,6 +7,7 @@ using API.Web.Result;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using API.Web.Extensions;
 
 namespace API.Web.Service
 {
@@ -23,12 +24,11 @@ namespace API.Web.Service
             _mapper = mapper;
         }
 
-        public Result<IEnumerable<MealDto>> GetMeals()
+        public Result<IEnumerable<MealDto>> GetMeals(bool isSaved)
         {
             try
             {
-                var a = _mealRepository.All();
-                var result = _mapper.Map<IEnumerable<MealDto>>(a);
+                var result = _mapper.Map<IEnumerable<MealDto>>(_mealRepository.Find(x=>x.IsSaved == isSaved));
                 return new SuccessResult<IEnumerable<MealDto>>(result);
             }
             catch(Exception ex)
@@ -43,7 +43,7 @@ namespace API.Web.Service
             try
             {
                 var meals = _mealRepository
-                    .Find(x=>x.Date.Date == mealDate.Date).ToList();
+                    .Find(x=>x.DateEaten.Date == mealDate.Date && !x.IsSaved).ToList();
 
                 if(meals.Count == 0)
                 {
@@ -94,7 +94,7 @@ namespace API.Web.Service
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while adding meal from {meal.Date}",ex);
+                _logger.LogCritical($"Exception while adding meal from {meal.DateEaten}",ex);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -119,7 +119,7 @@ namespace API.Web.Service
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while editing meal from {meal.Date}",ex);
+                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}",ex);
                 return new UnexpectedResult<MealDto>();
             }
         }

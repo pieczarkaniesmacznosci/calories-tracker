@@ -36,7 +36,7 @@ namespace API.Web.Repositories
                 .Meals
                 .Include(x=>x.MealProducts)
                 .ToList();
-        } 
+        }
 
         public override Meal Update(Meal entity)
         {

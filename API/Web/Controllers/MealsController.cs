@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace API.Web.Controllers
 {
     [ApiController]
-    [Route("api/meals")]
+    [Route("api/")]
     public class MealsController : BaseController
     {
         private readonly ILogger<MealsController> _logger;
@@ -20,38 +20,42 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
-        [Route("id/{id}")]
+        [Route("meal/{id}")]
         public IActionResult GetMeal(int id)
         {
             return base.FromResult(_service.GetMeal(id));
         }
 
         [HttpGet]
-        public IActionResult GetMeals()
+        [Route("meals/{isSaved:bool}")]
+        public IActionResult GetMeals(bool isSaved)
         {
-            return base.FromResult(_service.GetMeals());
+            return base.FromResult(_service.GetMeals(isSaved));
         }
         
         [HttpGet]
-        [Route("name/{mealDate}")]
-        public IActionResult FindMealByDate(DateTime mealDate)
+        [Route("meals/{mealDate:dateTime}")]
+        public IActionResult FindMealsByDate(DateTime mealDate)
         {
             return base.FromResult(_service.GetMeals(mealDate));
         }
 
         [HttpPost]
+        [Route("meal")]
         public IActionResult AddMeal(MealDto meal)
         {
             return base.FromResult(_service.AddMeal(meal));
         }
 
         [HttpPut]
+        [Route("meal")]
         public IActionResult EditMeal(MealDto meal)
         {
             return base.FromResult(_service.EditMeal(meal));
         }
         
         [HttpDelete]
+        [Route("meal")]
         public IActionResult DeleteMeal(int id)
         {
             return base.FromResult(_service.DeleteMeal(id));
