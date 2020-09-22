@@ -13,13 +13,14 @@ namespace API.Web.DbContexts
             Database.Migrate();
         }
 
-        public DbSet<Product> Products{get; set;}
-        public DbSet<Meal> Meals{get;set;}
-        public DbSet<MealProduct> MealProducts{get;set;}
+        public DbSet<Product> Products {get; set;}
+        public DbSet<Meal> Meals {get;set;}
+        public DbSet<Dish> Dishes {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
+            modelBuilder.Entity<DishProduct>().HasKey(dp => new { dp.DishId, dp.ProductId });
 
             PopulateProductTable(modelBuilder);
             PopulateMealTable(modelBuilder);
