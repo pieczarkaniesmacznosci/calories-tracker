@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using API.Web.DbContexts;
+using API.Web.Entities;
+using API.Web.Extensions;
 
 namespace API.Web.Repositories
 {
-    public abstract class GenericRepository<T> : IRepository<T> where T : class
+    public abstract class GenericRepository<T> : IRepository<T> where T : Entity, new()
     {
         protected CaloriesLibraryContext _context;
 
@@ -27,7 +29,7 @@ namespace API.Web.Repositories
 
         public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().AsQueryable().Where(predicate).ToList();
+            return _context.Set<T>().AsQueryable<T>().Where(predicate).ToList();
         }
 
         public virtual T Get(int id)
@@ -48,6 +50,11 @@ namespace API.Web.Repositories
         public virtual T Delete(T entity)
         {
             return _context.Remove(entity).Entity;
+        }
+        public virtual T Clone (T entity)
+        {
+            var newEntity = CloneExtension.Clone(entity);
+            return newEntity;
         }
     }
 }

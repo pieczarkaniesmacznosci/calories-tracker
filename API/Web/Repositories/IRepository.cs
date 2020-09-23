@@ -12,6 +12,7 @@ namespace API.Web.Repositories
         IEnumerable<T> All();
         IEnumerable<T> Find(Expression<Func<T,bool>> predicate);
         T Delete(T entity);
+        T Clone (T entity);
         void SaveChanges();
     }
 }

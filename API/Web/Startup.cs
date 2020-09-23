@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
+using API.Web;
+using API.Web.Service;
 
 namespace API
 {
@@ -33,7 +36,20 @@ namespace API
                 options.UseSqlite(connectionString);
             });
             
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddTransient<IRepository<Product>, ProductRepository>();
+            services.AddTransient<IProductService, ProductService>();
+
+            services.AddTransient<IRepository<Meal>, MealRepository>();
+            services.AddTransient<IMealService, MealService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();

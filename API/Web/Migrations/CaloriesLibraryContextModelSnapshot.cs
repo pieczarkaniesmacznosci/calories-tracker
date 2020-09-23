@@ -22,24 +22,64 @@ namespace Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CompositionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateEaten")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProductId")
+                    b.Property<bool>("IsSaved")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("MealName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Meals");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateEaten = new DateTime(2020, 9, 22, 22, 43, 56, 951, DateTimeKind.Local).AddTicks(3120),
+                            IsSaved = false
+                        });
+                });
+
+            modelBuilder.Entity("API.Web.Entities.MealProduct", b =>
+                {
+                    b.Property<int>("MealId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Weight")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("MealId", "ProductId");
 
-                    b.ToTable("Meals");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("MealProduct");
+
+                    b.HasData(
+                        new
+                        {
+                            MealId = 1,
+                            ProductId = 1,
+                            Weight = 200.0
+                        },
+                        new
+                        {
+                            MealId = 1,
+                            ProductId = 2,
+                            Weight = 60.0
+                        },
+                        new
+                        {
+                            MealId = 1,
+                            ProductId = 4,
+                            Weight = 35.0
+                        });
                 });
 
             modelBuilder.Entity("API.Web.Entities.Product", b =>
@@ -58,7 +98,6 @@ namespace Web.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Protein")
@@ -105,6 +144,21 @@ namespace Web.Migrations
                             Name = "White bread",
                             Protein = 4.0
                         });
+                });
+
+            modelBuilder.Entity("API.Web.Entities.MealProduct", b =>
+                {
+                    b.HasOne("API.Web.Entities.Meal", "Meal")
+                        .WithMany("MealProducts")
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Web.Entities.Product", "Product")
+                        .WithMany("MealProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
