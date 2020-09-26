@@ -3,11 +3,14 @@ using API.Web.Service;
 using API.Web.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API.Web.Controllers
 {
     [ApiController]
     [Route("api/products")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : BaseController
     {
         private readonly ILogger<ProductsController> _logger;

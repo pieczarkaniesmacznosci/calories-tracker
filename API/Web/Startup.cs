@@ -11,32 +11,38 @@ using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using API.Web;
 using API.Web.Service;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace API
 {
     public class Startup
     {
-        private IConfiguration _configuration { get; }
+        private IConfiguration _config { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration config)
         {
-            _configuration = configuration;
+            _config = config;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddMvc();
+            services.AddIdentity<User, IdentityRole>(cfg=>
+            {
+                cfg.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<CaloriesLibraryContext>();
+
             services.AddControllers().AddMvcOptions(options =>
                 options.OutputFormatters.Add(
                     new XmlDataContractSerializerOutputFormatter()));
 
-             var connectionString = _configuration["DefaultConnection"];
+             var connectionString = _config["DefaultConnection"];
             services.AddDbContext<CaloriesLibraryContext>(options => {
                 options.UseSqlite(connectionString);
             });
             
-            // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -50,6 +56,21 @@ namespace API
 
             services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IMealService, MealService>();
+
+            services.AddAuthentication()
+            .AddCookie()
+            .AddJwtBearer(cfg=>
+                {
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = _config["Tokens:Issuer"],
+                        ValidAudience = _config["Tokens:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]))
+                    };
+                }
+            );
+            services.AddAuthorization();
+
 
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
@@ -84,6 +105,7 @@ namespace API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseStatusCodePages();
