@@ -447,3 +447,6 @@ $RECYCLE.BIN/
 #Migrations
 
 Migrations
+
+#config files
+*config.json

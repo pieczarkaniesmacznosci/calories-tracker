@@ -1,15 +1,18 @@
 
 using System;
+using System.Threading.Tasks;
 using API.Web.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Web.DbContexts
 {
-    public class CaloriesLibraryContext : DbContext
+    public class CaloriesLibraryContext : IdentityDbContext<User>
     {
+
         public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options) : base(options)
         {
-            // Database.EnsureCreated();
             Database.Migrate();
         }
 
@@ -23,8 +26,9 @@ namespace API.Web.DbContexts
             PopulateProductTable(modelBuilder);
             PopulateMealTable(modelBuilder);
             PopulateMealProductTable(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
-        
+
         private static void PopulateProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(

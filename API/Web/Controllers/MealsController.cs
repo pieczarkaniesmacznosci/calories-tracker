@@ -3,11 +3,14 @@ using API.Web.Service;
 using API.Web.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API.Web.Controllers
 {
     [ApiController]
     [Route("api/")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class MealsController : BaseController
     {
         private readonly ILogger<MealsController> _logger;
