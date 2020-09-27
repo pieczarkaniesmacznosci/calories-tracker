@@ -120,7 +120,7 @@ namespace API.Web.Service
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while adding editing with name = {product.Name}",ex);
+                _logger.LogCritical($"Exception while editing product with name = {product.Name}",ex);
                 return new UnexpectedResult<ProductDto>();
             }
         }

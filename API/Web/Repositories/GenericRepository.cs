@@ -8,7 +8,7 @@ using API.Web.Extensions;
 
 namespace API.Web.Repositories
 {
-    public abstract class GenericRepository<T> : IRepository<T> where T : Entity, new()
+    public abstract class GenericRepository<T> : IRepository<T> where T : class
     {
         protected CaloriesLibraryContext _context;
 
