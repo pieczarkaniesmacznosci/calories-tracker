@@ -10,11 +10,9 @@ namespace API.Web.DbContexts
 {
     public class CaloriesLibraryContext : IdentityDbContext<User>
     {
-        private readonly UserManager<User> _usermanager;
 
-        public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options, UserManager<User> usermanager) : base(options)
+        public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options) : base(options)
         {
-            _usermanager = usermanager;
             Database.Migrate();
         }
 
@@ -25,32 +23,10 @@ namespace API.Web.DbContexts
         {
             modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
             
-            PopulateUserTableAsync(modelBuilder).Wait();
             PopulateProductTable(modelBuilder);
             PopulateMealTable(modelBuilder);
             PopulateMealProductTable(modelBuilder);
-        }
-
-        private async Task PopulateUserTableAsync(ModelBuilder modelBuilder)
-        {
-            var user = await _usermanager.FindByEmailAsync("email@domain.com");
-
-            if(user == null)
-            {
-                user = new User()
-                {
-                    FirstName = "First",
-                    LastName = "Last",
-                    Email = "email@domain.com",
-                    UserName = "email@domain.com"
-                };
-            var result = await _usermanager.CreateAsync(user, "P@ssw0rd");
-            
-            if(!result.Succeeded)
-            {
-                throw new InvalidOperationException("Could not create new user");
-            }
-            }
+            base.OnModelCreating(modelBuilder);
         }
 
         private static void PopulateProductTable(ModelBuilder modelBuilder)

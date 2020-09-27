@@ -1,7 +1,5 @@
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System;
@@ -18,8 +16,7 @@ using Microsoft.Extensions.Configuration;
 namespace API.Web.Controllers
 {
     [ApiController]
-    [Route("api/")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/token")]
     public class AuthenticationController : BaseController
     {
         private readonly UserManager<User> _userManager;
@@ -37,7 +34,7 @@ namespace API.Web.Controllers
             _config = config;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateToken([FromBody] TokenAccessDto tokenAccess)
+        public async Task<IActionResult> CreateToken( TokenAccessDto tokenAccess)
         {
             var user = await _userManager.FindByNameAsync(tokenAccess.Login);
             
@@ -60,7 +57,7 @@ namespace API.Web.Controllers
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             
             var token = new JwtSecurityToken(
@@ -77,7 +74,7 @@ namespace API.Web.Controllers
                 expiration = token.ValidTo
             };
 
-            return Created("", result);
+            return base.FromResult(new SuccessResult<object>(results));
         }
     }
 }

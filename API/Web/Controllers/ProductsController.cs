@@ -10,7 +10,7 @@ namespace API.Web.Controllers
 {
     [ApiController]
     [Route("api/products")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : BaseController
     {
         private readonly ILogger<ProductsController> _logger;
