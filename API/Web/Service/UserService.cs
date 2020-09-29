@@ -40,6 +40,7 @@ namespace API.Web.Service
             }
         }
 
+
         public Result<UserWeightDto> AddUserWeight(UserWeightDto userWeight)
         {
             try
@@ -269,6 +270,10 @@ namespace API.Web.Service
                 _logger.LogCritical($"Exception while getting user weights",ex);
                 return new UnexpectedResult<IEnumerable<UserWeightDto>>();
             }
+        }
+        private int GetCurrentUser()
+        {
+            throw new NotImplementedException();
         }
     }
 }

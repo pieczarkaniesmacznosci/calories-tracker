@@ -1,11 +1,18 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Web.Entities
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<int>
     {
-        public int UserId {get;set;}
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public IEnumerable<UserNutrition> UserNutritions {get;set;}
+        public IEnumerable<UserWeight> UserWeights {get;set;}
+    }
+    public class Role : IdentityRole<int>
+    {
+        public string Description {get;set;}
     }
 }
