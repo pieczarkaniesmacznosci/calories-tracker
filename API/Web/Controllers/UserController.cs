@@ -5,27 +5,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using API.Web.Entities;
 
 namespace API.Web.Controllers
 {
     [ApiController]
     [Route("api/")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : BaseController
     {
         private readonly ILogger<MealsController> _logger;
         private readonly IUserService _service;
+        private readonly UserManager<User> _userManager;
 
-        public UserController(ILogger<MealsController> logger, IUserService service)
+        public UserController(ILogger<MealsController> logger, IUserService service,
+            UserManager<User> userManager)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _service = service;
+            _userManager = userManager;
         }
 
         [HttpGet]
         [Route("user/weights")]
         public IActionResult GetUserWeights()
         {
+            string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
             return base.FromResult(_service.GetUserWeights());
         }
 
@@ -105,5 +113,12 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.DeleteUserNutrition(userNutrition));
         }
+
+        // private int GetUserId()
+        // {
+        //     string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //     var user = await _userManager.FindByNameAsync(userName).Wait();
+            
+        // } 
     }
 }

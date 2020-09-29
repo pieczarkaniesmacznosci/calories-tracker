@@ -1,7 +1,5 @@
 
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using API.Web.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -27,11 +25,11 @@ namespace API.Web.DbContexts
 
             modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
 
-            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<User>();
             modelBuilder.Entity<User>().HasMany(x=>x.UserNutritions).WithOne(x=>x.User);
             modelBuilder.Entity<User>().HasMany(x=>x.UserWeights).WithOne(x=>x.User);
 
-            modelBuilder.Entity<Role>().ToTable("Roles");
+            modelBuilder.Entity<Role>();
             
             SeedProductTable(modelBuilder);
             SeedMealTable(modelBuilder);
@@ -49,18 +47,18 @@ namespace API.Web.DbContexts
                     FirstName = "First",
                     LastName = "Last",
                     Email = "email@domain.com",
-                    UserName = "email@domain.com"
+                    UserName = "email@domain.com",
+                    NormalizedUserName = "EMAIL@DOMAIN.COM"
                 };
             PasswordHasher<User> ph = new PasswordHasher<User>();
             user.PasswordHash = ph.HashPassword(user, "support");
 
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id =1, Name = "Admin", NormalizedName = "ADMIN" }
+                new Role { Id =1, Name = "Admin", NormalizedName = "ADMIN", Description = "Administration role" }
             );
             
             modelBuilder.Entity<User>().HasData(user);
         }
-        
         private void SeedUserWeightTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserWeight>().HasData(
@@ -72,7 +70,6 @@ namespace API.Web.DbContexts
                 }
             );
         }
-
         private void SeedUserNutritionTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserNutrition>().HasData(
@@ -87,8 +84,7 @@ namespace API.Web.DbContexts
                 }
             );
         }
-
-        private static void SeedProductTable(ModelBuilder modelBuilder)
+        private void SeedProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
                             new Product()
@@ -129,7 +125,7 @@ namespace API.Web.DbContexts
                             }
                         );
         }
-        private static void SeedMealTable(ModelBuilder modelBuilder)
+        private void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
                             new Meal()
@@ -139,7 +135,7 @@ namespace API.Web.DbContexts
                             }
                         );
         }
-        private static void SeedMealProductTable(ModelBuilder modelBuilder)
+        private void SeedMealProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealProduct>().HasData(
                             new MealProduct()

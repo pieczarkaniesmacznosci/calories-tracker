@@ -61,7 +61,7 @@ namespace API.Web.Service
         {
             try
             {
-                var userNutritionToDelete = _userNutritionRepository.Get(userNutrition.Id);
+                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 999999).FirstOrDefault();
                 
                 if(userNutritionToDelete == null)
                 {
@@ -85,7 +85,7 @@ namespace API.Web.Service
         {
             try
             {
-                var userNutritionToDelete = _userNutritionRepository.Get(userWeight.Id);
+                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 999999).FirstOrDefault();
                 
                 if(userNutritionToDelete == null)
                 {
@@ -109,7 +109,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutritionToEdit = _userNutritionRepository.Get(userNutrition.Id);
+                var userNutritionToEdit = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 999999).FirstOrDefault();
 
                 if(userNutritionToEdit == null)
                 {
@@ -132,10 +132,9 @@ namespace API.Web.Service
 
         public Result<UserWeightDto> EditUserWeight(UserWeightDto userWeight)
         {
-            
             try
             {                
-                var userNutritionToEdit = _userWeightRepository.Get(userWeight.Id);
+                var userNutritionToEdit = _userWeightRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 999999).FirstOrDefault();
 
                 if(userNutritionToEdit == null)
                 {
@@ -160,7 +159,7 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserNutrition = _userNutritionRepository.All().Max(x=>x.Date);
+                 var currentUserNutrition = _userNutritionRepository.Find(x=> x.UserId == 999999).Max(x=>x.Date);
 
                 if(currentUserNutrition == null)
                 {
@@ -182,7 +181,7 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserWeight = _userWeightRepository.All().Max(x=>x.Date);
+                 var currentUserWeight = _userWeightRepository.Find(x=> x.UserId == 999999).Max(x=>x.Date);
 
                 if(currentUserWeight == null)
                 {
@@ -204,7 +203,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutrition = _userNutritionRepository.Find(x=>x.Date.Date == date.Date);
+                var userNutrition = _userNutritionRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 999999);
 
                 if(userNutrition == null)
                 {
@@ -239,8 +238,8 @@ namespace API.Web.Service
         public Result<UserWeightDto> GetUserWeight(DateTime date)
         {
             try
-            {                
-                var userWeight = _userWeightRepository.Find(x=>x.Date.Date == date.Date);
+            {   
+                var userWeight = _userWeightRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 999999);
 
                 if(userWeight == null)
                 {
@@ -271,9 +270,9 @@ namespace API.Web.Service
                 return new UnexpectedResult<IEnumerable<UserWeightDto>>();
             }
         }
-        private int GetCurrentUser()
-        {
-            throw new NotImplementedException();
-        }
+        // private int GetCurrentUser()
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 }
