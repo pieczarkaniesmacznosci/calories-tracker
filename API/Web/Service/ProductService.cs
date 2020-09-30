@@ -7,6 +7,7 @@ using API.Web.Repositories;
 using API.Web.Result;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using API.Web.Validators;
 
 namespace API.Web.Service
 {
@@ -15,12 +16,14 @@ namespace API.Web.Service
         private readonly ILogger<ProductService> _logger;
         private readonly IRepository<Product> _productRepository;
         private readonly IMapper _mapper;
+        private readonly ProductValidator _productValidator;
 
-        public ProductService(ILogger<ProductService> logger, IRepository<Product> productRepository, IMapper mapper)
+        public ProductService(ILogger<ProductService> logger, IRepository<Product> productRepository, IMapper mapper, ProductValidator productValidator)
         {
             _logger = logger;
             _productRepository = productRepository;
             _mapper = mapper;
+            _productValidator = productValidator;
         }
 
         public Result<IEnumerable<ProductDto>> GetProducts()
@@ -88,6 +91,12 @@ namespace API.Web.Service
         {
             try
             {
+                var validationResult = _productValidator.Validate(product);
+                if(!validationResult.IsValid)
+                {
+                    return new InvalidResult<ProductDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
+                }
+                
                 var productEntity = _mapper.Map<Product>(product);
                 var result = _productRepository.Add(productEntity);
                 _productRepository.SaveChanges();
@@ -103,7 +112,13 @@ namespace API.Web.Service
         public Result<ProductDto> EditProduct(ProductDto product)
         {
             try
-            {                
+            {
+                var validationResult = _productValidator.Validate(product);
+                if(!validationResult.IsValid)
+                {
+                    return new InvalidResult<ProductDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
+                }
+                            
                 var productToEdit = _productRepository.Get(product.Id);
 
                 if(productToEdit == null)

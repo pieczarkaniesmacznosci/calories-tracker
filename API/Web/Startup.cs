@@ -14,6 +14,7 @@ using API.Web.Service;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
+using API.Web.Validators;
 
 namespace API
 {
@@ -64,6 +65,10 @@ namespace API
             services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
             
             services.AddTransient<IUserService, UserService>();
+
+            
+            services.AddTransient<ProductValidator, ProductValidator>();
+            services.AddTransient<MealValidator, MealValidator>();
 
             services.AddAuthentication()
             .AddCookie()
