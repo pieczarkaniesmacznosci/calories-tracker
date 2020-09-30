@@ -61,7 +61,7 @@ namespace API.Web.Service
         {
             try
             {
-                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 999999).FirstOrDefault();
+                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 1).FirstOrDefault();
                 
                 if(userNutritionToDelete == null)
                 {
@@ -85,7 +85,7 @@ namespace API.Web.Service
         {
             try
             {
-                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 999999).FirstOrDefault();
+                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 1).FirstOrDefault();
                 
                 if(userNutritionToDelete == null)
                 {
@@ -109,7 +109,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutritionToEdit = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 999999).FirstOrDefault();
+                var userNutritionToEdit = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 1).FirstOrDefault();
 
                 if(userNutritionToEdit == null)
                 {
@@ -134,7 +134,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutritionToEdit = _userWeightRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 999999).FirstOrDefault();
+                var userNutritionToEdit = _userWeightRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 1).FirstOrDefault();
 
                 if(userNutritionToEdit == null)
                 {
@@ -159,7 +159,7 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserNutrition = _userNutritionRepository.Find(x=> x.UserId == 999999).Max(x=>x.Date);
+                 var currentUserNutrition = _userNutritionRepository.Find(x=> x.UserId == 1).Max(x=>x.Date);
 
                 if(currentUserNutrition == null)
                 {
@@ -181,7 +181,7 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserWeight = _userWeightRepository.Find(x=> x.UserId == 999999).Max(x=>x.Date);
+                 var currentUserWeight = _userWeightRepository.Find(x=> x.UserId == 1).Max(x=>x.Date);
 
                 if(currentUserWeight == null)
                 {
@@ -203,7 +203,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutrition = _userNutritionRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 999999);
+                var userNutrition = _userNutritionRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 1);
 
                 if(userNutrition == null)
                 {
@@ -225,7 +225,7 @@ namespace API.Web.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<UserNutritionDto>>(_userNutritionRepository.All());
+                var result = _mapper.Map<IEnumerable<UserNutritionDto>>(_userNutritionRepository.Find(x => x.UserId == 1));
                 return new SuccessResult<IEnumerable<UserNutritionDto>>(result);
             }
             catch(Exception ex)
@@ -239,7 +239,7 @@ namespace API.Web.Service
         {
             try
             {   
-                var userWeight = _userWeightRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 999999);
+                var userWeight = _userWeightRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 1);
 
                 if(userWeight == null)
                 {
@@ -261,7 +261,7 @@ namespace API.Web.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<UserWeightDto>>(_userWeightRepository.All());
+                var result = _mapper.Map<IEnumerable<UserWeightDto>>(_userWeightRepository.Find(x => x.UserId == 1));
                 return new SuccessResult<IEnumerable<UserWeightDto>>(result);
             }
             catch(Exception ex)
