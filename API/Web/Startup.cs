@@ -68,6 +68,7 @@ namespace API
 
             
             services.AddTransient<ProductValidator, ProductValidator>();
+            services.AddTransient<MealValidator, MealValidator>();
 
             services.AddAuthentication()
             .AddCookie()

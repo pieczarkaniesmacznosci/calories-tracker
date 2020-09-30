@@ -7,7 +7,7 @@ using API.Web.Result;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using API.Web.Extensions;
+using API.Web.Validators;
 
 namespace API.Web.Service
 {
@@ -16,12 +16,15 @@ namespace API.Web.Service
         private readonly ILogger<MealService> _logger;
         private readonly IRepository<Meal> _mealRepository;
         private readonly IMapper _mapper;
+        private readonly MealValidator _mealValidator;
 
-        public MealService(ILogger<MealService> logger, IRepository<Meal> productRepository, IMapper mapper)
+
+        public MealService(ILogger<MealService> logger, IRepository<Meal> productRepository, IMapper mapper, MealValidator mealValidator)
         {
             _logger = logger;
             _mealRepository = productRepository;
             _mapper = mapper;
+            _mealValidator = mealValidator;
         }
 
         public Result<IEnumerable<MealDto>> GetMeals(bool isSaved)
@@ -87,6 +90,12 @@ namespace API.Web.Service
         {
             try
             {
+                var validationResult = _mealValidator.Validate(meal);
+                if(!validationResult.IsValid)
+                {
+                    return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
+                }
+                
                 var productEntity = _mapper.Map<Meal>(meal);
                 var result = _mealRepository.Add(productEntity);
                 _mealRepository.SaveChanges();
@@ -102,7 +111,13 @@ namespace API.Web.Service
         public Result<MealDto> EditMeal(MealDto meal)
         {
             try
-            {                
+            {            
+                var validationResult = _mealValidator.Validate(meal);
+                if(!validationResult.IsValid)
+                {
+                    return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
+                }
+                    
                 var productToEdit = _mealRepository.Get(meal.Id);
 
                 if(productToEdit == null)
