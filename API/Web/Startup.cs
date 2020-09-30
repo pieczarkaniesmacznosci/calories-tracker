@@ -29,7 +29,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<User, IdentityRole>(cfg=>
+            services.AddIdentity<User, Role>(cfg=>
             {
                 cfg.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<CaloriesLibraryContext>();
@@ -56,6 +56,14 @@ namespace API
 
             services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IMealService, MealService>();
+            
+            services.AddTransient<IRepository<Meal>, MealRepository>();
+            services.AddTransient<IMealService, MealService>();
+            
+            services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
+            services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
+            
+            services.AddTransient<IUserService, UserService>();
 
             services.AddAuthentication()
             .AddCookie()
@@ -78,9 +86,7 @@ namespace API
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, 
-        IWebHostEnvironment env, 
-        CaloriesLibraryContext context,
-        UserManager<User> userManager)
+        IWebHostEnvironment env)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -117,8 +123,6 @@ namespace API
             {
                 endpoints.MapControllers();
             });
-
-            CaloriesLibraryInitializer.SeedUsersAsync(context,userManager).Wait();
         }
     }
 }

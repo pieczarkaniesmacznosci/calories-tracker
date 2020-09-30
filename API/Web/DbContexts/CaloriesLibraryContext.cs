@@ -1,6 +1,5 @@
 
 using System;
-using System.Threading.Tasks;
 using API.Web.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -8,9 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Web.DbContexts
 {
-    public class CaloriesLibraryContext : IdentityDbContext<User>
+    public class CaloriesLibraryContext : IdentityDbContext<User,Role,int>
     {
-
         public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options) : base(options)
         {
             Database.Migrate();
@@ -18,18 +16,75 @@ namespace API.Web.DbContexts
 
         public DbSet<Product> Products {get; set;}
         public DbSet<Meal> Meals {get;set;}
+        public DbSet<UserNutrition> UserNutritions {get;set;}
+        public DbSet<UserWeight> UserWeights {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
-            
-            PopulateProductTable(modelBuilder);
-            PopulateMealTable(modelBuilder);
-            PopulateMealProductTable(modelBuilder);
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
+
+            modelBuilder.Entity<User>();
+            modelBuilder.Entity<User>().HasMany(x=>x.UserNutritions).WithOne(x=>x.User);
+            modelBuilder.Entity<User>().HasMany(x=>x.UserWeights).WithOne(x=>x.User);
+
+            modelBuilder.Entity<Role>();
+            
+            SeedProductTable(modelBuilder);
+            SeedMealTable(modelBuilder);
+            SeedMealProductTable(modelBuilder);
+            SeedUserTable(modelBuilder);
+            SeedUserNutritionTable(modelBuilder);
+            SeedUserWeightTable(modelBuilder);
         }
 
-        private static void PopulateProductTable(ModelBuilder modelBuilder)
+        private void SeedUserTable(ModelBuilder modelBuilder)
+        {
+            var user = new User
+                {
+                    Id =1,
+                    FirstName = "First",
+                    LastName = "Last",
+                    Email = "email@domain.com",
+                    UserName = "email@domain.com",
+                    NormalizedUserName = "EMAIL@DOMAIN.COM"
+                };
+            PasswordHasher<User> ph = new PasswordHasher<User>();
+            user.PasswordHash = ph.HashPassword(user, "support");
+
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id =1, Name = "Admin", NormalizedName = "ADMIN", Description = "Administration role" }
+            );
+            
+            modelBuilder.Entity<User>().HasData(user);
+        }
+        private void SeedUserWeightTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserWeight>().HasData(
+                new UserWeight{
+                    Id = 1,
+                    UserId =1,
+                    Weight = 71.5,
+                    Date = new DateTime(2020,6,1)
+                }
+            );
+        }
+        private void SeedUserNutritionTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserNutrition>().HasData(
+                new UserNutrition(){
+                    Id = 1,
+                    UserId=1,
+                    Kcal = 2070,
+                    Protein = 142,
+                    Carbohydrates = 246,
+                    Fat = 57.51d,
+                    Date = new DateTime(2020,1,1)
+                }
+            );
+        }
+        private void SeedProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
                             new Product()
@@ -70,7 +125,7 @@ namespace API.Web.DbContexts
                             }
                         );
         }
-        private static void PopulateMealTable(ModelBuilder modelBuilder)
+        private void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
                             new Meal()
@@ -80,7 +135,7 @@ namespace API.Web.DbContexts
                             }
                         );
         }
-        private static void PopulateMealProductTable(ModelBuilder modelBuilder)
+        private void SeedMealProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealProduct>().HasData(
                             new MealProduct()

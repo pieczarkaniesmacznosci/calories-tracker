@@ -8,21 +8,23 @@ namespace API.Web
     {
         public MappingProfile() {
             CreateMap<Product, ProductDto>()
-            .ForMember(x=>x.Id,opt =>opt.Ignore());
-            CreateMap<ProductDto, Product>()
-            .ForMember(x=>x.Id,opt =>opt.Ignore());
+            .ForMember(x=>x.Id,opt =>opt.Ignore())
+            .ReverseMap();
             CreateMap<Meal, MealDto>()
                 .ForMember(
                     dest=>dest.MealProducts, 
                     opt=>opt.MapFrom(src=>src.MealProducts))
-            .ForMember(x=>x.Id,opt =>opt.Ignore());
-            CreateMap<MealDto, Meal>()
-                .ForMember(
-                    dest=>dest.MealProducts, 
-                    opt=>opt.MapFrom(src=>src.MealProducts));
+            .ForMember(x=>x.Id,opt =>opt.Ignore())
+            .ReverseMap();
             CreateMap<MealProduct, MealProductDto>()
-            .ForMember(x=>x.Id,opt =>opt.Ignore());
-            CreateMap<MealProductDto, MealProduct>();
+            .ForMember(x=>x.Id,opt =>opt.Ignore())
+            .ReverseMap();
+
+            CreateMap<UserNutrition, UserNutritionDto>()
+            .ReverseMap();
+
+            CreateMap<UserWeight, UserWeightDto>()
+            .ReverseMap();
         }
     }
 }
