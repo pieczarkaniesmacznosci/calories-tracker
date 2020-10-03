@@ -1,7 +1,7 @@
 language: csharp
 solution: calories-tracker.sln
 sudo: required
-dist: trusty
+dist: xenial
 mono: none
 dotnet: 3.1.0
 branches:
