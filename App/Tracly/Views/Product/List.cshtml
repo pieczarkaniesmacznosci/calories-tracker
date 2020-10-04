@@ -1,0 +1,17 @@
+﻿@model Tracly.ViewModels.ProductListViewModel
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+    <h1>@Model.Title</h1>
+    <ul>
+        @foreach (var item in Model.Products)
+        {
+            <ul>@item.Name</ul>   
+        }
+    </ul>
+</body>
+</html>
