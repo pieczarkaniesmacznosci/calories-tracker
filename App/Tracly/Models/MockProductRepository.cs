@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tracly.Models
 {
@@ -45,14 +46,6 @@ namespace Tracly.Models
                 };
 
         public Product ProductById(int productId) => 
-                            new Product()
-                            {
-                                Id = productId,
-                                Name = "Chicken",
-                                Kcal = 111.0d,
-                                Protein = 21.0d,
-                                Carbohydrates = 0.0d,
-                                Fat = 3.0d,
-                            };
+        this.AllProducts.FirstOrDefault(x=>x.Id ==productId);
     }
 }

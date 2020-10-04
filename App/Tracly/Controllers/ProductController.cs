@@ -15,6 +15,7 @@ namespace Tracly.Controllers
             _logger = logger;
             _productrepository = productRepository;
         }
+
         public IActionResult List()
         {
             var productListVM = new ProductListViewModel();
@@ -23,6 +24,18 @@ namespace Tracly.Controllers
             productListVM.Products = _productrepository.AllProducts;
 
             return View(productListVM);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var product = _productrepository.ProductById(id);
+
+            if(product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
         }
     }
 }
