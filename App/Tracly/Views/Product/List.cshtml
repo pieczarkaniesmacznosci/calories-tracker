@@ -1,9 +1,33 @@
 ﻿@model ProductListViewModel
 
 <h1>@Model.Title</h1>
-<ul>
+
+<div class="input-group">
+    <input type="text" class="form-control" placeholder="Search">
+    <span class="input-group-btn">
+        <button type="success" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus">
+                <span class="sr-only">Add</span>
+            </span>
+        </button>
+    </span>
+</div>
+
+<div class="list-group">
     @foreach (var item in Model.Products)
     {
-        <ul>@item.Name</ul>   
+        <div href="#" class="container list-group-item list-group-item-action flex-column align-items-start">
+            <div class="row">
+                <div class="col-10">
+                    <a class="row d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@item.Name</h5>
+                    </a>
+                    <p class="mb-1">Kcal: @item.Kcal / Protein: @item.Protein / Carbs: @item.Carbohydrates / Fat: @item.Fat</p>
+                </div>
+                <div class="col-2">
+                    <partial name="_TableButtonPartial" model="@item.Id" /> 
+                </div>
+            </div>
+        </div>
     }
-</ul>
+</div>
