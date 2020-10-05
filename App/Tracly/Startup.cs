@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tracly.Models;
+using Westwind.AspNetCore.LiveReload;
 
 namespace Tracly
 {
@@ -26,6 +22,7 @@ namespace Tracly
         {
             services.AddScoped<IProductRepository,MockProductRepository>();
             services.AddControllersWithViews();
+            services.AddLiveReload();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +39,7 @@ namespace Tracly
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseLiveReload();
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="WestWind.AspnetCore.LiveReload" Version="0.2.12" />
+  </ItemGroup>
+
 </Project>
