@@ -21,6 +21,7 @@ namespace Tracly
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IProductRepository,MockProductRepository>();
+            services.AddScoped<IMealRepository,MockMealRepository>();
             services.AddControllersWithViews();
             services.AddLiveReload();
         }
