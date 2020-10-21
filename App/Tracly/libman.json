@@ -1,14 +1,5 @@
 {
   "version": "1.0",
   "defaultProvider": "cdnjs",
-  "libraries": [
-    {
-      "library": "font-awesome@5.14.0",
-      "destination": "wwwroot/lib/font-awesome"
-    },
-    {
-      "library": "material-ui@4.11.0",
-      "destination": "wwwroot/lib/material-ui"
-    }
-  ]
+  "libraries": []
 }
