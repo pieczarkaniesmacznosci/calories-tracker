@@ -37,5 +37,17 @@ namespace Tracly.Controllers
 
             return View(meal);
         }
+
+        public IActionResult MealDetails(int id)
+        {
+            var meal = _mealRepository.MealById(id);
+
+            if(meal == null)
+            {
+                return NotFound();
+            }
+
+            return View(meal);
+        }
     }
 }
