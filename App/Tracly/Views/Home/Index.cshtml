@@ -1,66 +1,69 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
 }
 <div class="container">
   <div class="row">
-      <div class="col-md-12 rounded">
-        <h2>Today</h2>
-         <table class="table table-striped table-bordered table-hover table-condensed">
-          <thead>
-            <tr>
-              <th>Meal</th>
-              <th>Kcal</th>
-              <th>Protein</th>
-              <th>Carbs</th>
-              <th>Fat</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-                <td>
-                    Meal 1 at 7:20
-                </td>
-                <td >540
-                </td>
-                <td>30
-                </td>
-                <td>60
-                </td>
-                <td>10
-                </td>
-            </tr> 
-            <tr id="sum-up">
-                <td>
-                    Intake:
-                </td>
-                <td >540 / 2070
-                </td>
-                <td>30 / 128
-                </td>
-                <td>60 / 340
-                </td>
-                <td>10 / 58
-                </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="col-md-12 rounded">
+      <h2>Today</h2>
+      <table class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>Meal</th>
+            <th>Kcal</th>
+            <th>Protein</th>
+            <th>Carbs</th>
+            <th>Fat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Meal 1 at 7:20
+            </td>
+            <td>540
+            </td>
+            <td>30
+            </td>
+            <td>60
+            </td>
+            <td>10
+            </td>
+          </tr>
+          <tr id="sum-up">
+            <td>
+              Intake:
+            </td>
+            <td>540 / 2070
+            </td>
+            <td>30 / 128
+            </td>
+            <td>60 / 340
+            </td>
+            <td>10 / 58
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  <div class="row">
-      <div class="col-md-6">
-        <h2>Products</h2>
-      </div>
-      <div class="col-md-6">
-        <h2>Meals</h2>
-      </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <h2>Products</h2>
   </div>
-  <div class="row">
-      <div class="col-md-6">
-        <h2>Grid in container</h2>
-      </div>
-      <div class="col-md-6">
-        <h2>Grid in container</h2>
-      </div>
+  <div class="col-md-6">
+    <h2>Meals</h2>
   </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card" style="width: 18rem;">
+      <img src="https://cdn2.iconfinder.com/data/icons/donkey/75/26-128.png" class="card-img-top" alt="Products">
+      <a href="/product/list" class="btn btn-light stretched-link">Go to product list</a>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <h2>Grid in container</h2>
+  </div>
+</div>
 </div>
