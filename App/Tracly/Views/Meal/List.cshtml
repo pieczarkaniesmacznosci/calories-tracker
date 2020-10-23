@@ -1,7 +1,8 @@
 @model MealListViewModel
 <nav>
     <div class="nav nav-tabs" role="tablist">
-        <a class="nav-item nav-link active" id="nav-consumed-tab" data-toggle="tab" href="#consumed" role="tab">Consumed</a>
+        <a class="nav-item nav-link active" id="nav-consumed-tab" data-toggle="tab" href="#consumed"
+        role="tab">Consumed</a>
         <a class="nav-item nav-link" id="nav-saved-tab" data-toggle="tab" href="#saved" role="tab">Saved</a>
     </div>
 </nav>
@@ -9,80 +10,84 @@
 <div class="tab-content">
     <div id="consumed" class="tab-pane fade show active" role="tabpanel">
         <h3>Consumed meals</h3>
-        <div class="input-group mb-3">
-            <div class="input-group-append">
-                <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#mealModal">Add Meal</a>
-            </div>
+        <div class="input-group-append">
+            <button class="btn btn-primary mb-4" data-toggle="modal" data-target="#mealModal">
+                Add Meals
+            </button>
         </div>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
-            <tr>
-                <th>
-                    Eaten
-                </th>
-                <th>
-                    Nutrients
-                </th>
-                <th>
-                    Actions
-                </th>
-            </tr>
+                <tr>
+                    <th style="width: 40%">
+                        Eaten
+                    </th>
+                    <th style="width: 40%">
+                        Nutrients
+                    </th>
+                    <th style="width: 20%">
+                        Actions
+                    </th>
+                </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model.Meals)
                 {
-                <tr>
-                    <td>
-                        @item.DateEaten
-                    </td>
-                    <td >
-                        Weight: @item.MealProducts.Select(x=>x.Weight).Sum()
-                    </td>
-                    <td>
-                        <partial name="_EditDeleteButtonPartial" model="@item.Id" />
-                    </td>
-                </tr> 
+                    <tr>
+                        <td>
+                            @item.DateEaten
+                        </td>
+                        <td>
+                            Kcal: @item.MealProducts.Sum(x=>x.Product.Kcal) /
+                            P: @item.MealProducts.Sum(x=>x.Product.Protein) /
+                            C: @item.MealProducts.Sum(x=>x.Product.Carbohydrates) /
+                            F: @item.MealProducts.Sum(x=>x.Product.Fat)
+                        </td>
+                        <td>
+                            <partial name="_EditDeleteButtonPartial" model="@item.Id" />
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
-    </div>  
+    </div>
 
     <div id="saved" class="tab-pane fade" role="tabpanel">
         <h3>Saved meals</h3>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Enter meal name"aria-describedby="basic-addon2">
+            <input type="text" class="form-control" placeholder="Enter meal name" aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#mealModal">Add Meal</a>
+                <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#mealModal">Add
+                    Meal</a>
             </div>
         </div>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
-            <tr>
-                <th>
-                    Meal
-                </th>
-                <th>
-                    Nutrients
-                </th>
-                <th>
-                    Actions
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        Meal
+                    </th>
+                    <th>
+                        Nutrients
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model.Meals)
                 {
-                <tr>
-                    <td>
-                        Spaghetti Carbonara
-                    </td>
-                    <td >
-                        K: 540 / P: 28 / C: 80/ F: 15
-                    </td>
-                    <td>
-                        <partial name="_EditDeleteButtonPartial" model="@item.Id" />
-                    </td>
-                </tr> 
+                    <tr>
+                        <td>
+                            Spaghetti Carbonara
+                        </td>
+                        <td>
+                            K: 540 / P: 28 / C: 80/ F: 15
+                        </td>
+                        <td>
+                            <partial name="_EditDeleteButtonPartial" model="@item.Id" />
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -95,32 +100,34 @@
             <div class="modal-header">
                 <h1>Add Meal</h1>
             </div>
-            <div class="modal-body" >
+            <div class="modal-body">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Product name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control" placeholder="Product name" aria-label="Recipient's username"
+                    aria-describedby="basic-addon2">
                 </div>
                 <table class="table table-striped table-bordered table-hover table-condensed">
                     <thead>
-                    <tr>
-                        <th>
-                            Product
-                        </th>
-                        <th>
-                            Weight
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
+                        <tr>
+                            <th>
+                                Product
+                            </th>
+                            <th>
+                                Weight
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
                                 Chicken
                             </td>
-                            <td >
+                            <td>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Weight" aria-describedby="basic-addon2">
+                                    <input type="text" class="form-control" placeholder="Weight"
+                                    aria-describedby="basic-addon2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="basic-addon2">g</span>
                                     </div>
@@ -129,7 +136,7 @@
                             <td>
                                 <partial name="_EditDeleteButtonPartial" model="1" />
                             </td>
-                        </tr> 
+                        </tr>
                     </tbody>
                 </table>
                 <div class="input-group mb-3">
