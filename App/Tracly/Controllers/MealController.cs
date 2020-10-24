@@ -15,7 +15,7 @@ namespace Tracly.Controllers
             _logger = logger;
             _mealRepository = mealRepository;
         }
-        
+
         public IActionResult List()
         {
             var mealListVM = new MealListViewModel();
@@ -30,19 +30,7 @@ namespace Tracly.Controllers
         {
             var meal = _mealRepository.MealById(id);
 
-            if(meal == null)
-            {
-                return NotFound();
-            }
-
-            return View(meal);
-        }
-
-        public IActionResult MealDetails(int id)
-        {
-            var meal = _mealRepository.MealById(id);
-
-            if(meal == null)
+            if (meal == null)
             {
                 return NotFound();
             }
