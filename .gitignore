@@ -450,3 +450,6 @@ Migrations
 
 #config files
 *config.json
+
+#wwwroot/lib files, instaled 
+**/wwwroot/lib

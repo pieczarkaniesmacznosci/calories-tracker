@@ -1,0 +1,82 @@
+﻿@model ProductListViewModel
+
+<h1>@Model.Title</h1>
+
+<div class="input-group">
+    <input type="text" class="form-control" placeholder="Product name" aria-label="Recipient's username"
+    aria-describedby="basic-addon2">
+    <div class="input-group-append">
+        <button href="" class="btn btn-primary mb-4" data-toggle="modal" data-target="#productModal">Add</button>
+    </div>
+</div>
+<table class="table table-striped table-bordered table-hover table-condensed">
+    <thead>
+        <tr>
+            <th style="width: 40%">
+                Product
+            </th>
+            <th style="width: 40%">
+                Nutrients
+            </th>
+            <th style="width: 20%">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    K: @item.Kcal / P: @item.Protein / C: @item.Carbohydrates / F: @item.Fat
+                </td>
+                <td>
+                    <partial name="_EditDeleteButtonPartial" model="@item.Id" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="productModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="container">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1>Add Product</h1>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Product name</label>
+                            <input class="form-control" placeholder="Product name">
+                        </div>
+                        <div class="form-group">
+                            <label>Kcal</label>
+                            <input class="form-control" placeholder="Kcal">
+                        </div>
+                        <div class="form-group">
+                            <label>Protein</label>
+                            <input class="form-control" placeholder="Protein [g]">
+                        </div>
+                        <div class="form-group">
+                            <label>Carbohydrates</label>
+                            <input class="form-control" placeholder="Carbohydrates [g]">
+                        </div>
+                        <div class="form-group">
+                            <label>Fat</label>
+                            <input class="form-control" placeholder="Fat [g]">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dismiss">Dismiss</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
