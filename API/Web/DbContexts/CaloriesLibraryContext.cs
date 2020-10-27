@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Web.DbContexts
 {
-    public class CaloriesLibraryContext : IdentityDbContext<User,Role,int>
+    public class CaloriesLibraryContext : IdentityDbContext<User, Role, int>
     {
         public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options) : base(options)
         {
             Database.Migrate();
         }
 
-        public DbSet<Product> Products {get; set;}
-        public DbSet<Meal> Meals {get;set;}
-        public DbSet<UserNutrition> UserNutritions {get;set;}
-        public DbSet<UserWeight> UserWeights {get;set;}
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Meal> Meals { get; set; }
+        public DbSet<UserNutrition> UserNutritions { get; set; }
+        public DbSet<UserWeight> UserWeights { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,11 @@ namespace API.Web.DbContexts
             modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
 
             modelBuilder.Entity<User>();
-            modelBuilder.Entity<User>().HasMany(x=>x.UserNutritions).WithOne(x=>x.User);
-            modelBuilder.Entity<User>().HasMany(x=>x.UserWeights).WithOne(x=>x.User);
+            modelBuilder.Entity<User>().HasMany(x => x.UserNutritions).WithOne(x => x.User);
+            modelBuilder.Entity<User>().HasMany(x => x.UserWeights).WithOne(x => x.User);
 
             modelBuilder.Entity<Role>();
-            
+
             SeedProductTable(modelBuilder);
             SeedMealTable(modelBuilder);
             SeedMealProductTable(modelBuilder);
@@ -42,45 +42,47 @@ namespace API.Web.DbContexts
         private void SeedUserTable(ModelBuilder modelBuilder)
         {
             var user = new User
-                {
-                    Id =1,
-                    FirstName = "First",
-                    LastName = "Last",
-                    Email = "email@domain.com",
-                    UserName = "email@domain.com",
-                    NormalizedUserName = "EMAIL@DOMAIN.COM"
-                };
+            {
+                Id = 1,
+                FirstName = "First",
+                LastName = "Last",
+                Email = "email@domain.com",
+                UserName = "email@domain.com",
+                NormalizedUserName = "EMAIL@DOMAIN.COM"
+            };
             PasswordHasher<User> ph = new PasswordHasher<User>();
             user.PasswordHash = ph.HashPassword(user, "support");
 
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id =1, Name = "Admin", NormalizedName = "ADMIN", Description = "Administration role" }
+                new Role { Id = 1, Name = "Admin", NormalizedName = "ADMIN", Description = "Administration role" }
             );
-            
+
             modelBuilder.Entity<User>().HasData(user);
         }
         private void SeedUserWeightTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserWeight>().HasData(
-                new UserWeight{
+                new UserWeight
+                {
                     Id = 1,
-                    UserId =1,
+                    UserId = 1,
                     Weight = 71.5,
-                    Date = new DateTime(2020,6,1)
+                    Date = new DateTime(2020, 6, 1)
                 }
             );
         }
         private void SeedUserNutritionTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserNutrition>().HasData(
-                new UserNutrition(){
+                new UserNutrition()
+                {
                     Id = 1,
-                    UserId=1,
+                    UserId = 1,
                     Kcal = 2070,
                     Protein = 142,
                     Carbohydrates = 246,
                     Fat = 57.51d,
-                    Date = new DateTime(2020,1,1)
+                    Date = new DateTime(2020, 1, 1)
                 }
             );
         }
@@ -131,7 +133,8 @@ namespace API.Web.DbContexts
                             new Meal()
                             {
                                 Id = 1,
-                                DateEaten = DateTime.Now
+                                DateEaten = DateTime.Now,
+                                UserId = 1
                             }
                         );
         }
@@ -142,17 +145,17 @@ namespace API.Web.DbContexts
                             {
                                 MealId = 1,
                                 ProductId = 1,
-                                Weight = 200.0d 
-                            },new MealProduct()
+                                Weight = 200.0d
+                            }, new MealProduct()
                             {
                                 MealId = 1,
                                 ProductId = 2,
-                                Weight = 60.0d 
-                            },new MealProduct()
+                                Weight = 60.0d
+                            }, new MealProduct()
                             {
                                 MealId = 1,
                                 ProductId = 4,
-                                Weight = 35.0d 
+                                Weight = 35.0d
                             }
                         );
         }
