@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace App.Trackly.Controllers
+namespace Tracly.Controllers
 {
     public class UserController : Controller
     {
