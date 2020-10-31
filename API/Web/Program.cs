@@ -1,10 +1,6 @@
 using System;
-using API.Web.DbContexts;
-using API.Web.Entities;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
 
@@ -21,7 +17,7 @@ namespace API
                 logger.Info("Initializing application...");
 
                 var host = CreateHostBuilder(args).Build();
- 
+
                 host.Run();
             }
             catch (Exception ex)

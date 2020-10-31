@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tracly.Models;
-using Tracly.ViewModels;
+using App.Tracly.Models;
+using App.Tracly.ViewModels;
 
-namespace Tracly.Controllers
+namespace App.Tracly.Controllers
 {
+    [Authorize]
     public class MealController : Controller
     {
         private readonly ILogger<MealController> _logger;

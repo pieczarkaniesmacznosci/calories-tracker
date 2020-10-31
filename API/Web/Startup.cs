@@ -30,7 +30,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<User, Role>(cfg=>
+            services.AddIdentity<User, Role>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<CaloriesLibraryContext>();
@@ -39,8 +39,9 @@ namespace API
                 options.OutputFormatters.Add(
                     new XmlDataContractSerializerOutputFormatter()));
 
-             var connectionString = _config["DefaultConnection"];
-            services.AddDbContext<CaloriesLibraryContext>(options => {
+            var connectionString = _config["DefaultConnection"];
+            services.AddDbContext<CaloriesLibraryContext>(options =>
+            {
                 options.UseSqlite(connectionString);
             });
 
@@ -57,22 +58,22 @@ namespace API
 
             services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IMealService, MealService>();
-            
+
             services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IMealService, MealService>();
-            
+
             services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
             services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
-            
+
             services.AddTransient<IUserService, UserService>();
 
-            
+
             services.AddTransient<ProductValidator, ProductValidator>();
             services.AddTransient<MealValidator, MealValidator>();
 
             services.AddAuthentication()
             .AddCookie()
-            .AddJwtBearer(cfg=>
+            .AddJwtBearer(cfg =>
                 {
                     cfg.TokenValidationParameters = new TokenValidationParameters()
                     {
@@ -84,13 +85,12 @@ namespace API
             );
             services.AddAuthorization();
 
-
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, 
+        public void Configure(IApplicationBuilder app,
         IWebHostEnvironment env)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -113,7 +113,7 @@ namespace API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-            
+
             //MVC middleware will handel request
             // app.UseMvc();
 

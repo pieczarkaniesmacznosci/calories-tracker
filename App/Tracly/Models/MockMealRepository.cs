@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tracly.Models
+namespace App.Tracly.Models
 {
     public class MockMealRepository : IMealRepository
     {
@@ -36,7 +36,7 @@ namespace Tracly.Models
                 }
             };
 
-        public Meal MealById(int mealId) => 
-        this.AllMeals.FirstOrDefault(x=>x.Id ==mealId);
+        public Meal MealById(int mealId) =>
+        this.AllMeals.FirstOrDefault(x => x.Id == mealId);
     }
 }

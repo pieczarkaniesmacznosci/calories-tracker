@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace Tracly.Models
+namespace App.Tracly.Models
 {
     public interface IMealRepository
     {
-        IEnumerable<Meal> AllMeals {get;}
+        IEnumerable<Meal> AllMeals { get; }
         Meal MealById(int mealId);
     }
 }

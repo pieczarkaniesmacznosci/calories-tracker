@@ -1,6 +1,4 @@
-using System;
-
-namespace Tracly.Models
+namespace App.Tracly.Models
 {
     public class ErrorViewModel
     {

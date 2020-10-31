@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tracly.Models;
+using App.Tracly.Models;
 
-namespace Tracly.Controllers
+namespace App.Tracly.Controllers
 {
     public class HomeController : Controller
     {

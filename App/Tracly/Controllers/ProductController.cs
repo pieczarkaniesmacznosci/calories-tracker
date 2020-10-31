@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tracly.Models;
-using Tracly.ViewModels;
+using App.Tracly.Models;
+using App.Tracly.ViewModels;
 
-namespace Tracly.Controllers
+namespace App.Tracly.Controllers
 {
     public class ProductController : Controller
     {
@@ -30,7 +30,7 @@ namespace Tracly.Controllers
         {
             var product = _productrepository.ProductById(id);
 
-            if(product == null)
+            if (product == null)
             {
                 return NotFound();
             }
