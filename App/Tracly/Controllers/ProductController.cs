@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using App.Tracly.Models;
 using App.Tracly.ViewModels;
 
 namespace App.Tracly.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;

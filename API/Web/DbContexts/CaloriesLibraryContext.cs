@@ -31,10 +31,10 @@ namespace API.Web.DbContexts
 
             modelBuilder.Entity<Role>();
 
+            SeedUserTable(modelBuilder);
             SeedProductTable(modelBuilder);
             SeedMealTable(modelBuilder);
             SeedMealProductTable(modelBuilder);
-            SeedUserTable(modelBuilder);
             SeedUserNutritionTable(modelBuilder);
             SeedUserWeightTable(modelBuilder);
         }
@@ -48,7 +48,8 @@ namespace API.Web.DbContexts
                 LastName = "Last",
                 Email = "email@domain.com",
                 UserName = "email@domain.com",
-                NormalizedUserName = "EMAIL@DOMAIN.COM"
+                NormalizedUserName = "EMAIL@DOMAIN.COM",
+                SecurityStamp = Guid.NewGuid().ToString()
             };
             PasswordHasher<User> ph = new PasswordHasher<User>();
             user.PasswordHash = ph.HashPassword(user, "support");
@@ -137,7 +138,8 @@ namespace API.Web.DbContexts
                             new Meal()
                             {
                                 Id = 1,
-                                DateEaten = DateTime.Now
+                                DateEaten = DateTime.Now,
+                                UserId = 1
                             }
                         );
         }

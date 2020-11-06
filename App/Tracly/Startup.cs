@@ -8,6 +8,8 @@ using App.Tracly.Models;
 using Westwind.AspNetCore.LiveReload;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using App.Tracly.Data;
+using API.Web.Entities;
+using API.Web.DbContexts;
 using Microsoft.AspNetCore.Identity;
 
 namespace App.Tracly
@@ -26,19 +28,46 @@ namespace App.Tracly
             services.AddScoped<IProductRepository, MockProductRepository>();
             services.AddScoped<IMealRepository, MockMealRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddControllersWithViews();
             services.AddLiveReload();
             var connectionString = _config["DefaultConnection"];
 
-            services.AddDbContext<AuthenticationDbContext>(options =>
+            services.AddDbContext<CaloriesLibraryContext>(options =>
                 options.UseSqlite(connectionString));
 
-            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
-                 .AddEntityFrameworkStores<AuthenticationDbContext>();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            services.AddIdentity<User, Role>(
+                options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                })
+                    .AddEntityFrameworkStores<CaloriesLibraryContext>()
+                    .AddDefaultTokenProviders();
+
+            // Change password policy
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Just for dev prurposes
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            });
+            services.AddAuthentication(o =>
+            {
+                o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            })
                 .AddCookie();
+
+            // services.ConfigureApplicationCookie(config =>
+            // {
+            //     config.LoginPath = "/Account/Login";
+            // });
+
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddMvc().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,8 +97,7 @@ namespace App.Tracly
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

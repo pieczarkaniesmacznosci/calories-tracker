@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using API.Web.Entities;
 
 namespace App.Tracly.Models
 {

@@ -11,6 +11,7 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/App/Tracly/bin/Debug/netcoreapp3.1/Tracly.dll",
             "args": [],
+            "requireExactSource": false,
             "cwd": "${workspaceFolder}/App/Tracly",
             "stopAtEntry": false,
             "serverReadyAction": {
