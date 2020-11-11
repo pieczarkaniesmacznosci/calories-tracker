@@ -102,7 +102,7 @@ namespace API
             }
             else
             {
-                app.UseExceptionHandler();
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();
@@ -122,7 +122,7 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseStatusCodePages();
+            // app.UseStatusCodePages();
 
             app.UseEndpoints(endpoints =>
             {

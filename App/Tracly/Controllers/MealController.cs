@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using App.Tracly.Models;
 using App.Tracly.ViewModels;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using API.Web.Entities;
 
 namespace App.Tracly.Controllers
 {
@@ -18,13 +23,21 @@ namespace App.Tracly.Controllers
             _mealRepository = mealRepository;
         }
 
-        public IActionResult List()
+        public async Task<IActionResult> ListAsync()
         {
             var mealListVM = new MealListViewModel();
 
             mealListVM.Title = "Meals";
-            mealListVM.Meals = _mealRepository.AllMeals;
 
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meal");
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    mealListVM.Meals = JsonConvert.DeserializeObject<List<Meal>>(apiResponse);
+                }
+            }
             return View(mealListVM);
         }
 
