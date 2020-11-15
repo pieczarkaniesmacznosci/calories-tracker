@@ -149,16 +149,19 @@ namespace API.Web.DbContexts
             modelBuilder.Entity<MealProduct>().HasData(
                             new MealProduct()
                             {
+                                Id = 1,
                                 MealId = 1,
                                 ProductId = 1,
                                 Weight = 200.0d
                             }, new MealProduct()
                             {
+                                Id = 2,
                                 MealId = 1,
                                 ProductId = 2,
                                 Weight = 60.0d
                             }, new MealProduct()
                             {
+                                Id = 3,
                                 MealId = 1,
                                 ProductId = 4,
                                 Weight = 35.0d

@@ -4,20 +4,18 @@ using AutoMapper;
 
 namespace API.Web
 {
-    public class MappingProfile : Profile 
+    public class MappingProfile : Profile
     {
-        public MappingProfile() {
+        public MappingProfile()
+        {
             CreateMap<Product, ProductDto>()
-            .ForMember(x=>x.Id,opt =>opt.Ignore())
             .ReverseMap();
             CreateMap<Meal, MealDto>()
                 .ForMember(
-                    dest=>dest.MealProducts, 
-                    opt=>opt.MapFrom(src=>src.MealProducts))
-            .ForMember(x=>x.Id,opt =>opt.Ignore())
+                    dest => dest.MealProducts,
+                    opt => opt.MapFrom(src => src.MealProducts))
             .ReverseMap();
             CreateMap<MealProduct, MealProductDto>()
-            .ForMember(x=>x.Id,opt =>opt.Ignore())
             .ReverseMap();
 
             CreateMap<UserNutrition, UserNutritionDto>()

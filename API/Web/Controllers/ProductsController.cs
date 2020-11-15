@@ -34,9 +34,9 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.GetProducts());
         }
-        
+
         [HttpGet]
-        [Route("name/{productName}")]
+        [Route("name")]
         public IActionResult FindProductByName(string productName)
         {
             return base.FromResult(_service.GetProducts(productName));
@@ -53,7 +53,7 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.EditProduct(product));
         }
-        
+
         [HttpDelete]
         public IActionResult DeleteProduct(int id)
         {

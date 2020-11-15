@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
+using System;
 
 namespace App.Tracly.Controllers
 {
@@ -24,6 +25,7 @@ namespace App.Tracly.Controllers
             _productrepository = productRepository;
         }
 
+        [HttpGet]
         public async Task<IActionResult> List()
         {
             var productListVM = new ProductListViewModel();
@@ -40,11 +42,56 @@ namespace App.Tracly.Controllers
                     productListVM.Products = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
                 }
             }
-            return View(productListVM);
+            return View("List", productListVM.Products);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProductsList(string queryString)
+        {
+            var products = new List<Product>();
+            var getPath = "http://localhost:5005/api/products";
+            var getByNamePath = "http://localhost:5005/api/products/name";
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response;
+                if (!string.IsNullOrWhiteSpace(queryString))
+                {
+                    var builder = new UriBuilder(getByNamePath);
+                    builder.Query = $"productName={queryString}";
+                    response = await httpClient.GetAsync(builder.ToString());
+                }
+                else
+                {
+                    response = await httpClient.GetAsync(getPath);
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    products = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                }
+            }
+            return PartialView("_ProductListItem", products);
+        }
+
+        [HttpGet]
+        [Route("Product/GetProduct/{productId:int}")]
+        public async Task<Product> GetProduct(int productId)
+        {
+            var product = new Product();
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/products/id/{productId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    product = JsonConvert.DeserializeObject<Product>(apiResponse);
+                }
+            }
+            return product;
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostProduct(Product product)
+        public async void PostProduct(Product product)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");
 
@@ -52,7 +99,27 @@ namespace App.Tracly.Controllers
             {
                 HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/products", stringContent);
             }
-            return View("List");
+        }
+
+        [HttpPut]
+        public async void PutProduct(Product product)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");
+
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.PutAsync("http://localhost:5005/api/products", stringContent);
+            }
+        }
+
+        [HttpDelete]
+        [Route("Product/DeleteProduct/{productId:int}")]
+        public async void DeleteProduct(int productId)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:5005/api/products?id={productId}");
+            }
         }
 
         public IActionResult Details(int id)
