@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using API.Web.Entities;
 
-namespace Tracly.Models
+namespace App.Tracly.Models
 {
     public class MockProductRepository : IProductRepository
     {
@@ -45,7 +46,7 @@ namespace Tracly.Models
                             }
                 };
 
-        public Product ProductById(int productId) => 
-        this.AllProducts.FirstOrDefault(x=>x.Id ==productId);
+        public Product ProductById(int productId) =>
+        this.AllProducts.FirstOrDefault(x => x.Id == productId);
     }
 }

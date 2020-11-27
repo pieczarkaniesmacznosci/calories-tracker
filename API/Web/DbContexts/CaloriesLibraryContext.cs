@@ -30,11 +30,11 @@ namespace API.Web.DbContexts
             modelBuilder.Entity<User>().HasMany(x => x.UserWeights).WithOne(x => x.User);
 
             modelBuilder.Entity<Role>();
-
+            
+            SeedUserTable(modelBuilder);
             SeedProductTable(modelBuilder);
             SeedMealTable(modelBuilder);
             SeedMealProductTable(modelBuilder);
-            SeedUserTable(modelBuilder);
             SeedUserNutritionTable(modelBuilder);
             SeedUserWeightTable(modelBuilder);
         }
@@ -48,7 +48,12 @@ namespace API.Web.DbContexts
                 LastName = "Last",
                 Email = "email@domain.com",
                 UserName = "email@domain.com",
+<<<<<<< HEAD
+                NormalizedUserName = "EMAIL@DOMAIN.COM",
+                SecurityStamp = Guid.NewGuid().ToString()
+=======
                 NormalizedUserName = "EMAIL@DOMAIN.COM"
+>>>>>>> b60f79aabe242c682531b6d56a894c1283c9c112
             };
             PasswordHasher<User> ph = new PasswordHasher<User>();
             user.PasswordHash = ph.HashPassword(user, "support");
@@ -59,6 +64,7 @@ namespace API.Web.DbContexts
 
             modelBuilder.Entity<User>().HasData(user);
         }
+
         private void SeedUserWeightTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserWeight>().HasData(
@@ -71,6 +77,7 @@ namespace API.Web.DbContexts
                 }
             );
         }
+
         private void SeedUserNutritionTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserNutrition>().HasData(
@@ -86,6 +93,7 @@ namespace API.Web.DbContexts
                 }
             );
         }
+
         private void SeedProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
@@ -127,6 +135,7 @@ namespace API.Web.DbContexts
                             }
                         );
         }
+
         private void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
@@ -138,27 +147,30 @@ namespace API.Web.DbContexts
                             }
                         );
         }
+
         private void SeedMealProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealProduct>().HasData(
                             new MealProduct()
                             {
+                                Id = 1,
                                 MealId = 1,
                                 ProductId = 1,
                                 Weight = 200.0d
                             }, new MealProduct()
                             {
+                                Id = 2,
                                 MealId = 1,
                                 ProductId = 2,
                                 Weight = 60.0d
                             }, new MealProduct()
                             {
+                                Id = 3,
                                 MealId = 1,
                                 ProductId = 4,
                                 Weight = 35.0d
                             }
                         );
         }
-
     }
 }

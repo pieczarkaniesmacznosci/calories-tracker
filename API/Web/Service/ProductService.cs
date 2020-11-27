@@ -162,5 +162,27 @@ namespace API.Web.Service
                 return new UnexpectedResult<ProductDto>();
             }
         }
+
+        public Result<bool> ProductExist(string productName)
+        {
+            try
+            {
+                var productFound = _productRepository.Find(x=>x.Name == productName).FirstOrDefault();
+
+                if(productFound == null)
+                {
+                    return new SuccessResult<bool>(false);
+                }
+                else
+                {
+                    return new SuccessResult<bool>(true);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while checking if product with name = {productName} exists",ex);
+                return new UnexpectedResult<bool>();
+            }
+        }
     }
 }

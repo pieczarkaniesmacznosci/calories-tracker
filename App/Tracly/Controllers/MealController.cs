@@ -1,10 +1,17 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tracly.Models;
-using Tracly.ViewModels;
+using App.Tracly.Models;
+using App.Tracly.ViewModels;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using API.Web.Entities;
 
-namespace Tracly.Controllers
+namespace App.Tracly.Controllers
 {
+    [Authorize]
     public class MealController : Controller
     {
         private readonly ILogger<MealController> _logger;
@@ -16,14 +23,19 @@ namespace Tracly.Controllers
             _mealRepository = mealRepository;
         }
 
-        public IActionResult List()
+        public async Task<IActionResult> ListAsync()
         {
-            var mealListVM = new MealListViewModel();
-
-            mealListVM.Title = "Meals";
-            mealListVM.Meals = _mealRepository.AllMeals;
-
-            return View(mealListVM);
+            var mealsList = new List<Meal>();
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meal");
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    mealsList = JsonConvert.DeserializeObject<List<Meal>>(apiResponse);
+                }
+            }
+            return View(mealsList);
         }
 
         public IActionResult Details(int id)

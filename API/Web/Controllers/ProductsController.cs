@@ -34,14 +34,20 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.GetProducts());
         }
-        
+
         [HttpGet]
-        [Route("name/{productName}")]
+        [Route("name")]
         public IActionResult FindProductByName(string productName)
         {
             return base.FromResult(_service.GetProducts(productName));
         }
 
+        [HttpGet]
+        [Route("exist")]
+        public IActionResult ProductExist(string productName)
+        {
+            return base.FromResult(_service.ProductExist(productName));
+        }
         [HttpPost]
         public IActionResult AddProduct(ProductDto product)
         {
@@ -53,7 +59,7 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.EditProduct(product));
         }
-        
+
         [HttpDelete]
         public IActionResult DeleteProduct(int id)
         {
