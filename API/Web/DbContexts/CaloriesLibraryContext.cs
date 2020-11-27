@@ -48,12 +48,8 @@ namespace API.Web.DbContexts
                 LastName = "Last",
                 Email = "email@domain.com",
                 UserName = "email@domain.com",
-<<<<<<< HEAD
                 NormalizedUserName = "EMAIL@DOMAIN.COM",
                 SecurityStamp = Guid.NewGuid().ToString()
-=======
-                NormalizedUserName = "EMAIL@DOMAIN.COM"
->>>>>>> b60f79aabe242c682531b6d56a894c1283c9c112
             };
             PasswordHasher<User> ph = new PasswordHasher<User>();
             user.PasswordHash = ph.HashPassword(user, "support");
