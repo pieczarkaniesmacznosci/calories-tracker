@@ -1,4 +1,4 @@
-@model MealListViewModel
+@model List<Meal>
 
 <br>
 <nav>
@@ -36,7 +36,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Meals)
+                    
+    <tbody id="divProductsPartial">
+        <partial name="_MealsListItem" model=@Model />
+    </tbody>
+                    @foreach (var item in Model)
                     {
                         <tr class="align-middle">
                             <td>
@@ -86,7 +90,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Meals)
+                    @foreach (var item in Model)
                     {
                         <tr>
                             <td>
@@ -104,5 +108,4 @@
             </table>
         </div>
     </div>
-</div>
 </div>

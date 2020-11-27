@@ -25,20 +25,17 @@ namespace App.Tracly.Controllers
 
         public async Task<IActionResult> ListAsync()
         {
-            var mealListVM = new MealListViewModel();
-
-            mealListVM.Title = "Meals";
-
+            var mealsList = new List<Meal>();
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meal");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    mealListVM.Meals = JsonConvert.DeserializeObject<List<Meal>>(apiResponse);
+                    mealsList = JsonConvert.DeserializeObject<List<Meal>>(apiResponse);
                 }
             }
-            return View(mealListVM);
+            return View(mealsList);
         }
 
         public IActionResult Details(int id)

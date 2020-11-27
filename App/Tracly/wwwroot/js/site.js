@@ -19,7 +19,7 @@ function loadList(searchQuery) {
 		searchQuery = "";
 	}
 	var urlBase = "/Product/ProductsList/".concat("?queryString=" + searchQuery);
-	$("#divPartial").load(urlBase);
+	$("#divProductsPartial").load(urlBase);
 }
 
 function putProduct(productFormData) {
