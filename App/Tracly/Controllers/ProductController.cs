@@ -91,6 +91,24 @@ namespace App.Tracly.Controllers
         }
 
         [HttpPost]
+        [Route("Product/ProductNameValid")]
+        public async Task<bool> ProductNameValid(string productName)
+        {
+            bool productNameValid= false;
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/products/exist?productName={productName}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    bool productExist = JsonConvert.DeserializeObject<bool>(apiResponse);
+                    productNameValid = !productExist;
+                }
+            }
+            return productNameValid;
+        }
+
+        [HttpPost]
         public async void PostProduct(Product product)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");

@@ -65,6 +65,10 @@ function postProduct(productFormData) {
 }
 
 function saveProduct() {
+	if (!$("#productForm").valid()) {
+		return;
+	}
+
 	var productFormData = $("#productForm").serialize();
 
 	var productId = $("#productModal").attr("data-id");
@@ -124,7 +128,9 @@ function editProduct(id) {
 
 function addProductModal() {
 	$("#productModal").modal({ show: true });
-
+	$("#productModal").on("hidden.bs.modal", function () {
+		$("#productForm").validate().resetForm();
+	});
 	document.getElementById("productModalTitle").innerHTML = "Add Product";
 
 	document.getElementById("name").value = document.getElementById(
@@ -181,3 +187,72 @@ function populateModalInputs(name, kcal, protein, carbohydrates, fat) {
 
 	$("#fat").val(fat);
 }
+
+$(".numeric").numeric({
+	decimal: ".",
+	negative: false,
+	precision: 2,
+});
+
+$(function () {
+	$.validator.setDefaults({
+		errorClass: "text-danger",
+		highlight: function (element) {
+			$(element).addClass("is-invalid");
+		},
+		unhighlight: function (element) {
+			$(element).removeClass("is-invalid");
+		},
+	});
+	var $productForm = $("#productForm");
+	if ($productForm.length) {
+		$productForm.validate({
+			rules: {
+				name: {
+					required: true,
+					minlength: 3,
+					remote: {
+						url: "/Product/ProductNameValid",
+						async: false,
+						type: "post",
+						data: {
+							productName: function () {
+								return $("#name").val();
+							},
+						},
+					},
+				},
+				kcal: {
+					required: true,
+				},
+				protein: {
+					required: true,
+				},
+				carbohydrates: {
+					required: true,
+				},
+				fat: {
+					required: true,
+				},
+			},
+			messages: {
+				name: {
+					required: "Product name is required!",
+					remote: "Product already exists!",
+				},
+				kcal: {
+					required: "Kcal is required!",
+				},
+				protein: {
+					required: "Insert protein content!",
+				},
+				carbohydrates: {
+					required: "Insert carbohydrates content!",
+				},
+				fat: {
+					required: "Insert fat content!",
+				},
+			},
+		});
+	}
+});

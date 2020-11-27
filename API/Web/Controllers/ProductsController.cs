@@ -42,6 +42,12 @@ namespace API.Web.Controllers
             return base.FromResult(_service.GetProducts(productName));
         }
 
+        [HttpGet]
+        [Route("exist")]
+        public IActionResult ProductExist(string productName)
+        {
+            return base.FromResult(_service.ProductExist(productName));
+        }
         [HttpPost]
         public IActionResult AddProduct(ProductDto product)
         {
