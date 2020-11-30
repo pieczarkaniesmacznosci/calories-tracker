@@ -11,9 +11,6 @@ namespace API.Web
             CreateMap<Product, ProductDto>()
             .ReverseMap();
             CreateMap<Meal, MealDto>()
-                .ForMember(
-                    dest => dest.MealProducts,
-                    opt => opt.MapFrom(src => src.MealProducts))
             .ReverseMap();
             CreateMap<MealProduct, MealProductDto>()
             .ReverseMap();

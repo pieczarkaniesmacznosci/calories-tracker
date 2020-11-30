@@ -139,7 +139,15 @@ namespace API.Web.DbContexts
                             {
                                 Id = 1,
                                 DateEaten = DateTime.Now,
-                                UserId = 1
+                                UserId = 1,
+                            },
+                            new Meal()
+                            {
+                                Id = 2,
+                                DateEaten = DateTime.Now,
+                                UserId = 1,
+                                IsSaved = true,
+                                MealName = "Chicken stew"
                             }
                         );
         }
@@ -165,6 +173,25 @@ namespace API.Web.DbContexts
                                 MealId = 1,
                                 ProductId = 4,
                                 Weight = 35.0d
+                            },
+                            new MealProduct()
+                            {
+                                Id = 1,
+                                MealId = 2,
+                                ProductId = 1,
+                                Weight = 132.0d
+                            }, new MealProduct()
+                            {
+                                Id = 2,
+                                MealId = 2,
+                                ProductId = 2,
+                                Weight = 250.0d
+                            }, new MealProduct()
+                            {
+                                Id = 3,
+                                MealId = 2,
+                                ProductId = 4,
+                                Weight = 95.0d
                             }
                         );
         }

@@ -130,6 +130,7 @@ function addProductModal() {
 	$("#productModal").modal({ show: true });
 	$("#productModal").on("hidden.bs.modal", function () {
 		$("#productForm").validate().resetForm();
+		$("#productForm .is-invalid").removeClass("is-invalid");
 	});
 	document.getElementById("productModalTitle").innerHTML = "Add Product";
 

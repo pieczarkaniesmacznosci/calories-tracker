@@ -1,3 +1,5 @@
+@model MealViewModel
+
 <br>
 <br>
 <form>
@@ -8,7 +10,7 @@
 
     <div class="form-group">
         <div class="input-group">
-            <input id="productName" type="text" class="form-control" placeholder="Chic">
+            <input id="productNameListInput" type="text" class="form-control" placeholder="Enter product's name.." id="productNameListInput">
             <div class="input-group-append">
                 <button type="button" class="btn btn-primary" data-toggle="modal"
                 data-target="#productModal">Add</button>
@@ -17,7 +19,7 @@
     </div>
     <hr class="mb-4">
     <div>
-        <table class=" table table-striped table-bordered table-hover table-condensed">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width: 40%">
@@ -26,24 +28,13 @@
                     <th style="width: 40%">
                         Nutrients
                     </th>
+            <th style="width: 20%">
+                Actions
+            </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        Chicken
-                    </td>
-                    <td>
-                        Kcal: 239 / P: 21.4 / C: 0/ F: 3.
-                        7 </td>
-                </tr>
-                <tr>
-                    <td>
-                        Chickpeas
-                    </td>
-                    <td>
-                        Kcal: 378 / P: 20.5 / C: 61/ F: 6 </td>
-                </tr>
+            <tbody id="divProductsPartial">
+                <partial name="_ProductListItemMeal" model="@Model.Products"/> 
             </tbody>
         </table>
     </div>
@@ -66,87 +57,20 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        Wholemeal roll
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <input type=" text" class="form-control input-sm" placeholder="60"
-                            aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text">g</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <partial name="_EditDeleteButtonPartial" model="1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Turkey ham
-                    </td>
-                    <td>
-                        <div class="input-group ">
-                            <input type="text" class="form-control input-sm" placeholder="55"
-                            aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text">g</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <partial name="_EditDeleteButtonPartial" model="1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Cottage cheese
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm" placeholder="150"
-                            aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text">g</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <partial name="_EditDeleteButtonPartial" model="1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Tomato
-                    </td>
-                    <td>
-                        <div class="input-group  input-sm">
-                            <input type="text" class="form-control input-sm" placeholder="50"
-                            aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text">g</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <partial name="_EditDeleteButtonPartial" model="1" />
-                    </td>
-                </tr>
+            <tbody id="mealProductListTable">
+                <partial name="_MealProductListTable" model=@Model.Meal.MealProducts /> 
             </tbody>
-            <tr>
-                <td colspan="3">
-                    <b>
-                        Kcal: 295.6 /
-                        P: 32.7 /
-                        C: 37.3 /
-                        F: 1.9
-                    </b>
-                </td>
-            </tr>
-        </table>
+                @* <tr>
+                    <td colspan="3">
+                        <b>
+                            Kcal: @Model.Sum(x=>x.Product.Kcal) /
+                            P: @Model.Sum(x=>x.Product.Protein) /
+                            C: @Model.Sum(x=>x.Product.Carbohydrates) /
+                            F: @Model.Sum(x=>x.Product.Fat)
+                        </b>
+                    </td>
+                </tr> *@
+            </table>
         <div class="form-group d-flex justify-content-between">
             <div class="input-group w-50">
                 <input id="mealName" type="text" class="form-control " placeholder="Name">

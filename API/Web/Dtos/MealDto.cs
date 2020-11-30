@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using API.Web.Entities;
+using Newtonsoft.Json;
 
 namespace API.Web.Dtos
 {
@@ -11,6 +11,6 @@ namespace API.Web.Dtos
         public string MealName {get;set;}
         public double Weight { get; set; }
         public DateTime DateEaten { get; set; }
-        public IEnumerable<MealProductDto> MealProducts {get;set;}
+        public List<MealProductDto> MealProducts {get;set;}
     }
 }

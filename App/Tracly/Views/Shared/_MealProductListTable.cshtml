@@ -1,0 +1,34 @@
+@model List<MealProductDto>
+     
+@if(Model.Any())
+{
+    @foreach (var item in Model)
+    {
+    <tr onclick="addProductToMeal(@item.ProductId)">
+        <td>
+            @item.Product?.Name
+        </td>
+        <td>
+            <div class="input-group">
+                <input type=" text" class="form-control input-sm" placeholder="60"
+                aria-describedby="basic-addon2" value="@item.Weight">
+                <div class="input-group-append">
+                    <span class="input-group-text">g</span>
+                </div>
+            </div>
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger" title="Delete" onclick="deleteProductFromMeal(@item.Id)">
+                <i class="fas fa-trash text-white"></i>
+            </button>
+        </td>
+    </tr>
+    }
+}
+else
+{
+    <tr>
+        <td align="center" colspan="3">Search for products</td>
+    </tr>    
+}
+            

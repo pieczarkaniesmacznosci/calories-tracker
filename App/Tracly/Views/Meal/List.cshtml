@@ -1,12 +1,12 @@
-@model List<Meal>
+@model List<MealDto>
 
 <br>
 <nav>
     <div class="nav nav-tabs" role="tablist">
-        <a class="nav-item nav-link active" id="nav-consumed-tab" data-toggle="tab" href="#consumed" role="tab">
+        <a class="nav-item nav-link active" id="nav-consumed-tab" data-toggle="tab" href="#consumed" role="tab" onclick="loadMealsList(false)">
             <span>Consumed</span>
         </a>
-        <a class="nav-item nav-link" id="nav-saved-tab" data-toggle="tab" href="#saved" role="tab">
+        <a class="nav-item nav-link" id="nav-saved-tab" data-toggle="tab" href="#saved" role="tab" onclick="loadMealsList(true)">
             <span>Saved</span>
         </a>
     </div>
@@ -17,7 +17,7 @@
     <div id="consumed" class="tab-pane container fade show active" role="tabpanel">
         <br>
         <div class="card row">
-            <a class="btn btn-primary" href="/meal/details">Consume meal</a>
+            <a class="btn btn-primary" OnClientClick="mealDetails();return false;"  href="/meal/details">Consume meal</a>
         </div>
         <hr class="mb-4">
         <div class="row">
@@ -35,28 +35,8 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    
-    <tbody id="divProductsPartial">
-        <partial name="_MealsListItem" model=@Model />
-    </tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="align-middle">
-                            <td>
-                                @item.DateEaten
-                            </td>
-                            <td>
-                                Kcal: @item.MealProducts.Sum(x=>x.Product.Kcal) /
-                                P: @item.MealProducts.Sum(x=>x.Product.Protein) /
-                                C: @item.MealProducts.Sum(x=>x.Product.Carbohydrates) /
-                                F: @item.MealProducts.Sum(x=>x.Product.Fat)
-                            </td>
-                            <td>
-                                <partial name="_EditDeleteButtonPartial" model="@item.Id" />
-                            </td>
-                        </tr>
-                    }
+                <tbody id="divMealsConsumedPartial">
+                    <partial name="_MealsListItem" model=@Model />
                 </tbody>
             </table>
         </div>
@@ -89,21 +69,8 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                Spaghetti Carbonara
-                            </td>
-                            <td>
-                                Kcal: 540 / P: 28 / C: 80/ F: 15
-                            </td>
-                            <td>
-                                <partial name="_ConsumeEditDeleteButtonPartial" model="@item.Id" />
-                            </td>
-                        </tr>
-                    }
+                <tbody id="divMealsSavedPartial">
+                    <partial name="_MealsListItem" model=@Model />
                 </tbody>
             </table>
         </div>

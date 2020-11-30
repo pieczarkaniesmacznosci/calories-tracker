@@ -19,6 +19,7 @@ namespace API.Web.Repositories
             return _context
                 .Meals
                 .Include(x=>x.MealProducts)
+                .ThenInclude(x=>x.Product)
                 .FirstOrDefault(x=>x.Id == id);
         } 
 
@@ -26,6 +27,7 @@ namespace API.Web.Repositories
         {
             return _context.Meals
                 .Include(x=>x.MealProducts)
+                .ThenInclude(x=>x.Product)
                 .AsQueryable<Meal>()
                 .Where(predicate);
         }

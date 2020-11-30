@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using API.Web.Validators;
+using Newtonsoft.Json;
 
 namespace API
 {
@@ -35,9 +36,13 @@ namespace API
                 cfg.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<CaloriesLibraryContext>();
 
-            services.AddControllers().AddMvcOptions(options =>
+            services.AddControllers()
+            .AddMvcOptions(options =>
                 options.OutputFormatters.Add(
                     new XmlDataContractSerializerOutputFormatter()));
+        //     .AddNewtonsoftJson(options => {
+        //    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+        //    });
 
             var connectionString = _config["DefaultConnection"];
             services.AddDbContext<CaloriesLibraryContext>(options =>

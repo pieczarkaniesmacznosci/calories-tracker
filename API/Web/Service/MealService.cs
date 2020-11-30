@@ -31,7 +31,8 @@ namespace API.Web.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<MealDto>>(_mealRepository.Find(x=>x.IsSaved == isSaved));
+                var a = _mealRepository.Find(x=>x.IsSaved == isSaved);
+                var result = _mapper.Map<IEnumerable<MealDto>>(a);
                 return new SuccessResult<IEnumerable<MealDto>>(result);
             }
             catch(Exception ex)

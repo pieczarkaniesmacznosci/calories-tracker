@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using App.Tracly.Models;
-using App.Tracly.ViewModels;
 using System.Collections.Generic;
 using API.Web.Entities;
 using System.Net.Http;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using System;
+using API.Web.Dtos;
 
 namespace App.Tracly.Controllers
 {
@@ -28,10 +28,7 @@ namespace App.Tracly.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var productListVM = new ProductListViewModel();
-
-            productListVM.Title = "Products";
-            productListVM.Products = new List<Product>();
+            var products = new List<ProductDto>();
 
             using (var httpClient = new HttpClient())
             {
@@ -39,16 +36,16 @@ namespace App.Tracly.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    productListVM.Products = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                    products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
                 }
             }
-            return View("List", productListVM.Products);
+            return View("List", products);
         }
 
         [HttpGet]
         public async Task<IActionResult> ProductsList(string queryString)
         {
-            var products = new List<Product>();
+            var products = new List<ProductDto>();
             var getPath = "http://localhost:5005/api/products";
             var getByNamePath = "http://localhost:5005/api/products/name";
             using (var httpClient = new HttpClient())
@@ -67,7 +64,7 @@ namespace App.Tracly.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    products = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                    products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
                 }
             }
             return PartialView("_ProductListItem", products);
@@ -75,16 +72,16 @@ namespace App.Tracly.Controllers
 
         [HttpGet]
         [Route("Product/GetProduct/{productId:int}")]
-        public async Task<Product> GetProduct(int productId)
+        public async Task<ProductDto> GetProduct(int productId)
         {
-            var product = new Product();
+            var product = new ProductDto();
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/products/id/{productId}");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    product = JsonConvert.DeserializeObject<Product>(apiResponse);
+                    product = JsonConvert.DeserializeObject<ProductDto>(apiResponse);
                 }
             }
             return product;
@@ -109,7 +106,7 @@ namespace App.Tracly.Controllers
         }
 
         [HttpPost]
-        public async void PostProduct(Product product)
+        public async void PostProduct(ProductDto product)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");
 
@@ -120,7 +117,7 @@ namespace App.Tracly.Controllers
         }
 
         [HttpPut]
-        public async void PutProduct(Product product)
+        public async void PutProduct(ProductDto product)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");
 
