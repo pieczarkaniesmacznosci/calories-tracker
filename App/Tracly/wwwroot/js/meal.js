@@ -1,3 +1,6 @@
+var mealProducts;
+var product;
+
 function loadMealsList(isSaved) {
 	var list;
 	if (isSaved) {
@@ -13,25 +16,20 @@ $(function () {
 });
 
 function deleteProductFromMeal(id) {
-	var reducedProductsList = mealProducts.mealProducts.filter(
-		(x) => x.id != id
-	);
-	mealProducts.mealProducts = reducedProductsList;
+	var reducedProductsList = mealProducts.filter((x) => x.id != id);
+	mealProducts = reducedProductsList;
 	loadMealProductList(reducedProductsList);
 }
 
-var mealProducts;
-var product;
 $(document).ready(function () {
 	if (window.location.href.indexOf("/meal/details") > -1) {
-		var id = 1;
-		mealDetails(id);
+		mealDetails();
 	}
 });
 
 function mealDetails(id) {
 	$.get("/Meal/MealDto", { id: id }, function (data) {
-		mealProducts = data;
+		mealProducts = data.mealProducts;
 	});
 }
 
@@ -48,12 +46,25 @@ function loadMealProductList(products) {
 	});
 }
 
-function addProductToMeal(productId) {
-	mealProducts.mealProducts.push({
-		productId: product.Id,
-		product: product,
-		weight: 100,
-	});
+$("#productForMealListInput").keyup(function () {
+	var searchQuery = $("#productForMealListInput").val();
+
+	if (searchQuery.length > 2) {
+		loadProductForMealList(searchQuery);
+	} else {
+		return;
+	}
+});
+
+function loadProductForMealList(searchQuery) {
+	if (searchQuery === undefined) {
+		searchQuery = "";
+	}
+	var urlBase = "/Meal/ProductListForMealTable".concat(
+		"?queryString=" + searchQuery
+	);
+	console.log(urlBase);
+	$("#productsListForMealTable").load(urlBase);
 }
 
 function getProduct(id) {
@@ -65,6 +76,25 @@ function getProduct(id) {
 		url: url,
 		success: function (returnedProduct) {
 			product = returnedProduct;
+		},
+	});
+}
+
+function addProductToMeal(productId) {
+	var urlBase = "/Product/GetProduct/";
+
+	var url = urlBase.concat(productId);
+
+	$.ajax({
+		type: "GET",
+		url: url,
+		success: function (product) {
+			mealProducts.push({
+				productId: product.id,
+				product: product,
+				weight: 100,
+			});
+			loadMealProductList(mealProducts);
 		},
 	});
 }

@@ -62,69 +62,9 @@ namespace App.Tracly.Controllers
             }
             return PartialView("_MealsListItem", meals);
         }
-        public async Task<IActionResult> ListAsync()
-        {
-            var mealsList = new List<MealDto>();
-            using (var httpClient = new HttpClient())
-            {
-                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meal");
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    mealsList = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
-                }
-            }
-            return View(mealsList);
-        }
-
-        public async Task<IActionResult> Details(int id)
-        {
-            _viewModel = new MealViewModel();
-            _viewModel.Meal = new MealDto();
-            _viewModel.Products = new List<ProductDto>();
-
-            using (var httpClient = new HttpClient())
-            {
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    _viewModel.Meal = JsonConvert.DeserializeObject<MealDto>(apiResponse);
-
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            return View("Details", _viewModel);
-        }
-
-        public async Task<MealDto> MealDto(int id)
-        {
-            var meal = new MealDto();
-
-            using (var httpClient = new HttpClient())
-            {
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    meal = JsonConvert.DeserializeObject<MealDto>(apiResponse);
-
-                }
-            }
-            return meal;
-        }
-
-        [HttpPost]
-        public IActionResult GenerateMealProductListTable(List<MealProductDto> mealProducts)
-        {
-            return PartialView("_MealProductListTable", mealProducts);
-        }
 
         [HttpGet]
-        public async Task<IActionResult> ProductsList(string queryString)
+        public async Task<IActionResult> ProductListForMealTable(string queryString)
         {
             var products = new List<ProductDto>();
             var getPath = "http://localhost:5005/api/products";
@@ -148,7 +88,64 @@ namespace App.Tracly.Controllers
                     products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
                 }
             }
-            return PartialView("_ProductListItemMeal", products);
+            return PartialView("_ProductListForMealTable", products);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            _viewModel = new MealViewModel();
+            _viewModel.Meal = new MealDto(){
+                MealProducts = new List<MealProductDto>()
+            };
+            _viewModel.Products = new List<ProductDto>();
+            if(id == null)
+            {
+                _viewModel.Title = "New meal";
+            }
+            else
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        _viewModel.Meal = JsonConvert.DeserializeObject<MealDto>(apiResponse);
+                        _viewModel.Title = "Edit meal";
+
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+            }
+
+            return View("Details", _viewModel);
+        }
+
+        public async Task<MealDto> MealDto(int id)
+        {
+            var meal = new MealDto(){
+                MealProducts = new List<MealProductDto>()
+            };
+
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    meal = JsonConvert.DeserializeObject<MealDto>(apiResponse);
+                }
+            }
+            return meal;
+        }
+
+        [HttpPost]
+        public IActionResult GenerateMealProductListTable(List<MealProductDto> mealProducts)
+        {
+            return PartialView("_MealProductListTable", mealProducts);
         }
     }
 }

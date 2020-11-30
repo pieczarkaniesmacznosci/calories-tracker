@@ -154,13 +154,9 @@ function editProductModal(id) {
 
 			populateModalInputs(
 				returnedProduct["name"],
-
 				returnedProduct["kcal"],
-
 				returnedProduct["protein"],
-
 				returnedProduct["carbohydrates"],
-
 				returnedProduct["fat"]
 			);
 

@@ -7,5 +7,6 @@ namespace Tracly.Models
     {
         public List<ProductDto> Products {get;set;}
         public MealDto Meal {get;set;}
+        public string Title {get;set;}
     }
 }

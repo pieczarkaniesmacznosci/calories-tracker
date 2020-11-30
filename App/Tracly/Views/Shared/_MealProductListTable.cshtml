@@ -4,7 +4,7 @@
 {
     @foreach (var item in Model)
     {
-    <tr onclick="addProductToMeal(@item.ProductId)">
+    <tr>
         <td>
             @item.Product?.Name
         </td>
@@ -18,8 +18,8 @@
             </div>
         </td>
         <td>
-            <button type="button" class="btn btn-danger" title="Delete" onclick="deleteProductFromMeal(@item.Id)">
-                <i class="fas fa-trash text-white"></i>
+            <button type="button" class="btn btn-danger" title="Delete" onclick="addProductToMeal(@item.Id)">
+                <i class="fas fa-minus text-white"></i>
             </button>
         </td>
     </tr>

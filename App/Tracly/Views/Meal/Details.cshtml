@@ -3,14 +3,14 @@
 <br>
 <br>
 <form>
-    <h1>New Meal</h1>
+    <h1>@Model.Title</h1>
 
     <!----------- PRODUCT FINDER ----------->
     <h2>Find products</h2>
 
     <div class="form-group">
         <div class="input-group">
-            <input id="productNameListInput" type="text" class="form-control" placeholder="Enter product's name.." id="productNameListInput">
+            <input id="productForMealListInput" type="text" class="form-control" placeholder="Enter product's name.." id="productNameListInput">
             <div class="input-group-append">
                 <button type="button" class="btn btn-primary" data-toggle="modal"
                 data-target="#productModal">Add</button>
@@ -28,13 +28,13 @@
                     <th style="width: 40%">
                         Nutrients
                     </th>
-            <th style="width: 20%">
-                Actions
-            </th>
+                    <th style="width: 20%">
+                        Actions
+                    </th>
                 </tr>
             </thead>
-            <tbody id="divProductsPartial">
-                <partial name="_ProductListItemMeal" model="@Model.Products"/> 
+            <tbody id="productsListForMealTable">
+                <partial name="_ProductListForMealTable" model="@Model.Products"/> 
             </tbody>
         </table>
     </div>
@@ -60,17 +60,7 @@
             <tbody id="mealProductListTable">
                 <partial name="_MealProductListTable" model=@Model.Meal.MealProducts /> 
             </tbody>
-                @* <tr>
-                    <td colspan="3">
-                        <b>
-                            Kcal: @Model.Sum(x=>x.Product.Kcal) /
-                            P: @Model.Sum(x=>x.Product.Protein) /
-                            C: @Model.Sum(x=>x.Product.Carbohydrates) /
-                            F: @Model.Sum(x=>x.Product.Fat)
-                        </b>
-                    </td>
-                </tr> *@
-            </table>
+        </table>
         <div class="form-group d-flex justify-content-between">
             <div class="input-group w-50">
                 <input id="mealName" type="text" class="form-control " placeholder="Name">
