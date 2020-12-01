@@ -98,6 +98,7 @@ namespace API.Web.Service
                 }
                 
                 var productEntity = _mapper.Map<Meal>(meal);
+                productEntity.UserId =1;
                 var result = _mealRepository.Add(productEntity);
                 _mealRepository.SaveChanges();
                 return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));

@@ -10,10 +10,10 @@
 
     <div class="form-group">
         <div class="input-group">
-            <input id="productForMealListInput" type="text" class="form-control" placeholder="Enter product's name.." id="productNameListInput">
+            <input id="productForMealListInput" type="text" class="form-control" placeholder="Enter product's name" id="productNameListInput">
             <div class="input-group-append">
                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                data-target="#productModal">Add</button>
+                data-target="#productModal" onclick="addProductMealModal()">Add</button>
             </div>
         </div>
     </div>
@@ -74,49 +74,52 @@
         </div>
         <div class="form-group">
             <div class="float-right">
-                <button type="submit" class="btn btn-success">Consume</button>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-success" onclick="eatNow()">Eat now</button>
+                <button type="submit" class="btn btn-primary" onclick="saveForLater()">Save for later</button>
             </div>
         </div>
     </div>
 </form>
 
 <!----------- PRODUCT ADD MODAL ----------->
-<div id="productModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+
+<div id="productModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
         <div class="container">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1>Add Product</h1>
+                    <h1 class="modal-title" id="productModalTitle"></h1>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="productForm" name="productForm">
                         <div class="form-group">
                             <label>Product name</label>
-                            <input class="form-control" placeholder="Product name">
+                            <input class="form-control" id="name" name="name" placeholder="Product name"
+                                autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label>Kcal</label>
-                            <input class="form-control" placeholder="Kcal">
+                            <input class="form-control numeric" id="kcal" name="kcal" placeholder="Kcal" autocomplete="off" type="text">
                         </div>
                         <div class="form-group">
                             <label>Protein</label>
-                            <input class="form-control" placeholder="Protein [g]">
+                            <input class="form-control numeric" id="protein" name="protein" placeholder="Protein [g]"
+                                autocomplete="off" type="text">
                         </div>
                         <div class="form-group">
                             <label>Carbohydrates</label>
-                            <input class="form-control" placeholder="Carbohydrates [g]">
+                            <input class="form-control numeric" id="carbohydrates" name="carbohydrates"
+                                placeholder="Carbohydrates [g]" autocomplete="off" type="text">
                         </div>
                         <div class="form-group">
                             <label>Fat</label>
-                            <input class="form-control" placeholder="Fat [g]">
+                            <input class="form-control numeric" id="fat" name="fat" placeholder="Fat [g]" autocomplete="off" type="text">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dismiss" data-toggle="modal"
-                    data-target="#productModal">Dismiss</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-dismiss close" data-dismiss="modal">Dismiss</button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit" onclick="saveProduct()">Submit</button>
                 </div>
             </div>
         </div>

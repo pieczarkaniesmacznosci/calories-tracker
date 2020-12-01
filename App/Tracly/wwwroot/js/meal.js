@@ -98,3 +98,82 @@ function addProductToMeal(productId) {
 		},
 	});
 }
+// ------------ VALIDATION RULES ------------
+$(function () {
+	$.validator.setDefaults({
+		errorClass: "text-danger",
+		highlight: function (element) {
+			$(element).addClass("is-invalid");
+		},
+		unhighlight: function (element) {
+			$(element).removeClass("is-invalid");
+		},
+	});
+	var $productForm = $("#productForm");
+	if ($productForm.length) {
+		$productForm.validate({
+			rules: {
+				mealName: {
+					required: true,
+					minlength: 3,
+					remote: {
+						url: "/Product/ProductNameValid",
+						async: false,
+						type: "post",
+						data: {
+							productName: function () {
+								return $("#name").val();
+							},
+						},
+					},
+				},
+				kcal: {
+					required: true,
+				},
+				protein: {
+					required: true,
+				},
+				carbohydrates: {
+					required: true,
+				},
+				fat: {
+					required: true,
+				},
+			},
+			messages: {
+				name: {
+					required: "Product name is required!",
+					remote: "Product already exists!",
+				},
+				kcal: {
+					required: "Kcal is required!",
+				},
+				protein: {
+					required: "Insert protein content!",
+				},
+				carbohydrates: {
+					required: "Insert carbohydrates content!",
+				},
+				fat: {
+					required: "Insert fat content!",
+				},
+			},
+		});
+	}
+});
+
+function addProductMealModal() {
+	$("#productModal").modal({ show: true });
+	$("#productModal").on("hidden.bs.modal", function () {
+		$("#productForm").validate().resetForm();
+		$("#productForm .is-invalid").removeClass("is-invalid");
+	});
+	document.getElementById("productModalTitle").innerHTML = "Add Product";
+
+	document.getElementById("name").value = document.getElementById(
+		"productForMealListInput"
+	).value;
+}
+
+function eatNow() {}
+function saveForLater() {}

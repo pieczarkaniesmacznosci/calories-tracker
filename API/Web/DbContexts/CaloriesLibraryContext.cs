@@ -18,12 +18,18 @@ namespace API.Web.DbContexts
         public DbSet<Meal> Meals { get; set; }
         public DbSet<UserNutrition> UserNutritions { get; set; }
         public DbSet<UserWeight> UserWeights { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
 
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
+            // modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
+            modelBuilder.Entity<MealProduct>().Property(x=>x.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<User>();
             modelBuilder.Entity<User>().HasMany(x => x.UserNutritions).WithOne(x => x.User);
@@ -135,21 +141,21 @@ namespace API.Web.DbContexts
         private void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
-                            new Meal()
-                            {
-                                Id = 1,
-                                DateEaten = DateTime.Now,
-                                UserId = 1,
-                            },
-                            new Meal()
-                            {
-                                Id = 2,
-                                DateEaten = DateTime.Now,
-                                UserId = 1,
-                                IsSaved = true,
-                                MealName = "Chicken stew"
-                            }
-                        );
+                new Meal()
+                {
+                    Id = 1,
+                    DateEaten = DateTime.Now,
+                    UserId = 1,
+                },
+                new Meal()
+                {
+                    Id = 2,
+                    DateEaten = DateTime.Now,
+                    UserId = 1,
+                    IsSaved = true,
+                    MealName = "Chicken stew"
+                }
+            );
         }
 
         private void SeedMealProductTable(ModelBuilder modelBuilder)
@@ -176,19 +182,19 @@ namespace API.Web.DbContexts
                             },
                             new MealProduct()
                             {
-                                Id = 1,
+                                Id = 4,
                                 MealId = 2,
                                 ProductId = 1,
                                 Weight = 132.0d
                             }, new MealProduct()
                             {
-                                Id = 2,
+                                Id = 5,
                                 MealId = 2,
                                 ProductId = 2,
                                 Weight = 250.0d
                             }, new MealProduct()
                             {
-                                Id = 3,
+                                Id = 6,
                                 MealId = 2,
                                 ProductId = 4,
                                 Weight = 95.0d
