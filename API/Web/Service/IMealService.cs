@@ -9,6 +9,7 @@ namespace API.Web.Service
     {
         Result<MealDto> GetMeal(int id);
         Result<IEnumerable<MealDto>> GetMeals(bool isSaved);
+        Result<IEnumerable<MealDto>> GetMeals(string mealName);
         Result<IEnumerable<MealDto>> GetMeals(DateTime mealDate);
         Result<MealDto> AddMeal(MealDto meal);
         Result<MealDto> EditMeal(MealDto meal);

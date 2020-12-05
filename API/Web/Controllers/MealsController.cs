@@ -42,6 +42,13 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.GetMeals(mealDate));
         }
+        
+        [HttpGet]
+        [Route("meals/{mealName}")]
+        public IActionResult FindProductByName(string mealName)
+        {
+            return base.FromResult(_service.GetMeals(mealName));
+        }
 
         [HttpPost]
         [Route("meal")]

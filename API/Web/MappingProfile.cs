@@ -37,7 +37,7 @@ namespace API.Web
             }
             else
             {
-                return string.Format("Meal-{0:ddMMyyyy@HH-mm}", DateTime.Now);
+                return string.Format("Meal@{0:HH:mm-ddMMyyyy}", DateTime.Now);
             }
         }
     }

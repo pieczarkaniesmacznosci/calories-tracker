@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using API.Web.Validators;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Web.Service
 {
@@ -161,6 +162,34 @@ namespace API.Web.Service
             {
                 _logger.LogCritical($"Exception while deleting meal with id = {id}",ex);
                 return new UnexpectedResult<MealDto>();
+            }
+        }
+
+        public Result<IEnumerable<MealDto>> GetMeals(string mealName)
+        {
+            try
+            {
+                if(string.IsNullOrWhiteSpace(mealName))
+                {
+                    return new NotFoundResult<IEnumerable<MealDto>>();
+                }
+
+                //https://entityframeworkcore.com/knowledge-base/43277868/entity-framework-core---contains-is-case-sensitive-or-case-insensitive-
+                var meals = _mealRepository.Find(x=> x.IsSaved && x.UserId ==1 && EF.Functions.Like(x.MealName, $"%{mealName}%"));
+
+                if(!meals.Any())
+                {
+                    return new NotFoundResult<IEnumerable<MealDto>>();
+                }
+                
+                var mealsDto = _mapper.Map<IEnumerable<MealDto>>(meals);
+
+                return new SuccessResult<IEnumerable<MealDto>>(mealsDto);                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting products",ex);
+                return new UnexpectedResult<IEnumerable<MealDto>>();
             }
         }
     }
