@@ -75,10 +75,12 @@ function saveProduct() {
 
 	if (productId === undefined) {
 		postProduct(productFormData);
+		loadList();
 	} else {
 		productFormData = productFormData.concat("&id=" + productId);
 
 		putProduct(productFormData);
+		loadList();
 	}
 }
 

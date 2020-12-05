@@ -10,6 +10,7 @@ using System;
 using API.Web.Dtos;
 using Tracly.Models;
 using System.Linq;
+using System.Text;
 
 namespace App.Tracly.Controllers
 {
@@ -33,7 +34,7 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meals");
+                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meals/false");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -142,10 +143,49 @@ namespace App.Tracly.Controllers
             return meal;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MealListTable(string queryString)
+        {
+            var meals = new List<MealDto>();
+            var getPath = "http://localhost:5005/api/meals/true";
+            var getByNamePath = "http://localhost:5005/api/meals/mealsByName";
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response;
+                if (!string.IsNullOrWhiteSpace(queryString))
+                {
+                    var builder = new UriBuilder(getByNamePath);
+                    builder.Query = $"mealName={queryString}";
+                    response = await httpClient.GetAsync(builder.ToString());
+                }
+                else
+                {
+                    response = await httpClient.GetAsync(getPath);
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
+                }
+            }
+            return PartialView("_MealsListItem", meals);
+        }
+
         [HttpPost]
         public IActionResult GenerateMealProductListTable(List<MealProductDto> mealProducts)
         {
             return PartialView("_MealProductListTable", mealProducts);
+        }
+
+        [HttpPost]
+        public async void PostMeal(MealDto meal)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(meal), Encoding.UTF8, "application/json");
+
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/meal", stringContent);
+            }
         }
     }
 }

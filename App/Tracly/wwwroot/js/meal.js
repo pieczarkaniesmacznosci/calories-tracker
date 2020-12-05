@@ -15,12 +15,6 @@ $(function () {
 	loadMealsList(false);
 });
 
-function deleteProductFromMeal(id) {
-	var reducedProductsList = mealProducts.filter((x) => x.id != id);
-	mealProducts = reducedProductsList;
-	loadMealProductList(reducedProductsList);
-}
-
 $(document).ready(function () {
 	if (window.location.href.indexOf("/meal/details") > -1) {
 		mealDetails();
@@ -63,8 +57,25 @@ function loadProductForMealList(searchQuery) {
 	var urlBase = "/Meal/ProductListForMealTable".concat(
 		"?queryString=" + searchQuery
 	);
-	console.log(urlBase);
 	$("#productsListForMealTable").load(urlBase);
+}
+
+$("#mealListInput").keyup(function () {
+	var searchQuery = $("#mealListInput").val();
+
+	if (searchQuery.length > 2) {
+		loadMealList(searchQuery);
+	} else {
+		return;
+	}
+});
+
+function loadMealList(searchQuery) {
+	if (searchQuery === undefined) {
+		searchQuery = "";
+	}
+	var urlBase = "/Meal/MealListTable".concat("?queryString=" + searchQuery);
+	$("#divMealsSavedPartial").load(urlBase);
 }
 
 function getProduct(id) {
@@ -98,6 +109,13 @@ function addProductToMeal(productId) {
 		},
 	});
 }
+
+function deleteProductFromMeal(id) {
+	var reducedProductsList = mealProducts.filter((x) => x.productId != id);
+	mealProducts = reducedProductsList;
+	loadMealProductList(reducedProductsList);
+}
+
 // ------------ VALIDATION RULES ------------
 $(function () {
 	$.validator.setDefaults({
@@ -176,4 +194,22 @@ function addProductMealModal() {
 }
 
 function eatNow() {}
-function saveForLater() {}
+function saveForLater() {
+	var meal = {
+		MealName: document.getElementById("mealName").value,
+		IsSaved: true,
+		mealProducts: mealProducts,
+	};
+	var urlBase = "/Meal/PostMeal";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: meal,
+		success: function (result, status, xhr) {
+			mealDetails();
+		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
+}

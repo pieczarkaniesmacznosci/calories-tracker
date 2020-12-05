@@ -44,7 +44,7 @@ namespace API.Web.Controllers
         }
         
         [HttpGet]
-        [Route("meals/{mealName}")]
+        [Route("meals/mealsByName")]
         public IActionResult FindProductByName(string mealName)
         {
             return base.FromResult(_service.GetMeals(mealName));
