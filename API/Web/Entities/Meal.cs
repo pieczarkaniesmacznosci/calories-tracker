@@ -12,7 +12,7 @@ namespace API.Web.Entities
         public bool IsSaved { get; set; }
         public string MealName { get; set; }
         public DateTime DateEaten { get; set; }
-
+        public IEnumerable<MealLog> MealLogs { get; set; }
         public IEnumerable<MealProduct> MealProducts { get; set; }
     }
 }

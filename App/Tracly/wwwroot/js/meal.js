@@ -116,6 +116,70 @@ function deleteProductFromMeal(id) {
 	loadMealProductList(reducedProductsList);
 }
 
+function addProductMealModal() {
+	$("#productModal").modal({ show: true });
+	$("#productModal").on("hidden.bs.modal", function () {
+		$("#productForm").validate().resetForm();
+		$("#productForm .is-invalid").removeClass("is-invalid");
+	});
+	document.getElementById("productModalTitle").innerHTML = "Add Product";
+
+	document.getElementById("name").value = document.getElementById(
+		"productForMealListInput"
+	).value;
+}
+
+function eatNow() {
+	var meal = {
+		MealName: document.getElementById("mealName").value,
+		IsSaved: false,
+		MealProducts: mealProducts.map((mp) => {
+			var newWeight = $(`[data-meal-product-id="${mp.productId}"]`).val();
+			return {
+				ProductId: mp.productId,
+				Weight: newWeight,
+			};
+		}),
+	};
+	var urlBase = "/Meal/PostMeal";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: meal,
+		success: function (result, status, xhr) {
+			mealDetails();
+		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
+}
+function saveForLater() {
+	var meal = {
+		MealName: document.getElementById("mealName").value,
+		IsSaved: true,
+		MealProducts: mealProducts.map((mp) => {
+			var newWeight = $(`[data-meal-product-id="${mp.productId}"]`).val();
+			return {
+				ProductId: mp.productId,
+				Weight: newWeight,
+			};
+		}),
+	};
+	var urlBase = "/Meal/PostMeal";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: meal,
+		success: function (result, status, xhr) {
+			mealDetails();
+		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
+}
+
 // ------------ VALIDATION RULES ------------
 $(function () {
 	$.validator.setDefaults({
@@ -179,37 +243,3 @@ $(function () {
 		});
 	}
 });
-
-function addProductMealModal() {
-	$("#productModal").modal({ show: true });
-	$("#productModal").on("hidden.bs.modal", function () {
-		$("#productForm").validate().resetForm();
-		$("#productForm .is-invalid").removeClass("is-invalid");
-	});
-	document.getElementById("productModalTitle").innerHTML = "Add Product";
-
-	document.getElementById("name").value = document.getElementById(
-		"productForMealListInput"
-	).value;
-}
-
-function eatNow() {}
-function saveForLater() {
-	var meal = {
-		MealName: document.getElementById("mealName").value,
-		IsSaved: true,
-		mealProducts: mealProducts,
-	};
-	var urlBase = "/Meal/PostMeal";
-	$.ajax({
-		url: urlBase,
-		type: "POST",
-		data: meal,
-		success: function (result, status, xhr) {
-			mealDetails();
-		},
-		error: function () {
-			alert("ajax failed");
-		},
-	});
-}

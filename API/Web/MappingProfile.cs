@@ -11,12 +11,18 @@ namespace API.Web
         {
             CreateMap<Product, ProductDto>()
             .ReverseMap();
+
             CreateMap<Meal, MealDto>();
+
             CreateMap<MealDto, Meal>()
             .ForMember(dest=>dest.MealName,
             opt =>{
                 opt.MapFrom<DefaultMealNameResolver>();
             });
+
+            CreateMap<MealLog, MealLogDto>()
+            .ReverseMap();
+
             CreateMap<MealProduct, MealProductDto>()
             .ReverseMap();
 

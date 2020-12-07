@@ -16,14 +16,16 @@ namespace API.Web.Service
     {
         private readonly ILogger<MealService> _logger;
         private readonly IRepository<Meal> _mealRepository;
+        private readonly IRepository<MealLog> _mealLogRepository;
         private readonly IMapper _mapper;
         private readonly MealValidator _mealValidator;
 
 
-        public MealService(ILogger<MealService> logger, IRepository<Meal> productRepository, IMapper mapper, MealValidator mealValidator)
+        public MealService(ILogger<MealService> logger, IRepository<Meal> mealRepository,IRepository<MealLog> mealLogRepository, IMapper mapper, MealValidator mealValidator)
         {
             _logger = logger;
-            _mealRepository = productRepository;
+            _mealRepository = mealRepository;
+            _mealLogRepository = mealLogRepository;
             _mapper = mapper;
             _mealValidator = mealValidator;
         }
@@ -190,6 +192,60 @@ namespace API.Web.Service
             {
                 _logger.LogCritical($"Exception while getting products",ex);
                 return new UnexpectedResult<IEnumerable<MealDto>>();
+            }
+        }
+
+        public Result<MealLogDto> AddMealLog(MealLogDto mealLog)
+        {
+            try
+            {
+                var meal = _mealRepository.Get(mealLog.MealId);
+
+                if(meal ==null)
+                {
+                    return new NotFoundResult<MealLogDto>();
+                }
+
+                var log = new MealLog(){
+                    MealId = mealLog.MealId,
+                    DateEaten = mealLog.DateEaten ?? DateTime.Now
+                };
+
+                _mealLogRepository.Add(log);
+                
+                var mealLogDto = _mapper.Map<MealLogDto>(log);
+
+                return new SuccessResult<MealLogDto>(mealLogDto);                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting products",ex);
+                return new UnexpectedResult<MealLogDto>();
+            }
+        }
+
+        public Result<MealLogDto> DeleteMealLog(int mealLogId)
+        {
+            try
+            {
+                var mealLog = _mealLogRepository.Get(mealLogId);
+
+                if(mealLog ==null)
+                {
+                    return new NotFoundResult<MealLogDto>();
+                }
+
+                var mealLogDto = _mapper.Map<MealLogDto>(mealLog);
+
+                _mealLogRepository.Delete(mealLog);
+                _mealLogRepository.SaveChanges();
+
+                return new SuccessResult<MealLogDto>(mealLogDto);                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting products",ex);
+                return new UnexpectedResult<MealLogDto>();
             }
         }
     }

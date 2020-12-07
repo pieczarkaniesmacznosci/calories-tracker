@@ -16,6 +16,7 @@ namespace API.Web.DbContexts
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Meal> Meals { get; set; }
+        public DbSet<MealLog> MealLogs { get; set; }
         public DbSet<UserNutrition> UserNutritions { get; set; }
         public DbSet<UserWeight> UserWeights { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,6 +31,7 @@ namespace API.Web.DbContexts
 
             // modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
             modelBuilder.Entity<MealProduct>().Property(x=>x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealLog>().Property(x=>x.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<User>();
             modelBuilder.Entity<User>().HasMany(x => x.UserNutritions).WithOne(x => x.User);
@@ -40,6 +42,7 @@ namespace API.Web.DbContexts
             SeedUserTable(modelBuilder);
             SeedProductTable(modelBuilder);
             SeedMealTable(modelBuilder);
+            SeedMealLogTable(modelBuilder);
             SeedMealProductTable(modelBuilder);
             SeedUserNutritionTable(modelBuilder);
             SeedUserWeightTable(modelBuilder);
@@ -144,7 +147,7 @@ namespace API.Web.DbContexts
                 new Meal()
                 {
                     Id = 1,
-                    DateEaten = DateTime.Now,
+                    // DateEaten = DateTime.Now,
                     UserId = 1,
                 },
                 new Meal()
@@ -154,6 +157,18 @@ namespace API.Web.DbContexts
                     UserId = 1,
                     IsSaved = true,
                     MealName = "Chicken stew"
+                }
+            );
+        }
+        private void SeedMealLogTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MealLog>().HasData(
+                new MealLog()
+                {
+                    Id = 1,
+                    MealId = 1,
+                    DateEaten = DateTime.Now,
+                    UserId = 1,
                 }
             );
         }

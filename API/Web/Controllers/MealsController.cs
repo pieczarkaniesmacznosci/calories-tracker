@@ -57,6 +57,20 @@ namespace API.Web.Controllers
             return base.FromResult(_service.AddMeal(meal));
         }
 
+        [HttpPost]
+        [Route("meal/logMeal")]
+        public IActionResult EatMeal(MealLogDto mealLog)
+        {
+            return base.FromResult(_service.AddMealLog(mealLog));
+        }
+
+        [HttpDelete]
+        [Route("meal/logMeal/{mealLogId:int}")]
+        public IActionResult ThrowUp(int mealLogId)
+        {
+            return base.FromResult(_service.DeleteMealLog(mealLogId));
+        }
+
         [HttpPut]
         [Route("meal")]
         public IActionResult EditMeal(MealDto meal)

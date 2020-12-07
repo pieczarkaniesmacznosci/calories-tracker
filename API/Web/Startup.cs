@@ -62,6 +62,7 @@ namespace API
             services.AddTransient<IProductService, ProductService>();
 
             services.AddTransient<IRepository<Meal>, MealRepository>();
+            services.AddTransient<IRepository<MealLog>, MealLogRepository>();
             services.AddTransient<IMealService, MealService>();
 
             services.AddTransient<IRepository<Meal>, MealRepository>();
