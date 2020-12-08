@@ -1,11 +1,6 @@
 var mealProducts;
 var product;
 
-$(document).ready(function () {
-	if (window.location.href.indexOf("/meal/details") > -1) {
-		mealDetails();
-	}
-});
 function goToMealsList() {
 	$.get("/Meal/RedirectToList");
 }
@@ -36,7 +31,7 @@ $("#productForMealListInput").keyup(function () {
 	if (searchQuery.length > 2) {
 		loadProductForMealList(searchQuery);
 	} else {
-		return;
+		loadProductForMealList();
 	}
 });
 
@@ -192,7 +187,6 @@ function deleteSavedMeal(mealId) {
 		data: { mealId: mealId },
 		success: function (result, status, xhr) {
 			loadSavedMeals();
-			//mealDetails();
 		},
 		error: function () {
 			alert("ajax failed");

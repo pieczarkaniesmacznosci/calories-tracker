@@ -93,7 +93,6 @@ namespace App.Tracly.Controllers
         public async Task<IActionResult> ProductListForMealTable(string queryString)
         {
             var products = new List<ProductDto>();
-            var getPath = "http://localhost:5005/api/products";
             var getByNamePath = "http://localhost:5005/api/products/name";
             using (var httpClient = new HttpClient())
             {
@@ -103,15 +102,16 @@ namespace App.Tracly.Controllers
                     var builder = new UriBuilder(getByNamePath);
                     builder.Query = $"productName={queryString}";
                     response = await httpClient.GetAsync(builder.ToString());
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
+                    }
                 }
                 else
                 {
-                    response = await httpClient.GetAsync(getPath);
-                }
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
+                    products = new List<ProductDto>();
                 }
             }
             return PartialView("_ProductListForMealTable", products);

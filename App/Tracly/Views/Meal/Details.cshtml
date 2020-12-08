@@ -64,10 +64,10 @@
         </table>
         <div class="form-group d-flex justify-content-between">
             <div class="input-group w-50">
-                <input id="mealName" type="text" class="form-control " placeholder="Name">
+                <input id="mealName" autocomplete="off" type="text" class="form-control " placeholder="Name">
             </div>
             <div class="input-group w-25">
-                <input id="portionQty" type="text" autocomplete="off" class="form-control disabled" placeholder="1">
+                <input id="portionQty" type="text" autocomplete="off" class="form-control" disabled placeholder="1">
                 <div class="input-group-append">
                     <span class="input-group-text">pcs</span>
                 </div>
@@ -81,3 +81,6 @@
         </div>
     </div>
 </form>
+<script>
+    mealDetails();
+</script>
