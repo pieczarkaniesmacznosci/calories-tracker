@@ -45,29 +45,6 @@ namespace API.Web.Service
             }
         }
 
-        public Result<IEnumerable<MealDto>> GetMeals(DateTime mealDate)
-        {
-            try
-            {
-                var meals = _mealRepository
-                    .Find(x=>x.DateEaten.Date == mealDate.Date && !x.IsSaved).ToList();
-
-                if(meals.Count == 0)
-                {
-                    _logger.LogInformation($"No meals from {mealDate} were found!");
-                    return new NotFoundResult<IEnumerable<MealDto>>();
-                }
-
-                var mealDtos = _mapper.Map<IEnumerable<MealDto>>(meals);
-                return new SuccessResult<IEnumerable<MealDto>>(mealDtos);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogCritical($"Exception while getting meals",ex);
-                return new UnexpectedResult<IEnumerable<MealDto>>();
-            }
-        }
-
         public Result<MealDto> GetMeal(int id)
         {
             try
@@ -103,6 +80,15 @@ namespace API.Web.Service
                 var productEntity = _mapper.Map<Meal>(meal);
                 productEntity.UserId =1;
                 var result = _mealRepository.Add(productEntity);
+                if(meal.DateEaten != null)
+                {
+                    _mealLogRepository.Add(new MealLog(){
+                        Meal = result,
+                        DateEaten = meal.DateEaten.Value,
+                        UserId =productEntity.UserId
+                    });
+                }
+
                 _mealRepository.SaveChanges();
                 return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));
             }

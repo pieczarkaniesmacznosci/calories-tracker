@@ -1,3 +1,4 @@
+@using Tracly.Common
 @model List<MealDto>
     
     @if(Model.Any())
@@ -9,20 +10,20 @@
                     @item.MealName
                 </td>
                 <td>
-                    K: @item.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100) 
-                    / P: @item.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100) 
-                    / C: @item.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100) 
-                    / F: @item.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100)
+                    K: @Format.OneDecimal(item.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100))
+                    / P: @Format.OneDecimal(item.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100)) 
+                    / C: @Format.OneDecimal(item.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100)) 
+                    / F: @Format.OneDecimal(item.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100))
                 </td>
                 <td>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" title="Eat" onclick="eatMeal(@item.Id)">
-                            <i class="fas fa-utensil text-white"></i>
+                        <button type="button" class="btn btn-primary" title="Eat" onclick="eatNowSavedMeal(@item.Id)">
+                            <i class="fas fa-utensils text-white"></i>
                         </button>
                         <button type="button" class="btn btn-primary" title="Edit" onclick="editMeal(@item.Id)">
                             <i class="fas fa-edit text-white"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" title="Delete" onclick="deleteMeal(@item.Id)">
+                        <button type="button" class="btn btn-danger" title="Delete" onclick="deleteSavedMeal(@item.Id)">
                             <i class="fas fa-trash text-white"></i>
                         </button>
                     </div>

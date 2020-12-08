@@ -1,25 +1,14 @@
 var mealProducts;
 var product;
 
-function loadMealsList(isSaved) {
-	var list;
-	if (isSaved) {
-		list = "#divMealsSavedPartial";
-	} else {
-		list = "#divMealsConsumedPartial";
-	}
-	var urlBase = "/Meal/MealsList/".concat("?saved=" + isSaved);
-	$(list).load(urlBase);
-}
-$(function () {
-	loadMealsList(false);
-});
-
 $(document).ready(function () {
 	if (window.location.href.indexOf("/meal/details") > -1) {
 		mealDetails();
 	}
 });
+function goToMealsList() {
+	$.get("/Meal/RedirectToList");
+}
 
 function mealDetails(id) {
 	$.get("/Meal/MealDto", { id: id }, function (data) {
@@ -36,6 +25,7 @@ function loadMealProductList(products) {
 		data: { mealProducts: products },
 		success: function (result, status, xhr) {
 			$(list).html(result);
+			setUpNumeric();
 		},
 	});
 }
@@ -66,7 +56,7 @@ $("#mealListInput").keyup(function () {
 	if (searchQuery.length > 2) {
 		loadMealList(searchQuery);
 	} else {
-		return;
+		loadMealList("");
 	}
 });
 
@@ -133,6 +123,7 @@ function eatNow() {
 	var meal = {
 		MealName: document.getElementById("mealName").value,
 		IsSaved: false,
+		DateEaten: new Date().toISOString(),
 		MealProducts: mealProducts.map((mp) => {
 			var newWeight = $(`[data-meal-product-id="${mp.productId}"]`).val();
 			return {
@@ -147,13 +138,68 @@ function eatNow() {
 		type: "POST",
 		data: meal,
 		success: function (result, status, xhr) {
-			mealDetails();
+			loadConsumedMeals();
+			//mealDetails();
 		},
 		error: function () {
 			alert("ajax failed");
 		},
 	});
 }
+
+function eatNowSavedMeal(mealId) {
+	var mealLog = {
+		MealId: mealId,
+		DateEaten: new Date().toISOString(),
+	};
+
+	var urlBase = "/Meal/EatSavedMeal";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: mealLog,
+		success: function (result, status, xhr) {
+			loadSavedMeals();
+			//mealDetails();
+		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
+}
+
+function deleteConsumedMeal(mealLogId) {
+	var urlBase = "/Meal/DeleteConsumedMeal";
+	$.ajax({
+		url: urlBase,
+		type: "DELETE",
+		data: { mealLogId: mealLogId },
+		success: function (result, status, xhr) {
+			loadConsumedMeals();
+			//mealDetails();
+		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
+}
+
+function deleteSavedMeal(mealId) {
+	var urlBase = "/Meal/DeleteSavedMeal";
+	$.ajax({
+		url: urlBase,
+		type: "DELETE",
+		data: { mealId: mealId },
+		success: function (result, status, xhr) {
+			loadSavedMeals();
+			//mealDetails();
+		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
+}
+
 function saveForLater() {
 	var meal = {
 		MealName: document.getElementById("mealName").value,
@@ -172,12 +218,13 @@ function saveForLater() {
 		type: "POST",
 		data: meal,
 		success: function (result, status, xhr) {
-			mealDetails();
+			goToMealsList();
 		},
 		error: function () {
 			alert("ajax failed");
 		},
 	});
+	goToMealsList();
 }
 
 // ------------ VALIDATION RULES ------------

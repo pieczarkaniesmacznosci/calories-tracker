@@ -9,7 +9,7 @@ namespace API.Web.Dtos
         public bool IsSaved {get;set;}
         public string MealName {get;set;}
         public double Weight { get; set; }
-        public DateTime DateEaten { get; set; }
+        public DateTime? DateEaten { get; set; }
         public List<MealProductDto> MealProducts {get;set;}
     }
 }

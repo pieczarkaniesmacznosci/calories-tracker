@@ -3,10 +3,10 @@
 <br>
 <nav>
     <div class="nav nav-tabs" role="tablist">
-        <a class="nav-item nav-link active" id="nav-consumed-tab" data-toggle="tab" href="#consumed" role="tab" onclick="loadMealsList(false)">
+        <a class="nav-item nav-link active" id="nav-consumed-tab" data-toggle="tab" href="#consumed" role="tab" onclick="loadConsumedMeals()">
             <span>Consumed</span>
         </a>
-        <a class="nav-item nav-link" id="nav-saved-tab" data-toggle="tab" href="#saved" role="tab" onclick="loadMealsList(true)">
+        <a class="nav-item nav-link" id="nav-saved-tab" data-toggle="tab" href="#saved" role="tab" onclick="loadSavedMeals()">
             <span>Saved</span>
         </a>
     </div>
@@ -70,9 +70,29 @@
                     </tr>
                 </thead>
                 <tbody id="divMealsSavedPartial">
-                    <partial name="_MealsListItem" model=@Model.SavedMeals />
+                    <partial name="_MealsListTable" model=@Model.SavedMeals />
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    list = "#divMealsConsumedPartial";
+function loadConsumedMeals(){
+	var urlBase = "/Meal/ConsumedMealsList";
+	    $(list).load(urlBase);
+    }
+
+function loadSavedMeals() {
+	var list = "#divMealsSavedPartial";
+    var urlBase = "/Meal/SavedMealsList";
+	$(list).load(urlBase);
+} 
+function loadMeals() {
+	var list = "#divMealsSavedPartial";
+    var urlBase = "/Meal/SavedMealsList";
+	$(list).load(urlBase);
+} 
+    window.onload = loadConsumedMeals
+</script>

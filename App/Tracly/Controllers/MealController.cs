@@ -28,31 +28,52 @@ namespace App.Tracly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public IActionResult RedirectToList()
         {
             var mealsVM = new MealListViewModel()
             {
                 MealLogs = new List<MealLogDto>(),
                 SavedMeals = new List<MealDto>()
             };
+            return LocalRedirect("/Meal/List");
+        }
 
-            using (var httpClient = new HttpClient())
+        [HttpGet]
+        public IActionResult List()
+        {
+            var mealsVM = new MealListViewModel()
             {
-                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meal/mealsLog");
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    mealsVM.MealLogs = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
-                }
-            }
+                MealLogs = new List<MealLogDto>(),
+                SavedMeals = new List<MealDto>()
+            };
             return View("List", mealsVM);
         }
 
         [HttpGet]
-        public async Task<IActionResult> MealsList(bool saved)
+        public async Task<IActionResult> ConsumedMealsList()
+        {
+            var meals = new List<MealLogDto>();
+            var getMeals = $"http://localhost:5005/api/meal/mealsLog";
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response;
+                var builder = new UriBuilder(getMeals);
+                response = await httpClient.GetAsync(builder.ToString());
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    meals = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
+                }
+            }
+            return PartialView("_ConsumedMealsListTable", meals);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SavedMealsList()
         {
             var meals = new List<MealDto>();
-            var getMeals = $"http://localhost:5005/api/meals/{saved}";
+            var getMeals = $"http://localhost:5005/api/meals/true";
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response;
@@ -65,7 +86,7 @@ namespace App.Tracly.Controllers
                     meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
                 }
             }
-            return PartialView("_MealsListItem", meals);
+            return PartialView("_MealsListTable", meals);
         }
 
         [HttpGet]
@@ -150,8 +171,8 @@ namespace App.Tracly.Controllers
         [HttpGet]
         public async Task<IActionResult> MealListTable(string queryString)
         {
-            var meals = new List<MealLogDto>();
-            var getPath = "http://localhost:5005/api/meal/mealsLog";
+            var meals = new List<MealDto>();
+            var getPath = "http://localhost:5005/api/meals/true";
             var getByNamePath = "http://localhost:5005/api/meals/mealsByName";
             using (var httpClient = new HttpClient())
             {
@@ -169,10 +190,10 @@ namespace App.Tracly.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    meals = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
+                    meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
                 }
             }
-            return PartialView("_ConsumedMealsListTable", meals);
+            return PartialView("_MealsListTable", meals);
         }
 
         [HttpPost]
@@ -189,6 +210,37 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/meal", stringContent);
+            }
+        }
+
+        [HttpPost]
+        public async void EatSavedMeal(MealLogDto mealLog)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(mealLog), Encoding.UTF8, "application/json");
+
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/meal/logMeal", stringContent);
+            }
+        }
+
+        [HttpDelete]
+        public async void DeleteSavedMeal(int mealId)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var builder = new UriBuilder($"http://localhost:5005/api/meal/{mealId}");
+                HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
+            }
+        }
+
+        [HttpDelete]
+        public async void DeleteConsumedMeal(int mealLogId)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var builder = new UriBuilder($"http://localhost:5005/api/meal/logMeal/{mealLogId}");
+                HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
             }
         }
     }

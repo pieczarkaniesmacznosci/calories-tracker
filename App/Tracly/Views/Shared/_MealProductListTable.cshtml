@@ -9,13 +9,17 @@
             @item.Product?.Name
         </td>
         <td>
-            <div class="input-group">
-                <input type=" text" class="form-control input-sm numeric" required 
-                aria-describedby="basic-addon2" value="@item.Weight" data-meal-product-id="@item.Product.Id">
-                <div class="input-group-append">
-                    <span class="input-group-text">g</span>
+            <form>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm numeric" required 
+                        aria-describedby="basic-addon2" value="@item.Weight"autocomplete="off" data-meal-product-id="@item.Product.Id">
+                        <div class="input-group-append">
+                            <span class="input-group-text">g</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </td>
         <td>
             <button type="button" class="btn btn-danger" title="Delete" onclick="deleteProductFromMeal(@item.Product.Id)">

@@ -35,14 +35,7 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.GetMeals(isSaved));
         }
-        
-        [HttpGet]
-        [Route("meals/{mealDate:dateTime}")]
-        public IActionResult FindMealsByDate(DateTime mealDate)
-        {
-            return base.FromResult(_service.GetMeals(mealDate));
-        }
-        
+                
         [HttpGet]
         [Route("meals/mealsByName")]
         public IActionResult FindProductByName(string mealName)
@@ -93,10 +86,10 @@ namespace API.Web.Controllers
         }
         
         [HttpDelete]
-        [Route("meal")]
-        public IActionResult DeleteMeal(int id)
+        [Route("meal/{mealId:int}")]
+        public IActionResult DeleteMeal(int mealId)
         {
-            return base.FromResult(_service.DeleteMeal(id));
+            return base.FromResult(_service.DeleteMeal(mealId));
         }
     }
 }

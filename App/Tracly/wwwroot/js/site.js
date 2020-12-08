@@ -10,7 +10,7 @@ $("#productNameListInput").keyup(function () {
 	if (searchQuery.length > 2) {
 		loadList(searchQuery);
 	} else {
-		loadList();
+		loadList("");
 	}
 });
 
@@ -175,25 +175,23 @@ function editProductModal(id) {
 
 function populateModalInputs(name, kcal, protein, carbohydrates, fat) {
 	document.getElementById("productModalTitle").innerHTML = "Edit Product";
-
 	$("#name").val(name);
-
 	$("#kcal").val(kcal);
-
 	$("#protein").val(protein);
-
 	$("#carbohydrates").val(carbohydrates);
-
 	$("#fat").val(fat);
 }
 
-$(".numeric").numeric({
-	decimal: ".",
-	negative: false,
-	precision: 2,
-});
+function setUpNumeric() {
+	$(".numeric").numeric({
+		decimal: ".",
+		negative: false,
+		precision: 2,
+	});
+}
 
 $(function () {
+	setUpNumeric();
 	$.validator.setDefaults({
 		errorClass: "text-danger",
 		highlight: function (element) {

@@ -1,3 +1,4 @@
+@using Tracly.Common
 @model List<API.Web.Dtos.MealLogDto>
     
     @if(Model.Any())
@@ -6,23 +7,26 @@
         {
             <tr>
                 <td>
-                    @item.DateEaten
+                    @if(!string.IsNullOrEmpty(item.Meal.MealName))
+                    {
+                        @(item.Meal.MealName) @:<span class="date-detail"> @Format.DateOnly(item.Meal.DateEaten.Value)</span>
+                    
+                    }else{
+                        @item.Meal.DateEaten
+                    }
                 </td>
                 <td>
-                    K: @item.Meal.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100) 
-                    / P: @item.Meal.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100) 
-                    / C: @item.Meal.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100) 
-                    / F: @item.Meal.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100)
+                    K: @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100))
+                    / P: @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100)) 
+                    / C: @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100)) 
+                    / F: @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100))
                 </td>
                 <td>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" title="Eat" onclick="eatMeal(@item.Meal.Id)">
-                            <i class="fas fa-utensil text-white"></i>
-                        </button>
                         <button type="button" class="btn btn-primary" title="Edit" onclick="editMeal(@item.Meal.Id)">
                             <i class="fas fa-edit text-white"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" title="Delete" onclick="deleteMeal(@item.Meal.Id)">
+                        <button type="button" class="btn btn-danger" title="Delete" onclick="deleteConsumedMeal(@item.Id)">
                             <i class="fas fa-trash text-white"></i>
                         </button>
                     </div>
