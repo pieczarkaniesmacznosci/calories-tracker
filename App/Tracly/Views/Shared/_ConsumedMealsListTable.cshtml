@@ -1,0 +1,38 @@
+@model List<API.Web.Dtos.MealLogDto>
+    
+    @if(Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.DateEaten
+                </td>
+                <td>
+                    K: @item.Meal.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100) 
+                    / P: @item.Meal.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100) 
+                    / C: @item.Meal.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100) 
+                    / F: @item.Meal.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100)
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="Eat" onclick="eatMeal(@item.Meal.Id)">
+                            <i class="fas fa-utensil text-white"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Edit" onclick="editMeal(@item.Meal.Id)">
+                            <i class="fas fa-edit text-white"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" title="Delete" onclick="deleteMeal(@item.Meal.Id)">
+                            <i class="fas fa-trash text-white"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td align="center" colspan="3">No meals</td>
+        </tr>    
+    }

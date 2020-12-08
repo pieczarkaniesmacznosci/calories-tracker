@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System;
 using API.Web.Dtos;
 using Tracly.Models;
-using System.Linq;
 using System.Text;
+using App.Tracly.ViewModels;
 
 namespace App.Tracly.Controllers
 {
@@ -30,18 +30,22 @@ namespace App.Tracly.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var meals = new List<MealDto>();
+            var mealsVM = new MealListViewModel()
+            {
+                MealLogs = new List<MealLogDto>(),
+                SavedMeals = new List<MealDto>()
+            };
 
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meals/false");
+                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/meal/mealsLog");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
+                    mealsVM.MealLogs = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
                 }
             }
-            return View("List", meals);
+            return View("List", mealsVM);
         }
 
         [HttpGet]
@@ -146,8 +150,8 @@ namespace App.Tracly.Controllers
         [HttpGet]
         public async Task<IActionResult> MealListTable(string queryString)
         {
-            var meals = new List<MealDto>();
-            var getPath = "http://localhost:5005/api/meals/true";
+            var meals = new List<MealLogDto>();
+            var getPath = "http://localhost:5005/api/meal/mealsLog";
             var getByNamePath = "http://localhost:5005/api/meals/mealsByName";
             using (var httpClient = new HttpClient())
             {
@@ -165,10 +169,10 @@ namespace App.Tracly.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
+                    meals = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
                 }
             }
-            return PartialView("_MealsListItem", meals);
+            return PartialView("_ConsumedMealsListTable", meals);
         }
 
         [HttpPost]

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using API.Web.Entities;
-using App.Tracly.Models;
+using API.Web.Dtos;
 
 namespace App.Tracly.ViewModels
 {
     public class MealListViewModel
     {
         public string Title { get; set; }
-        public IEnumerable<Meal> Meals { get; set; }
+        public List<MealLogDto> MealLogs {get;set;}
+        public List<MealDto> SavedMeals {get;set;}
     }
 }

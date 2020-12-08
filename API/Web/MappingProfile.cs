@@ -18,9 +18,12 @@ namespace API.Web
             .ForMember(dest=>dest.MealName,
             opt =>{
                 opt.MapFrom<DefaultMealNameResolver>();
-            });
+            })
+            .ForMember(x=>x.MealLogs, opt=>opt.Ignore());
 
             CreateMap<MealLog, MealLogDto>()
+            .MaxDepth(1)
+            .PreserveReferences()
             .ReverseMap();
 
             CreateMap<MealProduct, MealProductDto>()
@@ -35,6 +38,8 @@ namespace API.Web
     }
     public class DefaultMealNameResolver : IValueResolver<MealDto, Meal, string>
     {
+
+
         public string Resolve(MealDto source, Meal destination, string destMember, ResolutionContext context)
         {
             if(!string.IsNullOrWhiteSpace(source.MealName))

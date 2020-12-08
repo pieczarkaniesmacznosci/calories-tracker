@@ -190,7 +190,7 @@ namespace API.Web.Service
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while getting products",ex);
+                _logger.LogCritical($"Exception while getting meals",ex);
                 return new UnexpectedResult<IEnumerable<MealDto>>();
             }
         }
@@ -208,18 +208,18 @@ namespace API.Web.Service
 
                 var log = new MealLog(){
                     MealId = mealLog.MealId,
+                    UserId = 1,
                     DateEaten = mealLog.DateEaten ?? DateTime.Now
                 };
 
-                _mealLogRepository.Add(log);
+                var result = _mealLogRepository.Add(log);
+                _mealLogRepository.SaveChanges();
                 
-                var mealLogDto = _mapper.Map<MealLogDto>(log);
-
-                return new SuccessResult<MealLogDto>(mealLogDto);                
+                return new SuccessResult<MealLogDto>(_mapper.Map<MealLogDto>(result));                
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while getting products",ex);
+                _logger.LogCritical($"Exception while adding meal log",ex);
                 return new UnexpectedResult<MealLogDto>();
             }
         }
@@ -244,8 +244,52 @@ namespace API.Web.Service
             }
             catch(Exception ex)
             {
-                _logger.LogCritical($"Exception while getting products",ex);
+                _logger.LogCritical($"Exception while deleting meal log",ex);
                 return new UnexpectedResult<MealLogDto>();
+            }
+        }
+
+        public Result<IEnumerable<MealLogDto>> GetMealLog()
+        {
+            try
+            {
+                var mealLog = _mealLogRepository.All().OrderByDescending(x=>x.DateEaten);
+
+                if(!mealLog.Any())
+                {
+                    return new NotFoundResult<IEnumerable<MealLogDto>>();
+                }
+
+                var mealLogListDto = _mapper.Map<IEnumerable<MealLog>,IEnumerable<MealLogDto>>(mealLog);
+
+                return new SuccessResult<IEnumerable<MealLogDto>>(mealLogListDto);                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting meal logs",ex);
+                return new UnexpectedResult<IEnumerable<MealLogDto>>();
+            }
+        }
+
+        public Result<IEnumerable<MealLogDto>> GetMealLog(DateTime date)
+        {
+            try
+            {
+                var mealLog = _mealLogRepository.Find(x=>x.DateEaten.Date == date.Date).OrderByDescending(x=>x.DateEaten);
+
+                if(!mealLog.Any())
+                {
+                    return new NotFoundResult<IEnumerable<MealLogDto>>();
+                }
+
+                var mealLogListDto = _mapper.Map<IEnumerable<MealLogDto>>(mealLog);
+
+                return new SuccessResult<IEnumerable<MealLogDto>>(mealLogListDto);                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting meal logs by date",ex);
+                return new UnexpectedResult<IEnumerable<MealLogDto>>();
             }
         }
     }

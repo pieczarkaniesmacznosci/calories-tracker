@@ -1,4 +1,4 @@
-@model List<MealDto>
+@model MealListViewModel
 
 <br>
 <nav>
@@ -36,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody id="divMealsConsumedPartial">
-                    <partial name="_MealsListItem" model=@Model />
+                    <partial name="_ConsumedMealsListTable" model=@Model.MealLogs />
                 </tbody>
             </table>
         </div>
@@ -70,7 +70,7 @@
                     </tr>
                 </thead>
                 <tbody id="divMealsSavedPartial">
-                    <partial name="_MealsListItem" model=@Model />
+                    <partial name="_MealsListItem" model=@Model.SavedMeals />
                 </tbody>
             </table>
         </div>

@@ -32,7 +32,10 @@ namespace API.Web.DbContexts
             // modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
             modelBuilder.Entity<MealProduct>().Property(x=>x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<MealLog>().Property(x=>x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealLog>().HasOne(x=>x.Meal);
 
+            modelBuilder.Entity<Meal>().HasMany(x=>x.MealLogs);
+            modelBuilder.Entity<Meal>().Property(x=>x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<User>();
             modelBuilder.Entity<User>().HasMany(x => x.UserNutritions).WithOne(x => x.User);
             modelBuilder.Entity<User>().HasMany(x => x.UserWeights).WithOne(x => x.User);
@@ -168,6 +171,20 @@ namespace API.Web.DbContexts
                     Id = 1,
                     MealId = 1,
                     DateEaten = DateTime.Now,
+                    UserId = 1,
+                },
+                new MealLog()
+                {
+                    Id = 2,
+                    MealId = 1,
+                    DateEaten = DateTime.Now.AddDays(-1),
+                    UserId = 1,
+                },
+                new MealLog()
+                {
+                    Id = 3,
+                    MealId = 2,
+                    DateEaten = DateTime.Now.AddDays(-2),
                     UserId = 1,
                 }
             );
