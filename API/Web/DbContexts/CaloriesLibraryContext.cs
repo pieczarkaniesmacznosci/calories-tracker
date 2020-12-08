@@ -16,15 +16,26 @@ namespace API.Web.DbContexts
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Meal> Meals { get; set; }
+        public DbSet<MealLog> MealLogs { get; set; }
         public DbSet<UserNutrition> UserNutritions { get; set; }
         public DbSet<UserWeight> UserWeights { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
 
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
+            // modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
+            modelBuilder.Entity<MealProduct>().Property(x=>x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealLog>().Property(x=>x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealLog>().HasOne(x=>x.Meal);
 
+            modelBuilder.Entity<Meal>().HasMany(x=>x.MealLogs);
+            modelBuilder.Entity<Meal>().Property(x=>x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<User>();
             modelBuilder.Entity<User>().HasMany(x => x.UserNutritions).WithOne(x => x.User);
             modelBuilder.Entity<User>().HasMany(x => x.UserWeights).WithOne(x => x.User);
@@ -34,6 +45,7 @@ namespace API.Web.DbContexts
             SeedUserTable(modelBuilder);
             SeedProductTable(modelBuilder);
             SeedMealTable(modelBuilder);
+            SeedMealLogTable(modelBuilder);
             SeedMealProductTable(modelBuilder);
             SeedUserNutritionTable(modelBuilder);
             SeedUserWeightTable(modelBuilder);
@@ -135,13 +147,47 @@ namespace API.Web.DbContexts
         private void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
-                            new Meal()
-                            {
-                                Id = 1,
-                                DateEaten = DateTime.Now,
-                                UserId = 1
-                            }
-                        );
+                new Meal()
+                {
+                    Id = 1,
+                    // DateEaten = DateTime.Now,
+                    UserId = 1,
+                },
+                new Meal()
+                {
+                    Id = 2,
+                    DateEaten = DateTime.Now,
+                    UserId = 1,
+                    IsSaved = true,
+                    MealName = "Chicken stew"
+                }
+            );
+        }
+        private void SeedMealLogTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MealLog>().HasData(
+                new MealLog()
+                {
+                    Id = 1,
+                    MealId = 1,
+                    DateEaten = DateTime.Now,
+                    UserId = 1,
+                },
+                new MealLog()
+                {
+                    Id = 2,
+                    MealId = 1,
+                    DateEaten = DateTime.Now.AddDays(-1),
+                    UserId = 1,
+                },
+                new MealLog()
+                {
+                    Id = 3,
+                    MealId = 2,
+                    DateEaten = DateTime.Now.AddDays(-2),
+                    UserId = 1,
+                }
+            );
         }
 
         private void SeedMealProductTable(ModelBuilder modelBuilder)
@@ -165,6 +211,25 @@ namespace API.Web.DbContexts
                                 MealId = 1,
                                 ProductId = 4,
                                 Weight = 35.0d
+                            },
+                            new MealProduct()
+                            {
+                                Id = 4,
+                                MealId = 2,
+                                ProductId = 1,
+                                Weight = 132.0d
+                            }, new MealProduct()
+                            {
+                                Id = 5,
+                                MealId = 2,
+                                ProductId = 2,
+                                Weight = 250.0d
+                            }, new MealProduct()
+                            {
+                                Id = 6,
+                                MealId = 2,
+                                ProductId = 4,
+                                Weight = 95.0d
                             }
                         );
         }

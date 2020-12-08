@@ -8,6 +8,7 @@ using API.Web.Result;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using API.Web.Validators;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Web.Service
 {
@@ -67,8 +68,7 @@ namespace API.Web.Service
             try
             { 
                 var products = _productRepository
-                    .All()
-                    .Where(x=>x.Name.StartsWith(productName,System.StringComparison.InvariantCulture))
+                    .Find(x=> EF.Functions.Like(x.Name, $"%{productName}%"))
                     .ToList();
 
                 if(products.Count == 0)

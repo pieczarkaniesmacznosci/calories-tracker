@@ -10,7 +10,7 @@ $("#productNameListInput").keyup(function () {
 	if (searchQuery.length > 2) {
 		loadList(searchQuery);
 	} else {
-		loadList();
+		loadList("");
 	}
 });
 
@@ -75,10 +75,12 @@ function saveProduct() {
 
 	if (productId === undefined) {
 		postProduct(productFormData);
+		loadList();
 	} else {
 		productFormData = productFormData.concat("&id=" + productId);
 
 		putProduct(productFormData);
+		loadList();
 	}
 }
 
@@ -126,15 +128,16 @@ function editProduct(id) {
 	});
 }
 
-function addProductModal() {
+function showProductModal(inputField) {
 	$("#productModal").modal({ show: true });
 	$("#productModal").on("hidden.bs.modal", function () {
 		$("#productForm").validate().resetForm();
+		$("#productForm .is-invalid").removeClass("is-invalid");
 	});
 	document.getElementById("productModalTitle").innerHTML = "Add Product";
 
 	document.getElementById("name").value = document.getElementById(
-		"productNameListInput"
+		inputField
 	).value;
 }
 
@@ -153,13 +156,9 @@ function editProductModal(id) {
 
 			populateModalInputs(
 				returnedProduct["name"],
-
 				returnedProduct["kcal"],
-
 				returnedProduct["protein"],
-
 				returnedProduct["carbohydrates"],
-
 				returnedProduct["fat"]
 			);
 
@@ -176,25 +175,23 @@ function editProductModal(id) {
 
 function populateModalInputs(name, kcal, protein, carbohydrates, fat) {
 	document.getElementById("productModalTitle").innerHTML = "Edit Product";
-
 	$("#name").val(name);
-
 	$("#kcal").val(kcal);
-
 	$("#protein").val(protein);
-
 	$("#carbohydrates").val(carbohydrates);
-
 	$("#fat").val(fat);
 }
 
-$(".numeric").numeric({
-	decimal: ".",
-	negative: false,
-	precision: 2,
-});
+function setUpNumeric() {
+	$(".numeric").numeric({
+		decimal: ".",
+		negative: false,
+		precision: 2,
+	});
+}
 
 $(function () {
+	setUpNumeric();
 	$.validator.setDefaults({
 		errorClass: "text-danger",
 		highlight: function (element) {

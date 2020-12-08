@@ -35,12 +35,12 @@ namespace API.Web.Controllers
         {
             return base.FromResult(_service.GetMeals(isSaved));
         }
-        
+                
         [HttpGet]
-        [Route("meals/{mealDate:dateTime}")]
-        public IActionResult FindMealsByDate(DateTime mealDate)
+        [Route("meals/mealsByName")]
+        public IActionResult FindProductByName(string mealName)
         {
-            return base.FromResult(_service.GetMeals(mealDate));
+            return base.FromResult(_service.GetMeals(mealName));
         }
 
         [HttpPost]
@@ -48,6 +48,34 @@ namespace API.Web.Controllers
         public IActionResult AddMeal(MealDto meal)
         {
             return base.FromResult(_service.AddMeal(meal));
+        }
+
+        [HttpGet]
+        [Route("meal/mealsLog")]
+        public IActionResult GetMealLog()
+        {
+            return base.FromResult(_service.GetMealLog());
+        }
+
+        [HttpGet]
+        [Route("meal/mealsLog/{date:dateTime}")]
+        public IActionResult GetMealLog(DateTime date)
+        {
+            return base.FromResult(_service.GetMealLog(date));
+        }
+
+        [HttpPost]
+        [Route("meal/logMeal")]
+        public IActionResult EatMeal(MealLogDto mealLog)
+        {
+            return base.FromResult(_service.AddMealLog(mealLog));
+        }
+
+        [HttpDelete]
+        [Route("meal/logMeal/{mealLogId:int}")]
+        public IActionResult ThrowUp(int mealLogId)
+        {
+            return base.FromResult(_service.DeleteMealLog(mealLogId));
         }
 
         [HttpPut]
@@ -58,10 +86,10 @@ namespace API.Web.Controllers
         }
         
         [HttpDelete]
-        [Route("meal")]
-        public IActionResult DeleteMeal(int id)
+        [Route("meal/{mealId:int}")]
+        public IActionResult DeleteMeal(int mealId)
         {
-            return base.FromResult(_service.DeleteMeal(id));
+            return base.FromResult(_service.DeleteMeal(mealId));
         }
     }
 }
