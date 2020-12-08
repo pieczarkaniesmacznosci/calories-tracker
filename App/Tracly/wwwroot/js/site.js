@@ -128,7 +128,7 @@ function editProduct(id) {
 	});
 }
 
-function addProductModal() {
+function showProductModal(inputField) {
 	$("#productModal").modal({ show: true });
 	$("#productModal").on("hidden.bs.modal", function () {
 		$("#productForm").validate().resetForm();
@@ -137,7 +137,7 @@ function addProductModal() {
 	document.getElementById("productModalTitle").innerHTML = "Add Product";
 
 	document.getElementById("name").value = document.getElementById(
-		"productNameListInput"
+		inputField
 	).value;
 }
 

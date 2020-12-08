@@ -2,11 +2,12 @@
 <br>
 <h1>Products</h1>
 <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search for a product..." id="productNameListInput">
-    <div class="input-group-append">
-        <button href="" class="btn btn-primary mb-4" data-toggle="modal" data-target="#productModal"
-            onclick="addProductMealModal()">Add</button>
-    </div>
+<input type="text" class="form-control" placeholder="Search for a product..." id="productNameListInput">
+<div class="input-group-append">
+    <button href="" class="btn btn-primary mb-4" data-toggle="modal" data-target="#productModal"
+        onclick="showProductModal('productNameListInput')">Add</button>
+</div>
+    <partial name="_ProductsModal"/>
 </div>
 <hr class="mb-4">
 <table class="table table-striped table-bordered table-hover table-condensed">
@@ -27,45 +28,3 @@
         <partial name="_ProductListItem" model=@Model />
     </tbody>
 </table>
-<div id="productModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
-        <div class="container">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="productModalTitle"></h1>
-                </div>
-                <div class="modal-body">
-                    <form id="productForm" name="productForm">
-                        <div class="form-group">
-                            <label>Product name</label>
-                            <input class="form-control" id="name" name="name" placeholder="Product name"
-                                autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label>Kcal</label>
-                            <input class="form-control numeric" id="kcal" name="kcal" placeholder="Kcal" autocomplete="off" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Protein</label>
-                            <input class="form-control numeric" id="protein" name="protein" placeholder="Protein [g]"
-                                autocomplete="off" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Carbohydrates</label>
-                            <input class="form-control numeric" id="carbohydrates" name="carbohydrates"
-                                placeholder="Carbohydrates [g]" autocomplete="off" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Fat</label>
-                            <input class="form-control numeric" id="fat" name="fat" placeholder="Fat [g]" autocomplete="off" type="text">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                    <button type="submit" class="btn btn-primary" id="btnSubmit" onclick="saveProduct()">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
