@@ -66,7 +66,7 @@ namespace App.Tracly.Controllers
                     meals = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
                 }
             }
-            return PartialView("_ConsumedMealsListTable", meals);
+            return PartialView("_ConsumedMealsList", meals);
         }
 
         [HttpGet]
@@ -86,7 +86,7 @@ namespace App.Tracly.Controllers
                     meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
                 }
             }
-            return PartialView("_MealsListTable", meals);
+            return PartialView("_SavedMealsList", meals);
         }
 
         [HttpGet]
@@ -138,7 +138,6 @@ namespace App.Tracly.Controllers
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         _viewModel.Meal = JsonConvert.DeserializeObject<MealDto>(apiResponse);
                         _viewModel.Title = "Edit meal";
-
                     }
                     else
                     {
@@ -193,13 +192,13 @@ namespace App.Tracly.Controllers
                     meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
                 }
             }
-            return PartialView("_MealsListTable", meals);
+            return PartialView("_SavedMealsList", meals);
         }
 
         [HttpPost]
         public IActionResult GenerateMealProductListTable(List<MealProductDto> mealProducts)
         {
-            return PartialView("_MealProductListTable", mealProducts);
+            return PartialView("_MealProductsList", mealProducts);
         }
 
         [HttpPost]

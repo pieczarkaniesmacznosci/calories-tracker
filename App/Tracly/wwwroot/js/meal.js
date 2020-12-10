@@ -5,12 +5,6 @@ function goToMealsList() {
 	$.get("/Meal/RedirectToList");
 }
 
-function mealDetails(id) {
-	$.get("/Meal/MealDto", { id: id }, function (data) {
-		mealProducts = data.mealProducts;
-	});
-}
-
 function loadMealProductList(products) {
 	var list = "#mealProductListTable";
 	var urlBase = "/Meal/GenerateMealProductListTable";
@@ -134,7 +128,6 @@ function eatNow() {
 		data: meal,
 		success: function (result, status, xhr) {
 			loadConsumedMeals();
-			//mealDetails();
 		},
 		error: function () {
 			alert("ajax failed");
@@ -155,7 +148,6 @@ function eatNowSavedMeal(mealId) {
 		data: mealLog,
 		success: function (result, status, xhr) {
 			loadSavedMeals();
-			//mealDetails();
 		},
 		error: function () {
 			alert("ajax failed");

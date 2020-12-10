@@ -59,7 +59,7 @@
                 </tr>
             </thead>
             <tbody id="mealProductListTable">
-                <partial name="_MealProductListTable" model=@Model.Meal.MealProducts /> 
+                <partial name="_MealProductsList" model=@Model.Meal.MealProducts /> 
             </tbody>
         </table>
         <div class="form-group d-flex justify-content-between">
@@ -82,5 +82,11 @@
     </div>
 </form>
 <script>
+
+function mealDetails(id) {
+	$.get("/Meal/MealDto", { id: id }, function (data) {
+		mealProducts = data.mealProducts;
+	});
+}
     mealDetails();
 </script>

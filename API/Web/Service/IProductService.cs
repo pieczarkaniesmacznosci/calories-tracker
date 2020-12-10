@@ -12,6 +12,6 @@ namespace API.Web.Service
         Result<ProductDto> AddProduct(ProductDto product);
         Result<ProductDto> EditProduct(ProductDto product);
         Result<ProductDto> DeleteProduct(int id);
-        Result<bool> ProductExist(string productName);
+        Result<bool> ProductNameValid(int id,string productName);
     }
 }

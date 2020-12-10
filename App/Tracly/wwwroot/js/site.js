@@ -211,10 +211,13 @@ $(function () {
 					remote: {
 						url: "/Product/ProductNameValid",
 						async: false,
-						type: "post",
+						type: "POST",
 						data: {
 							productName: function () {
 								return $("#name").val();
+							},
+							productId: function () {
+								return $("#productModal").attr("data-id");
 							},
 						},
 					},

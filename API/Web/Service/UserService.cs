@@ -159,7 +159,10 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserNutrition = _userNutritionRepository.Find(x=> x.UserId == 1).Max(x=>x.Date);
+                var currentUserNutrition = _userNutritionRepository
+                    .Find(x=> x.UserId == 1)
+                    .OrderByDescending(x=>x.Date)
+                    .FirstOrDefault();
 
                 if(currentUserNutrition == null)
                 {
@@ -181,7 +184,10 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserWeight = _userWeightRepository.Find(x=> x.UserId == 1).Max(x=>x.Date);
+                var currentUserWeight = _userWeightRepository
+                .Find(x=> x.UserId == 1)
+                .OrderByDescending(x=>x.Date)
+                .FirstOrDefault();
 
                 if(currentUserWeight == null)
                 {

@@ -1,3 +1,5 @@
+@model UserViewModel
+
 <br>
 <h1>User panel</h1>
 <br>
@@ -6,7 +8,7 @@
 <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
 
     <!-- Accordion card -->
-    <div class="card">
+    <div class="card" id="userNutritionAccordion">
 
         <!-- Card header -->
         <div class="card-header" role="tab" id="headingTwo1">
@@ -28,12 +30,12 @@
                     <div class="form-group row justify-content-center">
                         <label class="col-sm-2 col-form-label" for="currentKcalIntake">Current</label>
                         <div class="input-group col-sm-3">
-                            <input id="currentKcalIntake" type="text" class="form-control" value="2100"
+                            <input id="currentKcalIntake" autocomplete="off" type="text" class="form-control" value="@Model.Nutrition.Kcal"
                             aria-label="daily Kcal intake" disabled>
                         </div>
                         <label class="col-sm-2 col-form-label" for="kcalIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="kcalIntake" type="text" class="form-control" placeholder="Kcal">
+                            <input id="kcalIntake" autocomplete="off" type="text" class="form-control numeric" placeholder="Kcal">
                         </div>
                     </div>
                     <!-- PROTEIN INTAKE-->
@@ -43,12 +45,12 @@
                     <div class="form-group row justify-content-center">
                         <label class="col-sm-2 col-form-label" for="currentProteinIntake">Current</label>
                         <div class="input-group col-sm-3">
-                            <input id="currentProteinIntake" type="text" class="form-control" value="142"
+                            <input id="currentProteinIntake" autocomplete="off" type="text" class="form-control" value="@Model.Nutrition.Protein"
                             aria-label="daily Protein intake" disabled>
                         </div>
                         <label class="col-sm-2 col-form-label" for="proteinIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="proteinIntake" type="text" class="form-control" placeholder="Protein">
+                            <input id="proteinIntake" autocomplete="off" type="text" class="form-control numeric" placeholder="Protein">
                         </div>
                     </div>
                     <!-- CARBOHYDRATES INTAKE-->
@@ -58,12 +60,12 @@
                     <div class="form-group row justify-content-center">
                         <label class="col-sm-2 col-form-label" for="currentCarbohydratesIntake">Current</label>
                         <div class="input-group col-sm-3">
-                            <input id="currentCarbohydratesIntake" type="text" class="form-control" value="258"
+                            <input id="currentCarbohydratesIntake" autocomplete="off" type="text" class="form-control" value="@Model.Nutrition.Carbohydrates"
                             aria-label="daily Carbohydrates intake" disabled>
                         </div>
                         <label class="col-sm-2 col-form-label" for="carbohydratesIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="carbohydratesIntake" type="text" class="form-control"
+                            <input id="carbohydratesIntake" autocomplete="off" type="text" class="form-control numeric"
                             placeholder="Carbohydrates">
                         </div>
                     </div>
@@ -74,12 +76,12 @@
                     <div class="form-group row justify-content-center">
                         <label class="col-sm-2 col-form-label" for="currentFatIntake">Current</label>
                         <div class="input-group col-sm-3">
-                            <input id="currentFatIntake" type="text" class="form-control" value="58"
+                            <input id="currentFatIntake" autocomplete="off" type="text" class="form-control" value="@Model.Nutrition.Fat"
                             aria-label="daily Fat intake" disabled>
                         </div>
                         <label class="col-sm-2 col-form-label" for="fatIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="fatIntake" type="text" class="form-control" placeholder="Fat">
+                            <input id="fatIntake" autocomplete="off" type="text" class="form-control numeric" placeholder="Fat">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -89,7 +91,7 @@
     </div>
 
     <!-- Accordion card -->
-    <div class="card">
+    <div class="card" id="userWeightAccordion" >
 
         <!-- Card header -->
         <div class="card-header" role="tab" id="headingTwo2">
@@ -110,12 +112,12 @@
                 <div class="form-group row justify-content-center">
                     <label class="col-sm-2 col-form-label" for="currentWeight">Current</label>
                     <div class="input-group col-sm-3">
-                        <input id="currentWeight" type="text" class="form-control" value="75"
+                        <input id="currentWeight" autocomplete="off" type="text" class="form-control" value="75"
                         aria-label="current weight" disabled>
                     </div>
                     <label class="col-sm-2 col-form-label" for="weight">New</label>
                     <div class="input-group col-sm-3">
-                        <input id="weight" type="text" class="form-control" placeholder="Weight">
+                        <input id="weight" autocomplete="off" type="text" class="form-control numeric" placeholder="Weight">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
