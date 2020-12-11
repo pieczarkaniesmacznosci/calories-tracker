@@ -90,15 +90,13 @@ namespace App.Tracly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProductListForMealTable(string queryString)
+        public async Task<List<ProductDto>> ProductsForMeal(string queryString)
         {
             var products = new List<ProductDto>();
             var getByNamePath = "http://localhost:5005/api/products/name";
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response;
-                if (!string.IsNullOrWhiteSpace(queryString))
-                {
                     var builder = new UriBuilder(getByNamePath);
                     builder.Query = $"productName={queryString}";
                     response = await httpClient.GetAsync(builder.ToString());
@@ -108,12 +106,14 @@ namespace App.Tracly.Controllers
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
                     }
-                }
-                else
-                {
-                    products = new List<ProductDto>();
-                }
             }
+            return products;
+        }
+
+        [HttpPost]
+        public IActionResult ProductForMealTable(List<ProductDto> products)
+        {
+            products ??= new List<ProductDto>();
             return PartialView("_ProductListForMealTable", products);
         }
 
@@ -195,6 +195,22 @@ namespace App.Tracly.Controllers
             return PartialView("_SavedMealsList", meals);
         }
 
+        [HttpPost]
+        [Route("MealNameValid")]
+        public async Task<bool> ProductNameValid(int productId,string productName)
+        {
+            bool nameIsValid= false;
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}/nameValid?productName={productName}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    nameIsValid = JsonConvert.DeserializeObject<bool>(apiResponse);
+                }
+            }
+            return nameIsValid;
+        }
         [HttpPost]
         public IActionResult GenerateMealProductListTable(List<MealProductDto> mealProducts)
         {

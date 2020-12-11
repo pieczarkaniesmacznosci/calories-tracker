@@ -43,7 +43,7 @@ namespace App.Tracly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProductsList(string queryString)
+        public async Task<List<ProductDto>> ProductsList(string queryString)
         {
             var products = new List<ProductDto>();
             var getPath = "http://localhost:5005/api/products";
@@ -67,6 +67,13 @@ namespace App.Tracly.Controllers
                     products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
                 }
             }
+            return products;
+        }
+
+        [HttpPost]
+        public IActionResult ProductsListTable(IEnumerable<ProductDto> products)
+        {
+            products ??= new List<ProductDto>();
             return PartialView("_ProductsList", products);
         }
 

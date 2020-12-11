@@ -43,6 +43,13 @@ namespace API.Web.Controllers
             return base.FromResult(_service.GetMeals(mealName));
         }
 
+        [HttpGet]
+        [Route("meal/{id}/nameValid")]
+        public IActionResult MealNameValid(int id, string mealName)
+        {
+            return base.FromResult(_service.MealNameValid(id,mealName));
+        }
+
         [HttpPost]
         [Route("meal")]
         public IActionResult AddMeal(MealDto meal)

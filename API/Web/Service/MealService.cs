@@ -67,6 +67,24 @@ namespace API.Web.Service
             }
         }
 
+        public Result<bool> MealNameValid(int id, string mealName)
+        {
+            try
+            {
+                if(_mealRepository.Find(x=> x.MealName == mealName && x.Id != id).FirstOrDefault() != null){
+                    return new SuccessResult<bool>(false);
+                }
+                else{
+                    return new SuccessResult<bool>(true);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while checking if meal name {mealName} is valid",ex);
+                return new UnexpectedResult<bool>();
+            }
+        }
+        
         public Result<MealDto> AddMeal(MealDto meal)
         {
             try

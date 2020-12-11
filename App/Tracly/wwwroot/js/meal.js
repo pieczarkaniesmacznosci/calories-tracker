@@ -1,43 +1,12 @@
 var mealProducts;
+var products;
 var product;
 
 function goToMealsList() {
 	$.get("/Meal/RedirectToList");
 }
 
-function loadMealProductList(products) {
-	var list = "#mealProductListTable";
-	var urlBase = "/Meal/GenerateMealProductListTable";
-	$.ajax({
-		url: urlBase,
-		type: "POST",
-		data: { mealProducts: products },
-		success: function (result, status, xhr) {
-			$(list).html(result);
-			setUpNumeric();
-		},
-	});
-}
-
-$("#productForMealListInput").keyup(function () {
-	var searchQuery = $("#productForMealListInput").val();
-
-	if (searchQuery.length > 2) {
-		loadProductForMealList(searchQuery);
-	} else {
-		loadProductForMealList();
-	}
-});
-
-function loadProductForMealList(searchQuery) {
-	if (searchQuery === undefined) {
-		searchQuery = "";
-	}
-	var urlBase = "/Meal/ProductListForMealTable".concat(
-		"?queryString=" + searchQuery
-	);
-	$("#productsListForMealTable").load(urlBase);
-}
+// MEAL LIST GENERATION
 
 $("#mealListInput").keyup(function () {
 	var searchQuery = $("#mealListInput").val();
@@ -57,15 +26,70 @@ function loadMealList(searchQuery) {
 	$("#divMealsSavedPartial").load(urlBase);
 }
 
-function getProduct(id) {
-	var urlBase = "/Product/GetProduct/";
-	var url = urlBase.concat(id);
+// PRODUCTS FOR MEAL LIST GENERATION
 
+$("#productForMealListInput").keyup(function () {
+	var searchQuery = $("#productForMealListInput").val();
+
+	if (searchQuery.length > 2) {
+		getProductsForMeal(searchQuery);
+	} else {
+		getProductsForMeal();
+	}
+});
+
+function getProductsForMeal(searchQuery) {
 	$.ajax({
+		url: "/Product/ProductsList/".concat("?queryString=" + searchQuery),
 		type: "GET",
-		url: url,
-		success: function (returnedProduct) {
-			product = returnedProduct;
+		success: function (result, status, xhr) {
+			products = result;
+			loadProductsForMealTable(products);
+		},
+	});
+}
+
+function loadProductsForMealTable(productsForTable) {
+	var urlBase = "/Meal/ProductForMealTable";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: { products: productsForTable },
+		success: function (result, status, xhr) {
+			$("#productsListForMealTable").html(result);
+			registerFocusout();
+			setUpNumeric();
+		},
+	});
+}
+
+function filterAvailableProducts(mealProductsToGenerate) {
+	products = products.reduce((reducedProducts, product) => {
+		var foundProduct = mealProductsToGenerate.find(
+			(x) => x.productId === product.id
+		);
+		if (!!foundProduct) {
+			return reducedProducts;
+		} else {
+			return [...reducedProducts, product];
+		}
+	}, []);
+}
+
+// MEALPRODUCTS GENERATION
+
+function loadMealProductList(mealProductsToGenerate) {
+	filterAvailableProducts(mealProductsToGenerate);
+	var list = "#mealProductListTable";
+	var urlBase = "/Meal/GenerateMealProductListTable";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: { mealProducts: mealProductsToGenerate },
+		success: function (result, status, xhr) {
+			$(list).html(result);
+			registerFocusout();
+			setUpNumeric();
 		},
 	});
 }
@@ -211,6 +235,23 @@ function saveForLater() {
 		},
 	});
 	goToMealsList();
+}
+
+function registerFocusout() {
+	$(".meal-product-weight-input").focusout(function () {
+		var id = $(this).attr("data-meal-product-id");
+
+		mealProducts = mealProducts.map((x) => {
+			if (x.productId === Number(id)) {
+				return {
+					...x,
+					weight: $(this).val(),
+				};
+			} else {
+				return x;
+			}
+		});
+	});
 }
 
 // ------------ VALIDATION RULES ------------

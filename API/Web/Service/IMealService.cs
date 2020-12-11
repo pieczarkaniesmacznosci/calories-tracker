@@ -10,6 +10,7 @@ namespace API.Web.Service
         Result<MealDto> GetMeal(int id);
         Result<IEnumerable<MealDto>> GetMeals(bool isSaved);
         Result<IEnumerable<MealDto>> GetMeals(string mealName);
+        Result<bool> MealNameValid(int id, string mealName);
         Result<MealDto> AddMeal(MealDto meal);
         Result<MealDto> EditMeal(MealDto meal);
         Result<MealDto> DeleteMeal(int id);
