@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity.Core.Objects;
 
 namespace API.Web.Service
 {
@@ -213,7 +214,7 @@ namespace API.Web.Service
                 var log = new MealLog(){
                     MealId = mealLog.MealId,
                     UserId = 1,
-                    DateEaten = mealLog.DateEaten ?? DateTime.Now
+                    DateEaten = mealLog.DateEaten
                 };
 
                 var result = _mealLogRepository.Add(log);
@@ -279,7 +280,10 @@ namespace API.Web.Service
         {
             try
             {
-                var mealLog = _mealLogRepository.Find(x=>x.DateEaten.Date == date.Date).OrderByDescending(x=>x.DateEaten);
+                //https://entityframeworkcore.com/knowledge-base/43277868/entity-framework-core---contains-is-case-sensitive-or-case-insensitive-
+                //var meals = _mealRepository.Find(x=> x.IsSaved && x.UserId ==1 && EF.Functions.Like(x.MealName, $"%{mealName}%"));
+
+                var mealLog = _mealLogRepository.Find(x=> x.DateEaten.Date.Equals(date.Date) );
 
                 if(!mealLog.Any())
                 {

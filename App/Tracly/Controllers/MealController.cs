@@ -35,7 +35,7 @@ namespace App.Tracly.Controllers
                 MealLogs = new List<MealLogDto>(),
                 SavedMeals = new List<MealDto>()
             };
-            return LocalRedirect("/Meal/List");
+            return Redirect("List");
         }
 
         [HttpGet]

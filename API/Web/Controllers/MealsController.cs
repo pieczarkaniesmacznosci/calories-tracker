@@ -71,6 +71,13 @@ namespace API.Web.Controllers
             return base.FromResult(_service.GetMealLog(date));
         }
 
+        [HttpGet]
+        [Route("meal/todaysMealLog")]
+        public IActionResult GetTodaysMealLog()
+        {
+            return base.FromResult(_service.GetMealLog(DateTime.Now.Date));
+        }
+
         [HttpPost]
         [Route("meal/logMeal")]
         public IActionResult EatMeal(MealLogDto mealLog)

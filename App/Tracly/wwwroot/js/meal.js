@@ -3,7 +3,7 @@ var products;
 var product;
 
 function goToMealsList() {
-	$.get("/Meal/RedirectToList");
+	window.location.replace("/meal/list");
 }
 
 // MEAL LIST GENERATION
@@ -151,7 +151,7 @@ function eatNow() {
 		type: "POST",
 		data: meal,
 		success: function (result, status, xhr) {
-			loadConsumedMeals();
+			goToMealsList();
 		},
 		error: function () {
 			alert("ajax failed");
@@ -186,8 +186,7 @@ function deleteConsumedMeal(mealLogId) {
 		type: "DELETE",
 		data: { mealLogId: mealLogId },
 		success: function (result, status, xhr) {
-			loadConsumedMeals();
-			//mealDetails();
+			goToMealsList();
 		},
 		error: function () {
 			alert("ajax failed");
@@ -234,7 +233,6 @@ function saveForLater() {
 			alert("ajax failed");
 		},
 	});
-	goToMealsList();
 }
 
 function registerFocusout() {

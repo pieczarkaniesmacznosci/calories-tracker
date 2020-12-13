@@ -9,7 +9,7 @@
                 <td>
                     @if(!string.IsNullOrEmpty(item.Meal.MealName))
                     {
-                        @(item.Meal.MealName) @:<span class="date-detail"> @Format.DateOnly(item.Meal.DateEaten.Value)</span>
+                        @(item.Meal.MealName) @:<span class="date-detail"> @Format.DateOnly(item.DateEaten)</span>
                     
                     }else{
                         @item.Meal.DateEaten

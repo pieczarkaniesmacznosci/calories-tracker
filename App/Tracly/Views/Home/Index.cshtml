@@ -1,4 +1,5 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 <div class="container">
@@ -15,33 +16,8 @@
                         <th>Fat</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            Meal 1 at 7:20
-                        </td>
-                        <td>540
-                        </td>
-                        <td>30
-                        </td>
-                        <td>60
-                        </td>
-                        <td>10
-                        </td>
-                    </tr>
-                    <tr id="sum-up">
-                        <td>
-                            Intake:
-                        </td>
-                        <td>540 / 2070
-                        </td>
-                        <td>30 / 128
-                        </td>
-                        <td>60 / 340
-                        </td>
-                        <td>10 / 58
-                        </td>
-                    </tr>
+                <tbody id="todaysMealLogTable">
+                    <partial name="_TodaysMealLogTable" model=@Model.TodayMealLog />
                 </tbody>
             </table>
         </div>
@@ -75,3 +51,12 @@
         </div>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    list = "#todaysMealLogTable";
+function loadTodaysMealLog(){
+	var urlBase = "/Home/TodaysMealsList";
+	    $(list).load(urlBase);
+    }
+    window.onload = loadTodaysMealLog
+</script>

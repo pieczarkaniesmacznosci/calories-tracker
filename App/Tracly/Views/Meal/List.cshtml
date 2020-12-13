@@ -76,7 +76,7 @@
         </div>
     </div>
 </div>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     list = "#divMealsConsumedPartial";
 function loadConsumedMeals(){
@@ -89,10 +89,10 @@ function loadSavedMeals() {
     var urlBase = "/Meal/SavedMealsList";
 	$(list).load(urlBase);
 } 
-function loadMeals() {
+@* function loadMeals() {
 	var list = "#divMealsSavedPartial";
     var urlBase = "/Meal/SavedMealsList";
 	$(list).load(urlBase);
-} 
+}  *@
     window.onload = loadConsumedMeals
 </script>

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using API.Web.DbContexts;
 using API.Web.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,17 @@ namespace API.Web.Repositories
                 .Include(x => x.Meal)
                 .ThenInclude(x => x.MealProducts)
                 .ThenInclude(x=>x.Product)
+                .ToList();
+        }
+
+        public override IEnumerable<MealLog> Find(Expression<Func<MealLog, bool>> predicate)
+        {
+            return _context
+                .MealLogs 
+                .Include(x=>x.Meal)
+                .ThenInclude(x=>x.MealProducts)
+                .ThenInclude(x=>x.Product)
+                .Where(predicate)
                 .ToList();
         }
     }
