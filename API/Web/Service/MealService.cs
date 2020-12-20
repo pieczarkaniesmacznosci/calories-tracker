@@ -342,5 +342,27 @@ namespace API.Web.Service
                 return new UnexpectedResult<IEnumerable<MealLogDto>>();
             }
         }
+
+        public Result<MealLogDto> GetMealLog(int mealLogId)
+        {
+            try
+            {
+                var mealLog = _mealLogRepository.Get(mealLogId);
+
+                if(mealLog == null)
+                {
+                    return new NotFoundResult<MealLogDto>();
+                }
+
+                var mealLogListDto = _mapper.Map<MealLogDto>(mealLog);
+
+                return new SuccessResult<MealLogDto>(mealLogListDto);                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting meal log by id",ex);
+                return new UnexpectedResult<MealLogDto>();
+            }
+        }
     }
 }

@@ -65,6 +65,13 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
+        [Route("meal/mealsLog/{mealLogId:int}")]
+        public IActionResult GetMealLog(int mealLogId)
+        {
+            return base.FromResult(_service.GetMealLog(mealLogId));
+        }
+
+        [HttpGet]
         [Route("meal/mealsLog/{date:dateTime}")]
         public IActionResult GetMealLog(DateTime date)
         {

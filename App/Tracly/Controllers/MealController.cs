@@ -120,24 +120,25 @@ namespace App.Tracly.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             _viewModel = new MealViewModel();
-            _viewModel.Meal = new MealDto(){
-                MealProducts = new List<MealProductDto>()
+            _viewModel.MealLog = new MealLogDto(){
+                Meal = new MealDto(){
+                    MealProducts = new List<MealProductDto>()}
             };
             _viewModel.Products = new List<ProductDto>();
             if(id == null)
             {
-                _viewModel.Title = "New meal";
+                _viewModel.IsEdit= false;
             }
             else
             {
                 using (var httpClient = new HttpClient())
                 {
-                    HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/{id}");
+                    HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/mealsLog/{id}");
                     if (response.IsSuccessStatusCode)
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        _viewModel.Meal = JsonConvert.DeserializeObject<MealDto>(apiResponse);
-                        _viewModel.Title = "Edit meal";
+                        _viewModel.MealLog = JsonConvert.DeserializeObject<MealLogDto>(apiResponse);
+                        _viewModel.IsEdit= true;
                     }
                     else
                     {
@@ -225,6 +226,17 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/meal", stringContent);
+            }
+        }
+
+        [HttpPost]
+        public async void EditEatenMeal(MealLogDto mealLog)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(mealLog.Meal), Encoding.UTF8, "application/json");
+
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.PutAsync($"http://localhost:5005/api/mealLog/{mealLog?.Id}/editEaten", stringContent);
             }
         }
 

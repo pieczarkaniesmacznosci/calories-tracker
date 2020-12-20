@@ -15,6 +15,16 @@ namespace API.Web.Repositories
         {
         }
 
+        public override MealLog Get(int id)
+        {
+            return _context
+                .MealLogs
+                .AsQueryable()
+                .Include(x=>x.Meal)
+                .ThenInclude(x=>x.MealProducts)
+                .ThenInclude(x=>x.Product)
+                .FirstOrDefault(x=>x.Id == id);
+        } 
         public override IEnumerable<MealLog> All()
         {
             return _context

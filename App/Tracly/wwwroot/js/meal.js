@@ -95,7 +95,7 @@ function loadMealProductList(mealProductsToGenerate) {
 }
 
 function editMealWindow(id) {
-	var urlBase = "/Meal/MealDro/";
+	var urlBase = "/Meal/MealDto/";
 
 	var url = urlBase.concat(id);
 
@@ -155,17 +155,48 @@ function deleteProductFromMeal(id) {
 	loadMealProductList(reducedProductsList);
 }
 
-function addProductMealModal() {
-	$("#productModal").modal({ show: true });
-	$("#productModal").on("hidden.bs.modal", function () {
-		$("#productForm").validate().resetForm();
-		$("#productForm .is-invalid").removeClass("is-invalid");
-	});
-	document.getElementById("productModalTitle").innerHTML = "Add Product";
+// function addProductMealModal() {
+// 	$("#productModal").modal({ show: true });
+// 	$("#productModal").on("hidden.bs.modal", function () {
+// 		$("#productForm").validate().resetForm();
+// 		$("#productForm .is-invalid").removeClass("is-invalid");
+// 	});
+// 	document.getElementById("productModalTitle").innerHTML = "Add Product";
 
-	document.getElementById("name").value = document.getElementById(
-		"productForMealListInput"
-	).value;
+// 	document.getElementById("name").value = document.getElementById(
+// 		"productForMealListInput"
+// 	).value;
+// }
+
+function saveEdit(mealLogId) {
+	var meal = {
+		MealName: document.getElementById("mealName").value,
+		IsSaved: false,
+		DateEaten: new Date().toISOString(),
+		MealProducts: mealProducts.map((mp) => {
+			var newWeight = $(`[data-meal-product-id="${mp.productId}"]`).val();
+			return {
+				ProductId: mp.productId,
+				Weight: newWeight,
+			};
+		}),
+	};
+	var mealLog = {
+		Meal: meal,
+		Id: mealLogId,
+	};
+	var urlBase = "/Meal/EditEatenMeal";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: mealLog,
+		success: function (result, status, xhr) {
+			goToMealsList();
+		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
 }
 
 function eatNow() {
@@ -209,6 +240,19 @@ function eatNowSavedMeal(mealId) {
 		success: function (result, status, xhr) {
 			loadSavedMeals();
 		},
+		error: function () {
+			alert("ajax failed");
+		},
+	});
+}
+
+function editConsumedMeal(mealLogId) {
+	var urlBase = "/Meal/Details";
+	$.ajax({
+		url: urlBase,
+		type: "GET",
+		data: { id: mealLogId },
+		success: function (result, status, xhr) {},
 		error: function () {
 			alert("ajax failed");
 		},
@@ -287,67 +331,3 @@ function registerFocusout() {
 		});
 	});
 }
-
-// ------------ VALIDATION RULES ------------
-// $(function () {
-// 	$.validator.setDefaults({
-// 		errorClass: "text-danger",
-// 		highlight: function (element) {
-// 			$(element).addClass("is-invalid");
-// 		},
-// 		unhighlight: function (element) {
-// 			$(element).removeClass("is-invalid");
-// 		},
-// 	});
-// 	var $productForm = $("#productForm");
-// 	if ($productForm.length) {
-// 		$productForm.validate({
-// 			rules: {
-// 				mealName: {
-// 					required: true,
-// 					minlength: 3,
-// 					remote: {
-// 						url: "/Product/ProductNameValid",
-// 						async: false,
-// 						type: "post",
-// 						data: {
-// 							productName: function () {
-// 								return $("#name").val();
-// 							},
-// 						},
-// 					},
-// 				},
-// 				kcal: {
-// 					required: true,
-// 				},
-// 				protein: {
-// 					required: true,
-// 				},
-// 				carbohydrates: {
-// 					required: true,
-// 				},
-// 				fat: {
-// 					required: true,
-// 				},
-// 			},
-// 			messages: {
-// 				name: {
-// 					required: "Product name is required!",
-// 					remote: "Product already exists!",
-// 				},
-// 				kcal: {
-// 					required: "Kcal is required!",
-// 				},
-// 				protein: {
-// 					required: "Insert protein content!",
-// 				},
-// 				carbohydrates: {
-// 					required: "Insert carbohydrates content!",
-// 				},
-// 				fat: {
-// 					required: "Insert fat content!",
-// 				},
-// 			},
-// 		});
-// 	}
-// });

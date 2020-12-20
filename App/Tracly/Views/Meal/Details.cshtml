@@ -2,90 +2,98 @@
 
 <br>
 <br>
-
-    <h1>@Model.Title</h1>
-
-    <!----------- PRODUCT FINDER ----------->
-    <h2>Find products</h2>
-
-    <div class="form-group">
-        <div class="input-group">
-            <input id="productForMealListInput" autocomplete="off" type="text" class="form-control" placeholder="Enter product's name" id="productNameListInput">
-            <div class="input-group-append">
-                <button type="button" class="btn btn-primary" data-toggle="modal"
-                data-target="#productModal" onclick="showProductModal('productForMealListInput')">Add</button>
-            </div>
-        </div>
-    </div>
-    <partial name="_ProductsModal"/>
-    <hr class="mb-4">
-    <div>
-        <table class="table table-striped table-bordered table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th style="width: 40%">
-                        Product
-                    </th>
-                    <th style="width: 40%">
-                        Nutrients
-                    </th>
-                    <th style="width: 20%">
-                        Actions
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="productsListForMealTable">
-                <partial name="_ProductListForMealTable" model="@Model.Products"/> 
-            </tbody>
-        </table>
-    </div>
-
-    <!----------- CURRENT COMPOSITION ----------->
-    <h2>Current composition</h2>
-    <hr class="mb-4">
-    <div>
-        <table class="table table-striped table-bordered table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th style="width: 40%">
-                        Product
-                    </th>
-                    <th style="width: 40%">
-                        Weight
-                    </th>
-                    <th style="width: 20%">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="mealProductListTable">
-                <partial name="_MealProductsList" model=@Model.Meal.MealProducts /> 
-            </tbody>
-        </table>
-        <div class="form-group d-flex justify-content-between">
-            <div class="input-group w-50">
-                <input id="mealName" autocomplete="off" type="text" class="form-control " placeholder="Name">
-            </div>
-            <div class="input-group w-25">
-                <input id="portionQty" type="text" autocomplete="off" class="form-control" disabled placeholder="1">
-                <div class="input-group-append">
-                    <span class="input-group-text">pcs</span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="float-right">
-                <button type="submit" class="btn btn-success" onclick="eatNow()">Eat now</button>
-                <button type="submit" class="btn btn-primary" onclick="saveForLater()">Save for later</button>
-            </div>
-        </div>
-    </div>
-<script>
-
-function mealDetails(id) {
-	$.get("/Meal/MealDto", { id: id }, function (data) {
-		mealProducts = data.mealProducts;
-	});
+@if(Model.IsEdit)
+{
+    <h1>"Edit meal"</h1>
 }
-    mealDetails();
-</script>
+else
+{
+    <h1>"New meal"</h1>
+}
+
+<!----------- PRODUCT FINDER ----------->
+<h2>Find products</h2>
+
+<div class="form-group">
+    <div class="input-group">
+        <input id="productForMealListInput" autocomplete="off" type="text" class="form-control" placeholder="Enter product's name" id="productNameListInput">
+        <div class="input-group-append">
+            <button type="button" class="btn btn-primary" data-toggle="modal"
+            data-target="#productModal" onclick="showProductModal('productForMealListInput')">Add</button>
+        </div>
+    </div>
+</div>
+<partial name="_ProductsModal"/>
+<hr class="mb-4">
+<div>
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width: 40%">
+                    Product
+                </th>
+                <th style="width: 40%">
+                    Nutrients
+                </th>
+                <th style="width: 20%">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody id="productsListForMealTable">
+            <partial name="_ProductListForMealTable" model="@Model.Products"/> 
+        </tbody>
+    </table>
+</div>
+
+<!----------- CURRENT COMPOSITION ----------->
+<h2>Current composition</h2>
+<hr class="mb-4">
+<div>
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width: 40%">
+                    Product
+                </th>
+                <th style="width: 40%">
+                    Weight
+                </th>
+                <th style="width: 20%">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody id="mealProductListTable">
+            <partial name="_MealProductsList" model=@Model.MealLog.Meal.MealProducts /> 
+        </tbody>
+    </table>
+    <div class="form-group d-flex justify-content-between">
+        <div class="input-group w-50">
+            <input id="mealName" autocomplete="off" type="text" class="form-control " placeholder="Name">
+        </div>
+        <div class="input-group w-25">
+            <input id="portionQty" type="text" autocomplete="off" class="form-control" disabled placeholder="1">
+            <div class="input-group-append">
+                <span class="input-group-text">pcs</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+
+    @if(Model.IsEdit)
+    {
+        <div class="float-right">
+            <button id="saveEdit" data-access-meal-id="@Model.MealLog.Meal.Id" type="submit" class="btn btn-success" onclick="saveEdit(@Model.MealLog.Id)">Save edit</button>
+        </div>
+    }
+    else
+    {
+        <div class="float-right">
+            <button type="submit" class="btn btn-success" onclick="eatNow()">Eat now</button>
+            <button type="submit" class="btn btn-primary" onclick="saveForLater()">Save for later</button>
+        </div>
+    }
+    </div>
+</div>
+<script src="~/js/meal-details.js" asp-append-version="true"></script>
