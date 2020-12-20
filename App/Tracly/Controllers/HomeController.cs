@@ -35,8 +35,13 @@ namespace App.Tracly.Controllers
         [HttpGet]
         public async Task<IActionResult> TodaysMealsList()
         {
+            var homeVM = new HomeViewModel(){
+                TodayMealLog = new List<MealLogDto>(),
+                UserUntrition = new UserNutritionDto()
+            };
             var mealLog = new List<MealLogDto>();
             var getMeals = $"http://localhost:5005/api/meal/todaysMealLog";
+            var getUserNutrition = $"http://localhost:5005/api/user/nutrition";
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response;
@@ -46,10 +51,20 @@ namespace App.Tracly.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    mealLog = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
+                    homeVM.TodayMealLog = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
+                }
+                
+                HttpResponseMessage userNutritionResponse;
+                var userNutritionBuilder = new UriBuilder(getUserNutrition);
+                userNutritionResponse = await httpClient.GetAsync(userNutritionBuilder.ToString());
+                
+                if (userNutritionResponse.IsSuccessStatusCode)
+                {
+                    string apiResponse = await userNutritionResponse.Content.ReadAsStringAsync();
+                    homeVM.UserUntrition = JsonConvert.DeserializeObject<UserNutritionDto>(apiResponse);
                 }
             }
-            return PartialView("_TodaysMealLogTable", mealLog);
+            return PartialView("_TodaysMealLogTable", homeVM);
         }
 
         public IActionResult Privacy()

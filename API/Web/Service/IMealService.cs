@@ -14,6 +14,7 @@ namespace API.Web.Service
         Result<MealDto> AddMeal(MealDto meal);
         Result<MealDto> EditMeal(MealDto meal);
         Result<MealDto> DeleteMeal(int id);
+        Result<MealLogDto> EditEatenMeal(int mealLogId, MealDto meal);
         Result<MealLogDto> AddMealLog(MealLogDto mealLog);
         Result<MealLogDto> DeleteMealLog(int mealLogId);
         Result<IEnumerable<MealLogDto>> GetMealLog();

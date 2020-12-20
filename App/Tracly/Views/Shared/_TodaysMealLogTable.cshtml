@@ -1,28 +1,38 @@
 
 @using Tracly.Common
-@model List<MealLogDto>
-    
-@if(Model.Any())
+@model HomeViewModel
+
+<thead>
+    <tr>
+        <th>Meal</th>
+        <th>Kcal</th>
+        <th>Protein</th>
+        <th>Carbs</th>
+        <th>Fat</th>
+    </tr>
+</thead>
+<tbody>
+@if(Model.TodayMealLog.Any())
 {
-    @foreach (var item in Model)
+    @foreach (var item in Model.TodayMealLog)
     {
-        <tr>
-            <td>
-                @item.Meal.MealName
-            </td>
-            <td>
-                @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100))
-            </td>
-            <td>
-                @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100))
-            </td>
-            <td>
-                @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100))
-            </td>
-            <td>
-                @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100))
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @item.Meal.MealName
+        </td>
+        <td>
+            @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100))
+        </td>
+        <td>
+            @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100))
+        </td>
+        <td>
+            @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100))
+        </td>
+        <td>
+            @Format.OneDecimal(item.Meal.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100))
+        </td>
+    </tr>
     }
 }
 else
@@ -31,3 +41,35 @@ else
         <td align="center" colspan="5">No meals today</td>
     </tr>    
 }
+</tbody>
+<tfoot>
+    <tr id="sum-up">
+        <td>
+            Intake:
+        </td>
+        <td>
+                @Format.OneDecimal(Model.TodayMealLog.Sum(x=>x.Meal.MealProducts.Sum(x=>x.Product.Kcal * x.Weight/100))) / 
+            <b>
+                @Model.UserUntrition.Kcal
+            </b>
+        </td>
+        <td>
+                @Format.OneDecimal(Model.TodayMealLog.Sum(x=>x.Meal.MealProducts.Sum(x=>x.Product.Protein * x.Weight/100))) /
+            <b> 
+                @Model.UserUntrition.Protein
+            </b>
+        </td>
+        <td>
+                @Format.OneDecimal(Model.TodayMealLog.Sum(x=>x.Meal.MealProducts.Sum(x=>x.Product.Carbohydrates * x.Weight/100))) / 
+            <b>
+                @Model.UserUntrition.Carbohydrates
+            </b>
+        </td>
+        <td>
+                @Format.OneDecimal(Model.TodayMealLog.Sum(x=>x.Meal.MealProducts.Sum(x=>x.Product.Fat * x.Weight/100))) / 
+            <b>
+                @Model.UserUntrition.Fat
+            </b>
+        </td>
+    </tr>
+</tfoot>

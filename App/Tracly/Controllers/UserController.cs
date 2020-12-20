@@ -74,45 +74,29 @@ namespace App.Tracly.Controllers
         }
 
         [HttpPost]
-        public async Task<UserWeightDto> PostUserWeight(UserWeightDto userWeight)
+        public async void PostUserWeight(UserWeightDto userWeight)
         {
-            var PostUserWeight = $"http://localhost:5005/api/user/nutrition";
-            
+            userWeight.Date = DateTime.Now;
+            var stringContent = new StringContent(JsonConvert.SerializeObject(userWeight), Encoding.UTF8, "application/json");
+
             using (var httpClient = new HttpClient())
             {
-                var stringContent = new StringContent(JsonConvert.SerializeObject(userWeight), Encoding.UTF8, "application/json");
-
-                var builderWeight = new UriBuilder(PostUserWeight);
-
-                var response = await httpClient.PostAsync(builderWeight.ToString(),stringContent);
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    userWeight = JsonConvert.DeserializeObject<UserWeightDto>(apiResponse);
-                }
+                HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/user/weight", stringContent);
             }
-            return userWeight;
         }
 
         [HttpPost]
-        public async Task<UserNutritionDto> PostUserNutrition(UserNutritionDto userNutrition)
+        public async void PostUserNutrition(UserNutritionDto userNutrition)
         {
             var postUserNutrition = $"http://localhost:5005/api/user/nutrition";
             
+            userNutrition.Date = DateTime.Now;
+            var stringContent = new StringContent(JsonConvert.SerializeObject(userNutrition), Encoding.UTF8, "application/json");
+
             using (var httpClient = new HttpClient())
             {
-                var stringContent = new StringContent(JsonConvert.SerializeObject(userNutrition), Encoding.UTF8, "application/json");
-
-                var builderWeight = new UriBuilder(postUserNutrition);
-
-                var response = await httpClient.PostAsync(builderWeight.ToString(),stringContent);
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    userNutrition = JsonConvert.DeserializeObject<UserNutritionDto>(apiResponse);
-                }
+                HttpResponseMessage response = await httpClient.PostAsync(postUserNutrition, stringContent);
             }
-            return userNutrition;
         }
     }
 }

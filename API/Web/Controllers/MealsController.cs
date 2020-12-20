@@ -93,6 +93,13 @@ namespace API.Web.Controllers
         }
 
         [HttpPut]
+        [Route("mealLog/{mealLogId:int}/editEaten")]
+        public IActionResult EditEatenMeal(int mealLogId,MealDto meal)
+        {
+            return base.FromResult(_service.EditEatenMeal(mealLogId,meal));
+        }
+
+        [HttpPut]
         [Route("meal")]
         public IActionResult EditMeal(MealDto meal)
         {
