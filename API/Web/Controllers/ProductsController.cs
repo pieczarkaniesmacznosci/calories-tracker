@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace API.Web.Controllers
 {
     [ApiController]
-    [Route("api/products")]
+    [Route("api")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : BaseController
     {
@@ -23,44 +23,50 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
-        [Route("id/{id}")]
+        [Route("product/{id}")]
         public IActionResult GetProduct(int id)
         {
             return base.FromResult(_service.GetProduct(id));
         }
 
         [HttpGet]
+        [Route("products")]
         public IActionResult GetProducts()
         {
             return base.FromResult(_service.GetProducts());
         }
 
         [HttpGet]
-        [Route("name")]
+        [Route("products/name")]
         public IActionResult FindProductByName(string productName)
         {
             return base.FromResult(_service.GetProducts(productName));
         }
 
         [HttpGet]
-        [Route("exist")]
-        public IActionResult ProductExist(string productName)
+        // http://localhost:5005/api/product/{productId}/nameValid?productName={productName}
+        [Route("product/{id}/nameValid")]
+        public IActionResult ProductNameValid(int id, string productName)
         {
-            return base.FromResult(_service.ProductExist(productName));
+            return base.FromResult(_service.ProductNameValid(id,productName));
         }
+        
         [HttpPost]
+        [Route("products")]
         public IActionResult AddProduct(ProductDto product)
         {
             return base.FromResult(_service.AddProduct(product));
         }
 
         [HttpPut]
+        [Route("products")]
         public IActionResult EditProduct(ProductDto product)
         {
             return base.FromResult(_service.EditProduct(product));
         }
 
         [HttpDelete]
+        [Route("products")]
         public IActionResult DeleteProduct(int id)
         {
             return base.FromResult(_service.DeleteProduct(id));

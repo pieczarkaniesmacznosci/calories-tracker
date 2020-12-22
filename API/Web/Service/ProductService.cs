@@ -119,7 +119,7 @@ namespace API.Web.Service
                     return new InvalidResult<ProductDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
                             
-                var productToEdit = _productRepository.Get(product.Id);
+                var productToEdit = _productRepository.Get(product.Id.Value);
 
                 if(productToEdit == null)
                 {
@@ -163,18 +163,14 @@ namespace API.Web.Service
             }
         }
 
-        public Result<bool> ProductExist(string productName)
+        public Result<bool> ProductNameValid(int id, string productName)
         {
             try
             {
-                var productFound = _productRepository.Find(x=>x.Name == productName).FirstOrDefault();
-
-                if(productFound == null)
-                {
+                if(_productRepository.Find(x=> x.Name == productName && x.Id != id).FirstOrDefault() != null){
                     return new SuccessResult<bool>(false);
                 }
-                else
-                {
+                else{
                     return new SuccessResult<bool>(true);
                 }
             }

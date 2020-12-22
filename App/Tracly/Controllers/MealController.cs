@@ -35,7 +35,7 @@ namespace App.Tracly.Controllers
                 MealLogs = new List<MealLogDto>(),
                 SavedMeals = new List<MealDto>()
             };
-            return LocalRedirect("/Meal/List");
+            return Redirect("List");
         }
 
         [HttpGet]
@@ -66,7 +66,7 @@ namespace App.Tracly.Controllers
                     meals = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
                 }
             }
-            return PartialView("_ConsumedMealsListTable", meals);
+            return PartialView("_ConsumedMealsList", meals);
         }
 
         [HttpGet]
@@ -86,19 +86,17 @@ namespace App.Tracly.Controllers
                     meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
                 }
             }
-            return PartialView("_MealsListTable", meals);
+            return PartialView("_SavedMealsList", meals);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProductListForMealTable(string queryString)
+        public async Task<List<ProductDto>> ProductsForMeal(string queryString)
         {
             var products = new List<ProductDto>();
             var getByNamePath = "http://localhost:5005/api/products/name";
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response;
-                if (!string.IsNullOrWhiteSpace(queryString))
-                {
                     var builder = new UriBuilder(getByNamePath);
                     builder.Query = $"productName={queryString}";
                     response = await httpClient.GetAsync(builder.ToString());
@@ -108,37 +106,39 @@ namespace App.Tracly.Controllers
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
                     }
-                }
-                else
-                {
-                    products = new List<ProductDto>();
-                }
             }
+            return products;
+        }
+
+        [HttpPost]
+        public IActionResult ProductForMealTable(List<ProductDto> products)
+        {
+            products ??= new List<ProductDto>();
             return PartialView("_ProductListForMealTable", products);
         }
 
         public async Task<IActionResult> Details(int? id)
         {
             _viewModel = new MealViewModel();
-            _viewModel.Meal = new MealDto(){
-                MealProducts = new List<MealProductDto>()
+            _viewModel.MealLog = new MealLogDto(){
+                Meal = new MealDto(){
+                    MealProducts = new List<MealProductDto>()}
             };
             _viewModel.Products = new List<ProductDto>();
             if(id == null)
             {
-                _viewModel.Title = "New meal";
+                _viewModel.IsEdit= false;
             }
             else
             {
                 using (var httpClient = new HttpClient())
                 {
-                    HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/{id}");
+                    HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/mealsLog/{id}");
                     if (response.IsSuccessStatusCode)
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        _viewModel.Meal = JsonConvert.DeserializeObject<MealDto>(apiResponse);
-                        _viewModel.Title = "Edit meal";
-
+                        _viewModel.MealLog = JsonConvert.DeserializeObject<MealLogDto>(apiResponse);
+                        _viewModel.IsEdit= true;
                     }
                     else
                     {
@@ -193,13 +193,29 @@ namespace App.Tracly.Controllers
                     meals = JsonConvert.DeserializeObject<List<MealDto>>(apiResponse);
                 }
             }
-            return PartialView("_MealsListTable", meals);
+            return PartialView("_SavedMealsList", meals);
         }
 
         [HttpPost]
+        [Route("MealNameValid")]
+        public async Task<bool> ProductNameValid(int productId,string productName)
+        {
+            bool nameIsValid= false;
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}/nameValid?productName={productName}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    nameIsValid = JsonConvert.DeserializeObject<bool>(apiResponse);
+                }
+            }
+            return nameIsValid;
+        }
+        [HttpPost]
         public IActionResult GenerateMealProductListTable(List<MealProductDto> mealProducts)
         {
-            return PartialView("_MealProductListTable", mealProducts);
+            return PartialView("_MealProductsList", mealProducts);
         }
 
         [HttpPost]
@@ -210,6 +226,17 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/meal", stringContent);
+            }
+        }
+
+        [HttpPost]
+        public async void EditEatenMeal(MealLogDto mealLog)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(mealLog.Meal), Encoding.UTF8, "application/json");
+
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.PutAsync($"http://localhost:5005/api/mealLog/{mealLog?.Id}/editEaten", stringContent);
             }
         }
 

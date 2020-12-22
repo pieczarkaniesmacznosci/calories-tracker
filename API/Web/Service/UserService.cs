@@ -29,6 +29,7 @@ namespace API.Web.Service
             try
             {
                 var userNutritionEntity = _mapper.Map<UserNutrition>(userNutrition);
+                userNutritionEntity.UserId =1;
                 var result = _userNutritionRepository.Add(userNutritionEntity);
                 _userNutritionRepository.SaveChanges();
                 return new SuccessResult<UserNutritionDto>(_mapper.Map<UserNutritionDto>(result));
@@ -45,6 +46,7 @@ namespace API.Web.Service
         {
             try
             {
+                userWeight.UserId =1;
                 var userWeightEntity = _mapper.Map<UserWeight>(userWeight);
                 var result = _userWeightRepository.Add(userWeightEntity);
                 _userWeightRepository.SaveChanges();
@@ -159,7 +161,10 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserNutrition = _userNutritionRepository.Find(x=> x.UserId == 1).Max(x=>x.Date);
+                var currentUserNutrition = _userNutritionRepository
+                    .Find(x=> x.UserId == 1)
+                    .OrderByDescending(x=>x.Date)
+                    .FirstOrDefault();
 
                 if(currentUserNutrition == null)
                 {
@@ -181,7 +186,10 @@ namespace API.Web.Service
         {
             try
             {
-                 var currentUserWeight = _userWeightRepository.Find(x=> x.UserId == 1).Max(x=>x.Date);
+                var currentUserWeight = _userWeightRepository
+                .Find(x=> x.UserId == 1)
+                .OrderByDescending(x=>x.Date)
+                .FirstOrDefault();
 
                 if(currentUserWeight == null)
                 {

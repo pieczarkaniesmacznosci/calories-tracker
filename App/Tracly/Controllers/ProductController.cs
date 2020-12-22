@@ -43,7 +43,7 @@ namespace App.Tracly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProductsList(string queryString)
+        public async Task<List<ProductDto>> ProductsList(string queryString)
         {
             var products = new List<ProductDto>();
             var getPath = "http://localhost:5005/api/products";
@@ -67,7 +67,14 @@ namespace App.Tracly.Controllers
                     products = JsonConvert.DeserializeObject<List<ProductDto>>(apiResponse);
                 }
             }
-            return PartialView("_ProductListItem", products);
+            return products;
+        }
+
+        [HttpPost]
+        public IActionResult ProductsListTable(IEnumerable<ProductDto> products)
+        {
+            products ??= new List<ProductDto>();
+            return PartialView("_ProductsList", products);
         }
 
         [HttpGet]
@@ -77,7 +84,7 @@ namespace App.Tracly.Controllers
             var product = new ProductDto();
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/products/id/{productId}");
+                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -89,20 +96,19 @@ namespace App.Tracly.Controllers
 
         [HttpPost]
         [Route("Product/ProductNameValid")]
-        public async Task<bool> ProductNameValid(string productName)
+        public async Task<bool> ProductNameValid(int productId,string productName)
         {
-            bool productNameValid= false;
+            bool nameIsValid= false;
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/products/exist?productName={productName}");
+                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}/nameValid?productName={productName}");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    bool productExist = JsonConvert.DeserializeObject<bool>(apiResponse);
-                    productNameValid = !productExist;
+                    nameIsValid = JsonConvert.DeserializeObject<bool>(apiResponse);
                 }
             }
-            return productNameValid;
+            return nameIsValid;
         }
 
         [HttpPost]

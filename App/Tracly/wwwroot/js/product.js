@@ -1,25 +1,39 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+﻿// PRODUCTS LIST GENERATION
 
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+var products;
 
 $("#productNameListInput").keyup(function () {
 	var searchQuery = $("#productNameListInput").val();
 
 	if (searchQuery.length > 2) {
-		loadList(searchQuery);
+		getProducts(searchQuery);
 	} else {
-		loadList("");
+		getProducts("");
 	}
 });
 
-function loadList(searchQuery) {
-	if (searchQuery === undefined) {
-		searchQuery = "";
-	}
-	var urlBase = "/Product/ProductsList/".concat("?queryString=" + searchQuery);
-	$("#divProductsPartial").load(urlBase);
+function getProducts(searchQuery) {
+	$.ajax({
+		url: "/Product/ProductsList/".concat("?queryString=" + searchQuery),
+		type: "GET",
+		success: function (result, status, xhr) {
+			loadProductsTable(result);
+		},
+	});
+}
+
+function loadProductsTable(productsForTable) {
+	var urlBase = "/Product/ProductsListTable";
+	$.ajax({
+		url: urlBase,
+		type: "POST",
+		data: { products: productsForTable },
+		success: function (result, status, xhr) {
+			$("#productsListTable").html(result);
+			registerFocusout();
+			setUpNumeric();
+		},
+	});
 }
 
 function putProduct(productFormData) {
@@ -32,7 +46,7 @@ function putProduct(productFormData) {
 
 		success: function () {
 			$("#productModal").modal("hide");
-			loadList();
+			getProducts("");
 		},
 
 		error: function () {
@@ -53,7 +67,7 @@ function postProduct(productFormData) {
 
 		success: function () {
 			$("#productModal").modal("hide");
-			loadList();
+			getProducts("");
 		},
 
 		error: function () {
@@ -75,12 +89,9 @@ function saveProduct() {
 
 	if (productId === undefined) {
 		postProduct(productFormData);
-		loadList();
 	} else {
 		productFormData = productFormData.concat("&id=" + productId);
-
 		putProduct(productFormData);
-		loadList();
 	}
 }
 
@@ -95,7 +106,7 @@ function deleteProduct(id) {
 		url: url,
 
 		success: function () {
-			loadList();
+			getProducts("");
 		},
 
 		error: function () {
@@ -153,6 +164,10 @@ function editProductModal(id) {
 
 		success: function (returnedProduct) {
 			$("#productModal").modal({ show: true });
+			$("#productModal").on("hidden.bs.modal", function () {
+				$("#productForm").validate().resetForm();
+				$("#productForm .is-invalid").removeClass("is-invalid");
+			});
 
 			populateModalInputs(
 				returnedProduct["name"],
@@ -211,26 +226,21 @@ $(function () {
 					remote: {
 						url: "/Product/ProductNameValid",
 						async: false,
-						type: "post",
+						type: "POST",
 						data: {
 							productName: function () {
 								return $("#name").val();
 							},
+							productId: function () {
+								return $("#productModal").attr("data-id");
+							},
 						},
 					},
 				},
-				kcal: {
-					required: true,
-				},
-				protein: {
-					required: true,
-				},
-				carbohydrates: {
-					required: true,
-				},
-				fat: {
-					required: true,
-				},
+				kcal: { required: true },
+				protein: { required: true },
+				carbohydrates: { required: true },
+				fat: { required: true },
 			},
 			messages: {
 				name: {

@@ -27,6 +27,7 @@ namespace API.Web.Repositories
         public override IEnumerable<Meal> Find(Expression<Func<Meal, bool>> predicate)
         {
             return _context.Meals
+                .AsQueryable()
                 .Include(x=>x.MealProducts)
                 .ThenInclude(x=>x.Product)
                 .Where(predicate)

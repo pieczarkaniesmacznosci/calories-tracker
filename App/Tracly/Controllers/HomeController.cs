@@ -3,6 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using App.Tracly.Models;
 using Microsoft.AspNetCore.Authorization;
+using App.Tracly.ViewModels;
+using System.Collections.Generic;
+using API.Web.Dtos;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
 namespace App.Tracly.Controllers
 {
@@ -18,7 +25,46 @@ namespace App.Tracly.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var homeVM = new HomeViewModel(){
+                TodayMealLog = new List<MealLogDto>(),
+                UserUntrition = new UserNutritionDto()
+            };
+            return View(homeVM);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TodaysMealsList()
+        {
+            var homeVM = new HomeViewModel(){
+                TodayMealLog = new List<MealLogDto>(),
+                UserUntrition = new UserNutritionDto()
+            };
+            var mealLog = new List<MealLogDto>();
+            var getMeals = $"http://localhost:5005/api/meal/todaysMealLog";
+            var getUserNutrition = $"http://localhost:5005/api/user/nutrition";
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response;
+                var builder = new UriBuilder(getMeals);
+                response = await httpClient.GetAsync(builder.ToString());
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    homeVM.TodayMealLog = JsonConvert.DeserializeObject<List<MealLogDto>>(apiResponse);
+                }
+                
+                HttpResponseMessage userNutritionResponse;
+                var userNutritionBuilder = new UriBuilder(getUserNutrition);
+                userNutritionResponse = await httpClient.GetAsync(userNutritionBuilder.ToString());
+                
+                if (userNutritionResponse.IsSuccessStatusCode)
+                {
+                    string apiResponse = await userNutritionResponse.Content.ReadAsStringAsync();
+                    homeVM.UserUntrition = JsonConvert.DeserializeObject<UserNutritionDto>(apiResponse);
+                }
+            }
+            return PartialView("_TodaysMealLogTable", homeVM);
         }
 
         public IActionResult Privacy()

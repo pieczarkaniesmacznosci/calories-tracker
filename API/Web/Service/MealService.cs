@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity.Core.Objects;
 
 namespace API.Web.Service
 {
@@ -67,6 +68,24 @@ namespace API.Web.Service
             }
         }
 
+        public Result<bool> MealNameValid(int id, string mealName)
+        {
+            try
+            {
+                if(_mealRepository.Find(x=> x.MealName == mealName && x.Id != id && x.IsSaved).FirstOrDefault() != null){
+                    return new SuccessResult<bool>(false);
+                }
+                else{
+                    return new SuccessResult<bool>(true);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while checking if meal name {mealName} is valid",ex);
+                return new UnexpectedResult<bool>();
+            }
+        }
+        
         public Result<MealDto> AddMeal(MealDto meal)
         {
             try
@@ -77,16 +96,17 @@ namespace API.Web.Service
                     return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
                 
-                var productEntity = _mapper.Map<Meal>(meal);
-                productEntity.UserId =1;
-                var result = _mealRepository.Add(productEntity);
+                var mealEntity = _mapper.Map<Meal>(meal);
+                mealEntity.UserId =1;
+                var result = _mealRepository.Add(mealEntity);
                 if(meal.DateEaten != null)
                 {
                     _mealLogRepository.Add(new MealLog(){
                         Meal = result,
                         DateEaten = meal.DateEaten.Value,
-                        UserId =productEntity.UserId
+                        UserId =mealEntity.UserId
                     });
+                _mealLogRepository.SaveChanges();
                 }
 
                 _mealRepository.SaveChanges();
@@ -99,6 +119,49 @@ namespace API.Web.Service
             }
         }
 
+        public Result<MealLogDto> EditEatenMeal(int mealLogId, MealDto meal)
+        {
+            try
+            {            
+                var validationResult = _mealValidator.Validate(meal);
+                if(!validationResult.IsValid)
+                {
+                    return new InvalidResult<MealLogDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
+                }
+                var userId = 1;
+                    
+                var mealLogToDelete = _mealLogRepository.Get(mealLogId);
+
+                if(mealLogToDelete == null)
+                {
+                    _logger.LogInformation($"Meal with id = {mealLogId} was not found!");
+                    return new NotFoundResult<MealLogDto>();
+                }
+
+                _mealLogRepository.Delete(mealLogToDelete);
+                var mealEntity = _mapper.Map<Meal>(meal);
+                mealEntity.UserId = userId;
+
+                _mealRepository.Add(mealEntity);
+                _mealRepository.SaveChanges();
+
+                var mealLogToAdd = new MealLog{
+                    UserId = userId,
+                    MealId = mealEntity.Id,
+                    DateEaten = mealLogToDelete.DateEaten
+                };
+
+                _mealLogRepository.Add(mealLogToAdd);
+                _mealLogRepository.SaveChanges();
+
+                return new SuccessResult<MealLogDto>(_mapper.Map<MealLogDto>(mealLogToAdd));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}",ex);
+                return new UnexpectedResult<MealLogDto>();
+            }
+        }
         public Result<MealDto> EditMeal(MealDto meal)
         {
             try
@@ -109,7 +172,7 @@ namespace API.Web.Service
                     return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
                     
-                var productToEdit = _mealRepository.Get(meal.Id);
+                var productToEdit = _mealRepository.Get(meal.Id.Value);
 
                 if(productToEdit == null)
                 {
@@ -141,8 +204,9 @@ namespace API.Web.Service
                     _logger.LogInformation($"Meal with id = {id} was not found!");
                     return new NotFoundResult<MealDto>();
                 }
+                mealToDelete.IsSaved = false;
 
-                var result = _mealRepository.Delete(mealToDelete);
+                var result = _mealRepository.Update(mealToDelete);
                 _mealRepository.SaveChanges();
                 return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));
             }
@@ -195,7 +259,7 @@ namespace API.Web.Service
                 var log = new MealLog(){
                     MealId = mealLog.MealId,
                     UserId = 1,
-                    DateEaten = mealLog.DateEaten ?? DateTime.Now
+                    DateEaten = mealLog.DateEaten
                 };
 
                 var result = _mealLogRepository.Add(log);
@@ -261,7 +325,7 @@ namespace API.Web.Service
         {
             try
             {
-                var mealLog = _mealLogRepository.Find(x=>x.DateEaten.Date == date.Date).OrderByDescending(x=>x.DateEaten);
+                var mealLog = _mealLogRepository.Find(x=> x.DateEaten.Date.Equals(date.Date));
 
                 if(!mealLog.Any())
                 {
@@ -276,6 +340,28 @@ namespace API.Web.Service
             {
                 _logger.LogCritical($"Exception while getting meal logs by date",ex);
                 return new UnexpectedResult<IEnumerable<MealLogDto>>();
+            }
+        }
+
+        public Result<MealLogDto> GetMealLog(int mealLogId)
+        {
+            try
+            {
+                var mealLog = _mealLogRepository.Get(mealLogId);
+
+                if(mealLog == null)
+                {
+                    return new NotFoundResult<MealLogDto>();
+                }
+
+                var mealLogListDto = _mapper.Map<MealLogDto>(mealLog);
+
+                return new SuccessResult<MealLogDto>(mealLogListDto);                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting meal log by id",ex);
+                return new UnexpectedResult<MealLogDto>();
             }
         }
     }

@@ -1,3 +1,5 @@
+@model UserViewModel
+
 <br>
 <h1>User panel</h1>
 <br>
@@ -6,7 +8,7 @@
 <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
 
     <!-- Accordion card -->
-    <div class="card">
+    <div class="card collapsible" id="userNutritionAccordion">
 
         <!-- Card header -->
         <div class="card-header" role="tab" id="headingTwo1">
@@ -20,20 +22,16 @@
         <!-- Card body -->
         <div id="collapseTwo1" class="collapse" role="tabpanel" data-parent="#accordionEx1">
             <div class="card-body">
-                <form>
+                <form id="nutritionForm" name="nutritionForm">
                     <!-- KCAL INTAKE-->
                     <div>
                         <span>Daily <b>Kcal</b> intake</span>
                     </div>
                     <div class="form-group row justify-content-center">
-                        <label class="col-sm-2 col-form-label" for="currentKcalIntake">Current</label>
-                        <div class="input-group col-sm-3">
-                            <input id="currentKcalIntake" type="text" class="form-control" value="2100"
-                            aria-label="daily Kcal intake" disabled>
-                        </div>
+                        <label class="col-sm-2 col-form-label" for="currentKcalIntake">Current :<span id="currentKcalIntake"></span></label>
                         <label class="col-sm-2 col-form-label" for="kcalIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="kcalIntake" type="text" class="form-control" placeholder="Kcal">
+                            <input id="kcalIntake" name="kcal" autocomplete="off" type="text" class="form-control numeric" placeholder="Kcal">
                         </div>
                     </div>
                     <!-- PROTEIN INTAKE-->
@@ -41,14 +39,10 @@
                         <span>Daily <b>Protein</b> intake</span>
                     </div>
                     <div class="form-group row justify-content-center">
-                        <label class="col-sm-2 col-form-label" for="currentProteinIntake">Current</label>
-                        <div class="input-group col-sm-3">
-                            <input id="currentProteinIntake" type="text" class="form-control" value="142"
-                            aria-label="daily Protein intake" disabled>
-                        </div>
+                        <label class="col-sm-2 col-form-label" for="currentProteinIntake">Current :<span id="currentProteinIntake"></span></label>
                         <label class="col-sm-2 col-form-label" for="proteinIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="proteinIntake" type="text" class="form-control" placeholder="Protein">
+                            <input id="proteinIntake" name="protein" autocomplete="off" type="text" class="form-control numeric" placeholder="Protein">
                         </div>
                     </div>
                     <!-- CARBOHYDRATES INTAKE-->
@@ -56,14 +50,10 @@
                         <span>Daily <b>Carbohydrates</b> intake</span>
                     </div>
                     <div class="form-group row justify-content-center">
-                        <label class="col-sm-2 col-form-label" for="currentCarbohydratesIntake">Current</label>
-                        <div class="input-group col-sm-3">
-                            <input id="currentCarbohydratesIntake" type="text" class="form-control" value="258"
-                            aria-label="daily Carbohydrates intake" disabled>
-                        </div>
+                        <label class="col-sm-2 col-form-label" for="currentCarbohydratesIntake">Current :<span id="currentCarbohydratesIntake"></span></label>
                         <label class="col-sm-2 col-form-label" for="carbohydratesIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="carbohydratesIntake" type="text" class="form-control"
+                            <input id="carbohydratesIntake" name="carbohydrates" autocomplete="off" type="text" class="form-control numeric"
                             placeholder="Carbohydrates">
                         </div>
                     </div>
@@ -72,24 +62,20 @@
                         <span>Daily <b>Fat</b> intake</span>
                     </div>
                     <div class="form-group row justify-content-center">
-                        <label class="col-sm-2 col-form-label" for="currentFatIntake">Current</label>
-                        <div class="input-group col-sm-3">
-                            <input id="currentFatIntake" type="text" class="form-control" value="58"
-                            aria-label="daily Fat intake" disabled>
-                        </div>
+                        <label class="col-sm-2 col-form-label" for="currentFatIntake">Current :<span id="currentFatIntake"></span></label>
                         <label class="col-sm-2 col-form-label" for="fatIntake">New</label>
                         <div class="input-group col-sm-3">
-                            <input id="fatIntake" type="text" class="form-control" placeholder="Fat">
+                            <input id="fatIntake" name="fat" autocomplete="off" type="text" class="form-control numeric" placeholder="Fat">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="PostUserNutrition()">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 
     <!-- Accordion card -->
-    <div class="card">
+    <div class="card collapsible" id="userWeightAccordion" >
 
         <!-- Card header -->
         <div class="card-header" role="tab" id="headingTwo2">
@@ -102,24 +88,22 @@
 
         <!-- Card body -->
         <div id="collapseTwo21" class="collapse" role="tabpanel" data-parent="#accordionEx1">
-            <div class="card-body">
-                <!-- FAT INTAKE-->
-                <div>
-                    <span>Current <b>Weight</b></span>
-                </div>
-                <div class="form-group row justify-content-center">
-                    <label class="col-sm-2 col-form-label" for="currentWeight">Current</label>
-                    <div class="input-group col-sm-3">
-                        <input id="currentWeight" type="text" class="form-control" value="75"
-                        aria-label="current weight" disabled>
+            <form id="weightForm" name="weightForm">
+                <div class="card-body">
+                    <!-- FAT INTAKE-->
+                    <div>
+                        <span>Current <b>Weight</b></span>
                     </div>
-                    <label class="col-sm-2 col-form-label" for="weight">New</label>
-                    <div class="input-group col-sm-3">
-                        <input id="weight" type="text" class="form-control" placeholder="Weight">
+                    <div class="row justify-content-center">
+                        <label class="col-sm-2 col-form-label" for="currentWeight">Current :<span id="currentWeight"></span></label>
+                        <label class="col-sm-2 col-form-label" for="weight">New</label>
+                        <div class="form-group input-group col-sm-3">
+                            <input id="weight" name="weight" autocomplete="off" type="text" class="form-control numeric" placeholder="Weight">
+                        </div>
                     </div>
+                    <button type="button"class="btn btn-primary" onclick="PostUserWeight()">Submit</button>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>

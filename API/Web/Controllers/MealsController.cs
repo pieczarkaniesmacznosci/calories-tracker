@@ -43,6 +43,13 @@ namespace API.Web.Controllers
             return base.FromResult(_service.GetMeals(mealName));
         }
 
+        [HttpGet]
+        [Route("meal/{id}/nameValid")]
+        public IActionResult MealNameValid(int id, string mealName)
+        {
+            return base.FromResult(_service.MealNameValid(id,mealName));
+        }
+
         [HttpPost]
         [Route("meal")]
         public IActionResult AddMeal(MealDto meal)
@@ -58,10 +65,24 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
+        [Route("meal/mealsLog/{mealLogId:int}")]
+        public IActionResult GetMealLog(int mealLogId)
+        {
+            return base.FromResult(_service.GetMealLog(mealLogId));
+        }
+
+        [HttpGet]
         [Route("meal/mealsLog/{date:dateTime}")]
         public IActionResult GetMealLog(DateTime date)
         {
             return base.FromResult(_service.GetMealLog(date));
+        }
+
+        [HttpGet]
+        [Route("meal/todaysMealLog")]
+        public IActionResult GetTodaysMealLog()
+        {
+            return base.FromResult(_service.GetMealLog(DateTime.Now.Date));
         }
 
         [HttpPost]
@@ -76,6 +97,13 @@ namespace API.Web.Controllers
         public IActionResult ThrowUp(int mealLogId)
         {
             return base.FromResult(_service.DeleteMealLog(mealLogId));
+        }
+
+        [HttpPut]
+        [Route("mealLog/{mealLogId:int}/editEaten")]
+        public IActionResult EditEatenMeal(int mealLogId,MealDto meal)
+        {
+            return base.FromResult(_service.EditEatenMeal(mealLogId,meal));
         }
 
         [HttpPut]
