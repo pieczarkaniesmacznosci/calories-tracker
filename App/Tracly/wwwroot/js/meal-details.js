@@ -1,6 +1,7 @@
 function mealDetails(id) {
 	$.get("/Meal/MealDto", { id: id }, function (data) {
 		mealProducts = data.mealProducts;
+		$("#mealName").val(data.mealName);
 	});
 }
 

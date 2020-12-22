@@ -44,6 +44,7 @@ function getProductsForMeal(searchQuery) {
 		type: "GET",
 		success: function (result, status, xhr) {
 			products = result;
+			filterAvailableProducts(mealProducts);
 			loadProductsForMealTable(products);
 		},
 	});
@@ -94,41 +95,41 @@ function loadMealProductList(mealProductsToGenerate) {
 	});
 }
 
-function editMealWindow(id) {
-	var urlBase = "/Meal/MealDto/";
+// function editMealWindow(id) {
+// 	var urlBase = "/Meal/MealDto/";
 
-	var url = urlBase.concat(id);
+// 	var url = urlBase.concat(id);
 
-	$.ajax({
-		type: "GET",
+// 	$.ajax({
+// 		type: "GET",
 
-		url: url,
+// 		url: url,
 
-		success: function (returnedProduct) {
-			$("#productModal").modal({ show: true });
-			$("#productModal").on("hidden.bs.modal", function () {
-				$("#productForm").validate().resetForm();
-				$("#productForm .is-invalid").removeClass("is-invalid");
-			});
+// 		success: function (returnedProduct) {
+// 			$("#productModal").modal({ show: true });
+// 			$("#productModal").on("hidden.bs.modal", function () {
+// 				$("#productForm").validate().resetForm();
+// 				$("#productForm .is-invalid").removeClass("is-invalid");
+// 			});
 
-			populateModalInputs(
-				returnedProduct["name"],
-				returnedProduct["kcal"],
-				returnedProduct["protein"],
-				returnedProduct["carbohydrates"],
-				returnedProduct["fat"]
-			);
+// 			populateModalInputs(
+// 				returnedProduct["name"],
+// 				returnedProduct["kcal"],
+// 				returnedProduct["protein"],
+// 				returnedProduct["carbohydrates"],
+// 				returnedProduct["fat"]
+// 			);
 
-			$("#productModal").attr("data-id", id);
-		},
+// 			$("#productModal").attr("data-id", id);
+// 		},
 
-		error: function () {
-			alert("ajax failed");
-		},
+// 		error: function () {
+// 			alert("ajax failed");
+// 		},
 
-		processData: true,
-	});
-}
+// 		processData: true,
+// 	});
+// }
 
 function addProductToMeal(productId) {
 	var urlBase = "/Product/GetProduct/";
@@ -145,6 +146,8 @@ function addProductToMeal(productId) {
 				weight: 100,
 			});
 			loadMealProductList(mealProducts);
+			var searchQuery = $("#productForMealListInput").val();
+			getProductsForMeal(searchQuery);
 		},
 	});
 }
