@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
+using Tracly.Extensions;
 
 namespace App.Tracly.Controllers
 {
@@ -39,6 +40,7 @@ namespace App.Tracly.Controllers
             
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage weightResponse;
                 var builderWeight = new UriBuilder(getUserWeight);
 
@@ -60,6 +62,7 @@ namespace App.Tracly.Controllers
             
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage weightResponse;
                 var builderWeight = new UriBuilder(getUserWeight);
 
@@ -81,6 +84,7 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/user/weight", stringContent);
             }
         }
@@ -95,6 +99,7 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.PostAsync(postUserNutrition, stringContent);
             }
         }

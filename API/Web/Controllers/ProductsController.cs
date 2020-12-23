@@ -10,13 +10,15 @@ namespace API.Web.Controllers
 {
     [ApiController]
     [Route("api")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : BaseController
     {
         private readonly ILogger<ProductsController> _logger;
         private readonly IProductService _service;
 
-        public ProductsController(ILogger<ProductsController> logger, IProductService service)
+        public ProductsController(
+            ILogger<ProductsController> logger, 
+            IProductService service)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _service = service;

@@ -12,6 +12,7 @@ using API.Web.Entities;
 using System.Threading.Tasks;
 using API.Web.Result;
 using Microsoft.Extensions.Configuration;
+using Web.Result;
 
 namespace API.Web.Controllers
 {
@@ -25,9 +26,9 @@ namespace API.Web.Controllers
 
         public AuthenticationController(
             ILogger<MealsController> logger, 
-            UserManager<User> userManager,
             SignInManager<User> signInManager, 
-            IConfiguration config)
+            IConfiguration config, 
+            UserManager<User> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -40,14 +41,14 @@ namespace API.Web.Controllers
             
             if(user == null)
             {
-                return base.FromResult(new NotFoundResult<TokenAccessDto>(tokenAccess));
+                return base.FromResult(new UnauthorizedResult<TokenAccessDto>(tokenAccess));
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user,tokenAccess.Password,false);
 
             if(!result.Succeeded)
             {
-                return base.FromResult(new NotFoundResult<TokenAccessDto>(tokenAccess));
+                return base.FromResult(new UnauthorizedResult<TokenAccessDto>(tokenAccess));
             }
 
             var claims = new[]

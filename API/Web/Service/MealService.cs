@@ -9,7 +9,10 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Core.Objects;
+using Microsoft.AspNetCore.Http;
+using Web.Extensions;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace API.Web.Service
 {
@@ -20,22 +23,40 @@ namespace API.Web.Service
         private readonly IRepository<MealLog> _mealLogRepository;
         private readonly IMapper _mapper;
         private readonly MealValidator _mealValidator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<User> _userManager;
+        private int _userId => GetCurrentUserId().Result;
 
+        private async Task<int> GetCurrentUserId()
+        {
+            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
+            return currentUserId.Id;
+        }
 
-        public MealService(ILogger<MealService> logger, IRepository<Meal> mealRepository,IRepository<MealLog> mealLogRepository, IMapper mapper, MealValidator mealValidator)
+        public MealService(
+            ILogger<MealService> logger, 
+            IRepository<Meal> mealRepository,
+            IRepository<MealLog> mealLogRepository, 
+            IMapper mapper, 
+            MealValidator mealValidator, 
+            IHttpContextAccessor httpContextAccessor, 
+            UserManager<User> userManager)
         {
             _logger = logger;
             _mealRepository = mealRepository;
             _mealLogRepository = mealLogRepository;
             _mapper = mapper;
             _mealValidator = mealValidator;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
         public Result<IEnumerable<MealDto>> GetMeals(bool isSaved)
         {
             try
             {
-                var a = _mealRepository.Find(x=>x.IsSaved == isSaved);
+                var a = _mealRepository.Find(x=> x.UserId == _userId && x.IsSaved == isSaved);
                 var result = _mapper.Map<IEnumerable<MealDto>>(a);
                 return new SuccessResult<IEnumerable<MealDto>>(result);
             }
@@ -49,8 +70,8 @@ namespace API.Web.Service
         public Result<MealDto> GetMeal(int id)
         {
             try
-            {                
-                var meal = _mealRepository.Get(id);
+            {
+                var meal = _mealRepository.Find(x=>x.UserId == _userId && x.Id ==id).FirstOrDefault();
 
                 if(meal == null)
                 {
@@ -72,10 +93,16 @@ namespace API.Web.Service
         {
             try
             {
-                if(_mealRepository.Find(x=> x.MealName == mealName && x.Id != id && x.IsSaved).FirstOrDefault() != null){
+                var meal = _mealRepository
+                    .Find(x=> x.Id == _userId && x.MealName == mealName && x.Id != id && x.IsSaved)
+                    .FirstOrDefault();
+
+                if(meal != null)
+                {
                     return new SuccessResult<bool>(false);
                 }
-                else{
+                else
+                {
                     return new SuccessResult<bool>(true);
                 }
             }
@@ -97,16 +124,18 @@ namespace API.Web.Service
                 }
                 
                 var mealEntity = _mapper.Map<Meal>(meal);
-                mealEntity.UserId =1;
+                mealEntity.UserId =_userId;
+
                 var result = _mealRepository.Add(mealEntity);
+
                 if(meal.DateEaten != null)
                 {
                     _mealLogRepository.Add(new MealLog(){
                         Meal = result,
                         DateEaten = meal.DateEaten.Value,
-                        UserId =mealEntity.UserId
+                        UserId = mealEntity.UserId
                     });
-                _mealLogRepository.SaveChanges();
+                    _mealLogRepository.SaveChanges();
                 }
 
                 _mealRepository.SaveChanges();
@@ -128,9 +157,10 @@ namespace API.Web.Service
                 {
                     return new InvalidResult<MealLogDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
-                var userId = 1;
-                    
-                var mealLogToDelete = _mealLogRepository.Get(mealLogId);
+                
+                var mealLogToDelete = _mealLogRepository
+                    .Find(x=>x.UserId == _userId && x.Id == mealLogId)
+                    .FirstOrDefault();
 
                 if(mealLogToDelete == null)
                 {
@@ -140,13 +170,13 @@ namespace API.Web.Service
 
                 _mealLogRepository.Delete(mealLogToDelete);
                 var mealEntity = _mapper.Map<Meal>(meal);
-                mealEntity.UserId = userId;
+                mealEntity.UserId = _userId;
 
                 _mealRepository.Add(mealEntity);
                 _mealRepository.SaveChanges();
 
                 var mealLogToAdd = new MealLog{
-                    UserId = userId,
+                    UserId = _userId,
                     MealId = mealEntity.Id,
                     DateEaten = mealLogToDelete.DateEaten
                 };
@@ -197,7 +227,9 @@ namespace API.Web.Service
         {
             try
             {
-                var mealToDelete = _mealRepository.Get(id);
+                var mealToDelete = _mealRepository
+                    .Find(x=> x.UserId == _userId && x.Id ==id)
+                    .FirstOrDefault();
 
                 if(mealToDelete == null)
                 {
@@ -227,7 +259,9 @@ namespace API.Web.Service
                 }
 
                 //https://entityframeworkcore.com/knowledge-base/43277868/entity-framework-core---contains-is-case-sensitive-or-case-insensitive-
-                var meals = _mealRepository.Find(x=> x.IsSaved && x.UserId ==1 && EF.Functions.Like(x.MealName, $"%{mealName}%"));
+                var meals = _mealRepository
+                    .Find(x=> x.IsSaved && x.UserId == _userId && EF.Functions.Like(x.MealName, $"%{mealName}%"))
+                    .OrderBy(x=>x.DateEaten);
 
                 if(!meals.Any())
                 {
@@ -249,7 +283,7 @@ namespace API.Web.Service
         {
             try
             {
-                var meal = _mealRepository.Get(mealLog.MealId);
+                var meal = _mealRepository.Find(x=>x.UserId == _userId && x.Id == mealLog.MealId);
 
                 if(meal ==null)
                 {
@@ -258,7 +292,7 @@ namespace API.Web.Service
 
                 var log = new MealLog(){
                     MealId = mealLog.MealId,
-                    UserId = 1,
+                    UserId = _userId,
                     DateEaten = mealLog.DateEaten
                 };
 
@@ -278,7 +312,9 @@ namespace API.Web.Service
         {
             try
             {
-                var mealLog = _mealLogRepository.Get(mealLogId);
+                var mealLog = _mealLogRepository
+                    .Find(x=>x.UserId == _userId && x.Id == mealLogId)
+                    .FirstOrDefault();
 
                 if(mealLog ==null)
                 {
@@ -303,7 +339,9 @@ namespace API.Web.Service
         {
             try
             {
-                var mealLog = _mealLogRepository.All().OrderByDescending(x=>x.DateEaten);
+                var mealLog = _mealLogRepository
+                    .Find(x=>x.UserId == _userId)
+                    .OrderByDescending(x=>x.DateEaten);
 
                 if(!mealLog.Any())
                 {
@@ -325,7 +363,8 @@ namespace API.Web.Service
         {
             try
             {
-                var mealLog = _mealLogRepository.Find(x=> x.DateEaten.Date.Equals(date.Date));
+                var mealLog = _mealLogRepository
+                    .Find(x=>x.UserId == _userId && x.DateEaten.Date.Equals(date.Date));
 
                 if(!mealLog.Any())
                 {
@@ -347,7 +386,8 @@ namespace API.Web.Service
         {
             try
             {
-                var mealLog = _mealLogRepository.Get(mealLogId);
+                var mealLog = _mealLogRepository
+                    .Find(x=>x.UserId == _userId && x.Id == mealLogId);
 
                 if(mealLog == null)
                 {

@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using System.Text;
 using System;
 using API.Web.Dtos;
+using System.Net.Http.Headers;
+using Tracly.Extensions;
 
 namespace App.Tracly.Controllers
 {
@@ -32,6 +34,7 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();    
                 HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/products");
                 if (response.IsSuccessStatusCode)
                 {
@@ -50,6 +53,7 @@ namespace App.Tracly.Controllers
             var getByNamePath = "http://localhost:5005/api/products/name";
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response;
                 if (!string.IsNullOrWhiteSpace(queryString))
                 {
@@ -84,6 +88,7 @@ namespace App.Tracly.Controllers
             var product = new ProductDto();
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}");
                 if (response.IsSuccessStatusCode)
                 {
@@ -101,6 +106,7 @@ namespace App.Tracly.Controllers
             bool nameIsValid= false;
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}/nameValid?productName={productName}");
                 if (response.IsSuccessStatusCode)
                 {
@@ -118,6 +124,7 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/products", stringContent);
             }
         }
@@ -129,6 +136,7 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.PutAsync("http://localhost:5005/api/products", stringContent);
             }
         }
@@ -139,6 +147,7 @@ namespace App.Tracly.Controllers
         {
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:5005/api/products?id={productId}");
             }
         }

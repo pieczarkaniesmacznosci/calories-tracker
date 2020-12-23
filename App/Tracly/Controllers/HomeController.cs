@@ -10,6 +10,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using Tracly.Extensions;
 
 namespace App.Tracly.Controllers
 {
@@ -44,6 +45,7 @@ namespace App.Tracly.Controllers
             var getUserNutrition = $"http://localhost:5005/api/user/nutrition";
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response;
                 var builder = new UriBuilder(getMeals);
                 response = await httpClient.GetAsync(builder.ToString());
@@ -56,6 +58,7 @@ namespace App.Tracly.Controllers
                 
                 HttpResponseMessage userNutritionResponse;
                 var userNutritionBuilder = new UriBuilder(getUserNutrition);
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 userNutritionResponse = await httpClient.GetAsync(userNutritionBuilder.ToString());
                 
                 if (userNutritionResponse.IsSuccessStatusCode)

@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Text;
 using API.Web.Validators;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
 
 namespace API
 {
@@ -77,6 +79,8 @@ namespace API
             services.AddTransient<ProductValidator, ProductValidator>();
             services.AddTransient<MealValidator, MealValidator>();
 
+            services.AddHttpContextAccessor();
+            
             services.AddAuthentication()
             .AddCookie()
             .AddJwtBearer(cfg =>
@@ -86,6 +90,14 @@ namespace API
                         ValidIssuer = _config["Tokens:Issuer"],
                         ValidAudience = _config["Tokens:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]))
+                    };
+                    cfg.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["X-Access-Token"];
+                            return Task.CompletedTask;
+                        },
                     };
                 }
             );
