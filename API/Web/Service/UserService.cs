@@ -51,7 +51,7 @@ namespace API.Web.Service
             try
             {
                 var userNutritionEntity = _mapper.Map<UserNutrition>(userNutrition);
-                userNutritionEntity.UserId =1;
+                userNutritionEntity.UserId = _userId;
                 var result = _userNutritionRepository.Add(userNutritionEntity);
                 _userNutritionRepository.SaveChanges();
                 return new SuccessResult<UserNutritionDto>(_mapper.Map<UserNutritionDto>(result));
