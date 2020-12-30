@@ -6,7 +6,7 @@ namespace Tracly.Controllers
     public class ScannerController : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View("UnderConstruction");
         }

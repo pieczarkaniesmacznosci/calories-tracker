@@ -46,7 +46,7 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
-        // http://localhost:5005/api/product/{productId}/nameValid?productName={productName}
+        // {_apiUrl}/product/{productId}/nameValid?productName={productName}
         [Route("product/{id}/nameValid")]
         public IActionResult ProductNameValid(int id, string productName)
         {

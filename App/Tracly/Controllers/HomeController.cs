@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using Tracly.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace App.Tracly.Controllers
 {
@@ -18,10 +19,13 @@ namespace App.Tracly.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private IConfiguration _config { get; }
+        private string _apiUrl{ get; }
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _config = configuration;
+            _apiUrl = _config["APIUrl"];
         }
 
         public IActionResult Index()
@@ -41,8 +45,8 @@ namespace App.Tracly.Controllers
                 UserUntrition = new UserNutritionDto()
             };
             var mealLog = new List<MealLogDto>();
-            var getMeals = $"http://localhost:5005/api/meal/todaysMealLog";
-            var getUserNutrition = $"http://localhost:5005/api/user/nutrition";
+            var getMeals = $"{_apiUrl}/meal/todaysMealLog";
+            var getUserNutrition = $"{_apiUrl}/user/nutrition";
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();

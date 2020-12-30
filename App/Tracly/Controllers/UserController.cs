@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using Tracly.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace App.Tracly.Controllers
 {
@@ -16,9 +17,13 @@ namespace App.Tracly.Controllers
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
-        public UserController(ILogger<UserController> logger)
+        private IConfiguration _config { get; }
+        private string _apiUrl{ get; }
+        public UserController(ILogger<UserController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _config = configuration;
+            _apiUrl = _config["APIUrl"];
         }
 
         [HttpGet]
@@ -36,7 +41,7 @@ namespace App.Tracly.Controllers
         public async Task<UserWeightDto> UserWeight()
         {
             var weight = new UserWeightDto();
-            var getUserWeight = $"http://localhost:5005/api/user/weight";
+            var getUserWeight = $"{_apiUrl}/user/weight";
             
             using (var httpClient = new HttpClient())
             {
@@ -58,7 +63,7 @@ namespace App.Tracly.Controllers
         public async Task<UserNutritionDto> UserNutrition()
         {
             var nutrition = new UserNutritionDto();
-            var getUserWeight = $"http://localhost:5005/api/user/nutrition";
+            var getUserWeight = $"{_apiUrl}/user/nutrition";
             
             using (var httpClient = new HttpClient())
             {
@@ -85,14 +90,14 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/user/weight", stringContent);
+                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/user/weight", stringContent);
             }
         }
 
         [HttpPost]
         public async void PostUserNutrition(UserNutritionDto userNutrition)
         {
-            var postUserNutrition = $"http://localhost:5005/api/user/nutrition";
+            var postUserNutrition = $"{_apiUrl}/user/nutrition";
             
             userNutrition.Date = DateTime.Now;
             var stringContent = new StringContent(JsonConvert.SerializeObject(userNutrition), Encoding.UTF8, "application/json");

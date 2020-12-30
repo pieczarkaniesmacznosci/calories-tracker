@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Web.Dtos;
@@ -20,6 +21,8 @@ namespace App.Tracly.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IUserRepository _userRepository;
+        private IConfiguration _config { get; }
+        private string _apiUrl{ get; }
 
         /// <summary>
         /// The manager for handling user creation, deletion, searching, roles etc...
@@ -35,12 +38,15 @@ namespace App.Tracly.Controllers
             ILogger<AccountController> logger,
             IUserRepository userRepository,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager, 
+            IConfiguration configuration)
         {
             _logger = logger;
             _userRepository = userRepository;
             _userManager = userManager;
             _signInManager = signInManager;
+            _config = configuration;
+            _apiUrl = _config["APIUrl"];
 
         }
 
@@ -70,7 +76,7 @@ namespace App.Tracly.Controllers
 
                     using (var httpClient = new HttpClient())
                     {
-                        HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/token", content);
+                        HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/token", content);
 
                         var tokenDto = JsonConvert.DeserializeObject<ResponseTokenDto>(response.Content.ReadAsStringAsync().Result);
                         Response.Cookies.Append("X-Access-Token", tokenDto.Token, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });

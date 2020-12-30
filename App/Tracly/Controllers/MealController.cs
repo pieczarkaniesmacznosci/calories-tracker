@@ -12,6 +12,7 @@ using Tracly.Models;
 using System.Text;
 using App.Tracly.ViewModels;
 using Tracly.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace App.Tracly.Controllers
 {
@@ -21,11 +22,15 @@ namespace App.Tracly.Controllers
         private readonly ILogger<MealController> _logger;
         private readonly IMealRepository _mealRepository;
         private MealViewModel _viewModel;
+        private IConfiguration _config { get; }
+        private string _apiUrl{ get; }
 
-        public MealController(ILogger<MealController> logger, IMealRepository mealRepository)
+        public MealController(ILogger<MealController> logger, IMealRepository mealRepository, IConfiguration configuration)
         {
             _logger = logger;
             _mealRepository = mealRepository;
+            _config = configuration;
+            _apiUrl = _config["APIUrl"];
         }
 
         [HttpGet]
@@ -54,7 +59,7 @@ namespace App.Tracly.Controllers
         public async Task<IActionResult> ConsumedMealsList()
         {
             var meals = new List<MealLogDto>();
-            var getMeals = $"http://localhost:5005/api/meal/mealsLog";
+            var getMeals = $"{_apiUrl}/meal/mealsLog";
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
@@ -75,7 +80,7 @@ namespace App.Tracly.Controllers
         public async Task<IActionResult> SavedMealsList()
         {
             var meals = new List<MealDto>();
-            var getMeals = $"http://localhost:5005/api/meals/true";
+            var getMeals = $"{_apiUrl}/meals/true";
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
@@ -96,7 +101,7 @@ namespace App.Tracly.Controllers
         public async Task<List<ProductDto>> ProductsForMeal(string queryString)
         {
             var products = new List<ProductDto>();
-            var getByNamePath = "http://localhost:5005/api/products/name";
+            var getByNamePath = $"{_apiUrl}/products/name";
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
@@ -138,7 +143,7 @@ namespace App.Tracly.Controllers
                 using (var httpClient = new HttpClient())
                 {
                     httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                    HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/mealsLog/{id}");
+                    HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/meal/mealsLog/{id}");
                     if (response.IsSuccessStatusCode)
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -164,7 +169,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/meal/{id}");
+                HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/meal/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -178,8 +183,8 @@ namespace App.Tracly.Controllers
         public async Task<IActionResult> MealListTable(string queryString)
         {
             var meals = new List<MealDto>();
-            var getPath = "http://localhost:5005/api/meals/true";
-            var getByNamePath = "http://localhost:5005/api/meals/mealsByName";
+            var getPath = $"{_apiUrl}/meals/true";
+            var getByNamePath = $"{_apiUrl}/meals/mealsByName";
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
@@ -211,7 +216,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}/nameValid?productName={productName}");
+                HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/product/{productId}/nameValid?productName={productName}");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -234,7 +239,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/meal", stringContent);
+                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/meal", stringContent);
             }
         }
 
@@ -246,7 +251,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PutAsync($"http://localhost:5005/api/mealLog/{mealLog?.Id}/editEaten", stringContent);
+                HttpResponseMessage response = await httpClient.PutAsync($"{_apiUrl}/mealLog/{mealLog?.Id}/editEaten", stringContent);
             }
         }
 
@@ -258,7 +263,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/meal/logMeal", stringContent);
+                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/meal/logMeal", stringContent);
             }
         }
 
@@ -268,7 +273,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                var builder = new UriBuilder($"http://localhost:5005/api/meal/{mealId}");
+                var builder = new UriBuilder($"{_apiUrl}/meal/{mealId}");
                 HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
             }
         }
@@ -279,7 +284,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                var builder = new UriBuilder($"http://localhost:5005/api/meal/logMeal/{mealLogId}");
+                var builder = new UriBuilder($"{_apiUrl}/meal/logMeal/{mealLogId}");
                 HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
             }
         }
