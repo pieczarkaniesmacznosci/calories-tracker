@@ -107,12 +107,12 @@ namespace App.Tracly.Controllers
 
                     foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError("Email", error.Description);
+                        ModelState.AddModelError("", error.Description);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("Email", "User with supplied e-mail already exist");
+                    ModelState.AddModelError("Email", "User with supplied e-mail address already exists!");
                 }
             }
 

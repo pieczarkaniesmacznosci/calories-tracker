@@ -9,9 +9,7 @@ namespace App.Tracly.Models
             [Display(Name = "Email")]  
             public string Email { get; set; }  
   
-            [Required]  
-            [StringLength(30, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 6)]
-            //[RegularExpression(@"/(?=.*[a-z])/", ErrorMessage = "Password must contain at least one lower case letter.")]
+            [Required]
             [DataType(DataType.Password)]  
             [Display(Name = "Password")]  
             public string Password { get; set; }  

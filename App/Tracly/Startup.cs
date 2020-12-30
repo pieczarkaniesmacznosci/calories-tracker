@@ -50,9 +50,9 @@ namespace App.Tracly
                 // Just for dev prurposes
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 5;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
             });
             services.AddAuthentication(o =>
             {
