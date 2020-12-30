@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using App.Tracly.Models;
 using System.Collections.Generic;
-using API.Web.Entities;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using System;
 using API.Web.Dtos;
-using System.Net.Http.Headers;
 using Tracly.Extensions;
 
 namespace App.Tracly.Controllers
@@ -19,12 +17,10 @@ namespace App.Tracly.Controllers
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
-        private readonly IProductRepository _productrepository;
 
-        public ProductController(ILogger<ProductController> logger, IProductRepository productRepository)
+        public ProductController(ILogger<ProductController> logger)
         {
             _logger = logger;
-            _productrepository = productRepository;
         }
 
         [HttpGet]
@@ -150,18 +146,6 @@ namespace App.Tracly.Controllers
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:5005/api/products?id={productId}");
             }
-        }
-
-        public IActionResult Details(int id)
-        {
-            var product = _productrepository.ProductById(id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
         }
     }
 }

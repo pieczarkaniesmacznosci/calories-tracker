@@ -387,7 +387,8 @@ namespace API.Web.Service
             try
             {
                 var mealLog = _mealLogRepository
-                    .Find(x=>x.UserId == _userId && x.Id == mealLogId);
+                    .Find(x=>x.UserId == _userId && x.Id == mealLogId)
+                    .FirstOrDefault();
 
                 if(mealLog == null)
                 {

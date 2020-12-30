@@ -13,7 +13,6 @@
                 <div class="panel-body">
                     <form asp-route="Login">
                         <input type="hidden" asp-for="ReturnUrl" />
-
                         <fieldset>
                             <div class="form-group">
                                 <label asp-for="UserName">Username</label>
@@ -37,6 +36,7 @@ autocomplete="off">
                     </form>
                 </div>
             </div>
+            <h3 class="panel-title">Not an user yet? <a asp-controller="Account" asp-action="Register">Register</a></h3>
         </div>
     </div>
 </div>
