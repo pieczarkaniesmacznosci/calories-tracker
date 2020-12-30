@@ -108,23 +108,23 @@ $(function () {
 	if ($nutritionForm.length) {
 		nutritionFormValidator = $nutritionForm.validate({
 			rules: {
-				kcalIntake: { required: true },
-				proteinIntake: { required: true },
-				carbohydratesIntake: { required: true },
-				fatIntake: { required: true },
+				kcal: { required: true },
+				protein: { required: true },
+				carbohydrates: { required: true },
+				fat: { required: true },
 			},
 			messages: {
 				kcal: {
-					fatIntake: "Kcal intake is required!",
+					kcal: "Kcal intake is required!",
 				},
-				proteinIntake: {
-					fatIntake: "Protein intake is required!",
+				protein: {
+					protein: "Protein intake is required!",
 				},
-				carbohydratesIntake: {
-					fatIntake: "Carbohydrates intake is required!",
+				carbohydrates: {
+					carbohydrates: "Carbohydrates intake is required!",
 				},
-				fatIntake: {
-					fatIntake: "Fat intake is required!",
+				fat: {
+					fat: "Fat intake is required!",
 				},
 			},
 		});

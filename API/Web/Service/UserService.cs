@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using API.Web.Dtos;
 using API.Web.Entities;
 using API.Web.Repositories;
 using API.Web.Result;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Web.Extensions;
 
 namespace API.Web.Service
 {
@@ -16,12 +20,30 @@ namespace API.Web.Service
         private readonly IRepository<UserWeight> _userWeightRepository;
         private readonly IRepository<UserNutrition> _userNutritionRepository;
         private readonly IMapper _mapper;
-        public UserService(ILogger<UserService> logger, IRepository<UserWeight> userWeightRepository, IRepository<UserNutrition> userNutritionRepository, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<User> _userManager;
+        private int _userId => GetCurrentUserId().Result;
+
+        private async Task<int> GetCurrentUserId()
+        {
+            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
+            return currentUserId.Id;
+        }
+        public UserService(
+            ILogger<UserService> logger, 
+            IRepository<UserWeight> userWeightRepository, 
+            IRepository<UserNutrition> userNutritionRepository, 
+            IMapper mapper, 
+            IHttpContextAccessor httpContextAccessor, 
+            UserManager<User> userManager)
         {
             _logger = logger;
             _userWeightRepository = userWeightRepository;
             _userNutritionRepository = userNutritionRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
         
         public Result<UserNutritionDto> AddUserNutrition(UserNutritionDto userNutrition)
@@ -29,7 +51,7 @@ namespace API.Web.Service
             try
             {
                 var userNutritionEntity = _mapper.Map<UserNutrition>(userNutrition);
-                userNutritionEntity.UserId =1;
+                userNutritionEntity.UserId = _userId;
                 var result = _userNutritionRepository.Add(userNutritionEntity);
                 _userNutritionRepository.SaveChanges();
                 return new SuccessResult<UserNutritionDto>(_mapper.Map<UserNutritionDto>(result));
@@ -46,7 +68,7 @@ namespace API.Web.Service
         {
             try
             {
-                userWeight.UserId =1;
+                userWeight.UserId =_userId;
                 var userWeightEntity = _mapper.Map<UserWeight>(userWeight);
                 var result = _userWeightRepository.Add(userWeightEntity);
                 _userWeightRepository.SaveChanges();
@@ -63,7 +85,7 @@ namespace API.Web.Service
         {
             try
             {
-                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 1).FirstOrDefault();
+                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == _userId).FirstOrDefault();
                 
                 if(userNutritionToDelete == null)
                 {
@@ -87,7 +109,7 @@ namespace API.Web.Service
         {
             try
             {
-                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 1).FirstOrDefault();
+                var userNutritionToDelete = _userNutritionRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == _userId).FirstOrDefault();
                 
                 if(userNutritionToDelete == null)
                 {
@@ -111,7 +133,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutritionToEdit = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == 1).FirstOrDefault();
+                var userNutritionToEdit = _userNutritionRepository.Find(x=>x.UserId == userNutrition.Id && x.UserId == _userId).FirstOrDefault();
 
                 if(userNutritionToEdit == null)
                 {
@@ -136,7 +158,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutritionToEdit = _userWeightRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == 1).FirstOrDefault();
+                var userNutritionToEdit = _userWeightRepository.Find(x=>x.UserId == userWeight.Id && x.UserId == _userId).FirstOrDefault();
 
                 if(userNutritionToEdit == null)
                 {
@@ -162,7 +184,7 @@ namespace API.Web.Service
             try
             {
                 var currentUserNutrition = _userNutritionRepository
-                    .Find(x=> x.UserId == 1)
+                    .Find(x=> x.UserId == _userId)
                     .OrderByDescending(x=>x.Date)
                     .FirstOrDefault();
 
@@ -187,7 +209,7 @@ namespace API.Web.Service
             try
             {
                 var currentUserWeight = _userWeightRepository
-                .Find(x=> x.UserId == 1)
+                .Find(x=> x.UserId == _userId)
                 .OrderByDescending(x=>x.Date)
                 .FirstOrDefault();
 
@@ -211,7 +233,7 @@ namespace API.Web.Service
         {
             try
             {                
-                var userNutrition = _userNutritionRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 1);
+                var userNutrition = _userNutritionRepository.Find(x=>x.Date.Date == date.Date && x.UserId == _userId);
 
                 if(userNutrition == null)
                 {
@@ -233,7 +255,7 @@ namespace API.Web.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<UserNutritionDto>>(_userNutritionRepository.Find(x => x.UserId == 1));
+                var result = _mapper.Map<IEnumerable<UserNutritionDto>>(_userNutritionRepository.Find(x => x.UserId == _userId));
                 return new SuccessResult<IEnumerable<UserNutritionDto>>(result);
             }
             catch(Exception ex)
@@ -247,7 +269,7 @@ namespace API.Web.Service
         {
             try
             {   
-                var userWeight = _userWeightRepository.Find(x=>x.Date.Date == date.Date && x.UserId == 1);
+                var userWeight = _userWeightRepository.Find(x=>x.Date.Date == date.Date && x.UserId == _userId);
 
                 if(userWeight == null)
                 {
@@ -269,7 +291,7 @@ namespace API.Web.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<UserWeightDto>>(_userWeightRepository.Find(x => x.UserId == 1));
+                var result = _mapper.Map<IEnumerable<UserWeightDto>>(_userWeightRepository.Find(x => x.UserId == _userId));
                 return new SuccessResult<IEnumerable<UserWeightDto>>(result);
             }
             catch(Exception ex)
@@ -278,9 +300,5 @@ namespace API.Web.Service
                 return new UnexpectedResult<IEnumerable<UserWeightDto>>();
             }
         }
-        // private int GetCurrentUser()
-        // {
-        //     throw new NotImplementedException();
-        // }
     }
 }

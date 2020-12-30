@@ -10,13 +10,15 @@ namespace API.Web.Controllers
 {
     [ApiController]
     [Route("api")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : BaseController
     {
         private readonly ILogger<ProductsController> _logger;
         private readonly IProductService _service;
 
-        public ProductsController(ILogger<ProductsController> logger, IProductService service)
+        public ProductsController(
+            ILogger<ProductsController> logger, 
+            IProductService service)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _service = service;
@@ -44,7 +46,7 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
-        // http://localhost:5005/api/product/{productId}/nameValid?productName={productName}
+        // {_apiUrl}/product/{productId}/nameValid?productName={productName}
         [Route("product/{id}/nameValid")]
         public IActionResult ProductNameValid(int id, string productName)
         {

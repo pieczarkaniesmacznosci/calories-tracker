@@ -1,5 +1,9 @@
 using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using API.Web.Entities;
 using API.Web.Result;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Web.Controllers

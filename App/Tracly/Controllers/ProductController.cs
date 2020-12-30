@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using App.Tracly.Models;
 using System.Collections.Generic;
-using API.Web.Entities;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using System;
 using API.Web.Dtos;
+using Tracly.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace App.Tracly.Controllers
 {
@@ -17,12 +17,14 @@ namespace App.Tracly.Controllers
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
-        private readonly IProductRepository _productrepository;
+        private IConfiguration _config { get; }
+        private string _apiUrl{ get; }
 
-        public ProductController(ILogger<ProductController> logger, IProductRepository productRepository)
+        public ProductController(ILogger<ProductController> logger, IConfiguration configuration)
         {
             _logger = logger;
-            _productrepository = productRepository;
+            _config = configuration;
+            _apiUrl = _config["APIUrl"];
         }
 
         [HttpGet]
@@ -32,7 +34,8 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5005/api/products");
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();    
+                HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/products");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -46,10 +49,11 @@ namespace App.Tracly.Controllers
         public async Task<List<ProductDto>> ProductsList(string queryString)
         {
             var products = new List<ProductDto>();
-            var getPath = "http://localhost:5005/api/products";
-            var getByNamePath = "http://localhost:5005/api/products/name";
+            var getPath = $"{_apiUrl}/products";
+            var getByNamePath = $"{_apiUrl}/products/name";
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response;
                 if (!string.IsNullOrWhiteSpace(queryString))
                 {
@@ -84,7 +88,8 @@ namespace App.Tracly.Controllers
             var product = new ProductDto();
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}");
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+                HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/product/{productId}");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -101,7 +106,8 @@ namespace App.Tracly.Controllers
             bool nameIsValid= false;
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5005/api/product/{productId}/nameValid?productName={productName}");
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+                HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/product/{productId}/nameValid?productName={productName}");
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -118,7 +124,8 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5005/api/products", stringContent);
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/products", stringContent);
             }
         }
 
@@ -129,7 +136,8 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.PutAsync("http://localhost:5005/api/products", stringContent);
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+                HttpResponseMessage response = await httpClient.PutAsync($"{_apiUrl}/products", stringContent);
             }
         }
 
@@ -139,20 +147,9 @@ namespace App.Tracly.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:5005/api/products?id={productId}");
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+                HttpResponseMessage response = await httpClient.DeleteAsync($"{_apiUrl}/products?id={productId}");
             }
-        }
-
-        public IActionResult Details(int id)
-        {
-            var product = _productrepository.ProductById(id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
         }
     }
 }

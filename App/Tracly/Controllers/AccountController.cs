@@ -1,10 +1,19 @@
+using System;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using API.Web.Entities;
 using App.Tracly.Models;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Web.Dtos;
 
 namespace App.Tracly.Controllers
 {
@@ -12,6 +21,8 @@ namespace App.Tracly.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IUserRepository _userRepository;
+        private IConfiguration _config { get; }
+        private string _apiUrl{ get; }
 
         /// <summary>
         /// The manager for handling user creation, deletion, searching, roles etc...
@@ -27,12 +38,15 @@ namespace App.Tracly.Controllers
             ILogger<AccountController> logger,
             IUserRepository userRepository,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager, 
+            IConfiguration configuration)
         {
             _logger = logger;
             _userRepository = userRepository;
             _userManager = userManager;
             _signInManager = signInManager;
+            _config = configuration;
+            _apiUrl = _config["APIUrl"];
 
         }
 
@@ -40,6 +54,12 @@ namespace App.Tracly.Controllers
         public ActionResult Login(string returnUrl = "/Home/Index")
         {
             return View(new LoginModel { ReturnUrl = returnUrl });
+        }
+
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -52,14 +72,62 @@ namespace App.Tracly.Controllers
 
                 if (result.Succeeded)
                 {
+                    var content = new StringContent(JsonConvert.SerializeObject( new {Login = model.UserName, Password=model.Password}), Encoding.UTF8, "application/json");
+
+                    using (var httpClient = new HttpClient())
+                    {
+                        HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/token", content);
+
+                        var tokenDto = JsonConvert.DeserializeObject<ResponseTokenDto>(response.Content.ReadAsStringAsync().Result);
+                        Response.Cookies.Append("X-Access-Token", tokenDto.Token, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+                    }
+
                     return LocalRedirect(model.ReturnUrl);// used local insterd od simple redirect to avoid open redirection attacks
                 }
             }
             return View(model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.Email);
+
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        UserName = model.Email,
+                        Email = model.Email
+                    };
+
+                    var result = await _userManager.CreateAsync(user, model.Password);
+
+                    if(result.Succeeded)
+                    {
+                        return LocalRedirect("/Home/Index");
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "User with supplied e-mail address already exists!");
+                }
+            }
+
+            return View();
+        }
+
         public async Task<IActionResult> Logout()
         {
+            Response.Cookies.Delete("X-Access-Token");
             await _signInManager.SignOutAsync();
             return Redirect("/");
         }

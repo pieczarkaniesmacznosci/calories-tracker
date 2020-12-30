@@ -19,7 +19,11 @@ namespace API.Web.Service
         private readonly IMapper _mapper;
         private readonly ProductValidator _productValidator;
 
-        public ProductService(ILogger<ProductService> logger, IRepository<Product> productRepository, IMapper mapper, ProductValidator productValidator)
+        public ProductService(
+            ILogger<ProductService> logger, 
+            IRepository<Product> productRepository, 
+            IMapper mapper, 
+            ProductValidator productValidator)
         {
             _logger = logger;
             _productRepository = productRepository;

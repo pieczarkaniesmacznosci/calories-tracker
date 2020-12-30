@@ -39,6 +39,7 @@ namespace App.Tracly
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireLowercase = false;
                 })
                     .AddEntityFrameworkStores<CaloriesLibraryContext>()
                     .AddDefaultTokenProviders();
@@ -50,8 +51,8 @@ namespace App.Tracly
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 5;
                 options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
             });
             services.AddAuthentication(o =>
             {
@@ -98,6 +99,7 @@ namespace App.Tracly
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

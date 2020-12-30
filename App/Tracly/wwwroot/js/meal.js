@@ -1,5 +1,5 @@
 var mealProducts;
-var products;
+var products = [];
 var product;
 
 function goToMealsList() {
@@ -95,42 +95,6 @@ function loadMealProductList(mealProductsToGenerate) {
 	});
 }
 
-// function editMealWindow(id) {
-// 	var urlBase = "/Meal/MealDto/";
-
-// 	var url = urlBase.concat(id);
-
-// 	$.ajax({
-// 		type: "GET",
-
-// 		url: url,
-
-// 		success: function (returnedProduct) {
-// 			$("#productModal").modal({ show: true });
-// 			$("#productModal").on("hidden.bs.modal", function () {
-// 				$("#productForm").validate().resetForm();
-// 				$("#productForm .is-invalid").removeClass("is-invalid");
-// 			});
-
-// 			populateModalInputs(
-// 				returnedProduct["name"],
-// 				returnedProduct["kcal"],
-// 				returnedProduct["protein"],
-// 				returnedProduct["carbohydrates"],
-// 				returnedProduct["fat"]
-// 			);
-
-// 			$("#productModal").attr("data-id", id);
-// 		},
-
-// 		error: function () {
-// 			alert("ajax failed");
-// 		},
-
-// 		processData: true,
-// 	});
-// }
-
 function addProductToMeal(productId) {
 	var urlBase = "/Product/GetProduct/";
 
@@ -157,19 +121,6 @@ function deleteProductFromMeal(id) {
 	mealProducts = reducedProductsList;
 	loadMealProductList(reducedProductsList);
 }
-
-// function addProductMealModal() {
-// 	$("#productModal").modal({ show: true });
-// 	$("#productModal").on("hidden.bs.modal", function () {
-// 		$("#productForm").validate().resetForm();
-// 		$("#productForm .is-invalid").removeClass("is-invalid");
-// 	});
-// 	document.getElementById("productModalTitle").innerHTML = "Add Product";
-
-// 	document.getElementById("name").value = document.getElementById(
-// 		"productForMealListInput"
-// 	).value;
-// }
 
 function saveEdit(mealLogId) {
 	var meal = {
@@ -241,7 +192,7 @@ function eatNowSavedMeal(mealId) {
 		type: "POST",
 		data: mealLog,
 		success: function (result, status, xhr) {
-			loadSavedMeals();
+			goToMealsList();
 		},
 		error: function () {
 			alert("ajax failed");
