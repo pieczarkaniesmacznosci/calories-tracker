@@ -101,20 +101,32 @@ namespace App.Tracly.Controllers
                     user = new User
                     {
                         UserName = model.Email,
-                        Email = model.Email
+                        Email = model.Email,
+                        SecurityStamp = Guid.NewGuid().ToString()
                     };
 
                     var result = await _userManager.CreateAsync(user, model.Password);
-
-                    if(result.Succeeded)
-                    {
-                        return LocalRedirect("/Home/Index");
-                    }
 
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
                     }
+
+                    if(result.Succeeded)
+                    {
+                        var resultRole = await _userManager.AddToRoleAsync(user,"User");
+
+                        foreach (var error in resultRole.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+
+                        if(resultRole.Succeeded)
+                        {
+                            return LocalRedirect("/Home/Index");
+                        }
+                    }
+
                 }
                 else
                 {
