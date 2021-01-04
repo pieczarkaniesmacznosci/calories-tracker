@@ -31,6 +31,7 @@ namespace API.Web.Service
         {
             var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
             var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
+
             return currentUserId.Id;
         }
 

@@ -9,6 +9,10 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using Web.Extensions;
 
 namespace API.Web.Service
 {
@@ -18,24 +22,49 @@ namespace API.Web.Service
         private readonly IRepository<Product> _productRepository;
         private readonly IMapper _mapper;
         private readonly ProductValidator _productValidator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<User> _userManager;
+        private int _userId => GetCurrentUserId().Result;
+        private bool _isUserAdmin => IsCurrentUserAdminRole().Result;
+
+        private async Task<int> GetCurrentUserId()
+        {
+            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
+
+            return currentUserId.Id;
+        }
+
+        private async Task<bool> IsCurrentUserAdminRole()
+        {
+            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var user = _userManager.FindByNameAsync(loggedInUserName).Result;
+            var  loggedInUserRole  = await _userManager.IsInRoleAsync(user,"Admin");
+
+            return loggedInUserRole;
+        }
 
         public ProductService(
             ILogger<ProductService> logger, 
             IRepository<Product> productRepository, 
             IMapper mapper, 
-            ProductValidator productValidator)
+            ProductValidator productValidator, 
+            IHttpContextAccessor httpContextAccessor, 
+            UserManager<User> userManager)
         {
             _logger = logger;
             _productRepository = productRepository;
             _mapper = mapper;
             _productValidator = productValidator;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
         public Result<IEnumerable<ProductDto>> GetProducts()
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.All());
+                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x=>x.UserId == _userId || x.IsDefault == true));
                 return new SuccessResult<IEnumerable<ProductDto>>(result);
             }
             catch(Exception ex)
@@ -100,7 +129,6 @@ namespace API.Web.Service
                 {
                     return new InvalidResult<ProductDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
-                
                 var productEntity = _mapper.Map<Product>(product);
                 var result = _productRepository.Add(productEntity);
                 _productRepository.SaveChanges();
