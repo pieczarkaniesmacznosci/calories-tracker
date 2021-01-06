@@ -36,10 +36,9 @@ namespace API.Web
             .ReverseMap();
         }
     }
+    
     public class DefaultMealNameResolver : IValueResolver<MealDto, Meal, string>
     {
-
-
         public string Resolve(MealDto source, Meal destination, string destMember, ResolutionContext context)
         {
             if(!string.IsNullOrWhiteSpace(source.MealName))

@@ -8,5 +8,6 @@ namespace API.Web.Dtos
         public double Protein {get;set;}
         public double Carbohydrates {get;set;}
         public double Fat {get;set;}
+        public bool IsDefault {get;set;}
     }
 }
