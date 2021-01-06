@@ -24,7 +24,7 @@ namespace API.Web.Validators
                 .Must(ContainAtLeastOneMacronutrient)
                 .WithMessage($"Product has to contain at least one macro-nutrient!");
         }
-
+        
         private bool ContainAtLeastOneMacronutrient(ProductDto product)
         {
             return (product.Protein + product.Carbohydrates + product.Fat) > 0;

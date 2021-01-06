@@ -27,23 +27,6 @@ namespace API.Web.Service
         private int _userId => GetCurrentUserId().Result;
         private bool _isUserAdmin => IsCurrentUserAdminRole().Result;
 
-        private async Task<int> GetCurrentUserId()
-        {
-            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
-            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
-
-            return currentUserId.Id;
-        }
-
-        private async Task<bool> IsCurrentUserAdminRole()
-        {
-            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
-            var user = _userManager.FindByNameAsync(loggedInUserName).Result;
-            var  loggedInUserRole  = await _userManager.IsInRoleAsync(user,"Admin");
-
-            return loggedInUserRole;
-        }
-
         public ProductService(
             ILogger<ProductService> logger, 
             IRepository<Product> productRepository, 
@@ -64,7 +47,8 @@ namespace API.Web.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x=>x.UserId == _userId || x.IsDefault == true));
+                IEnumerable<ProductDto> result = new List<ProductDto>();
+                result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x=>x.UserId == _userId || x.IsDefault == true));
                 return new SuccessResult<IEnumerable<ProductDto>>(result);
             }
             catch(Exception ex)
@@ -77,8 +61,17 @@ namespace API.Web.Service
         public Result<ProductDto> GetProduct(int id)
         {
             try
-            {                
-                var product = _productRepository.Get(id);
+            {              
+                Product product;
+
+                if(!_isUserAdmin)
+                {
+                    product = _productRepository.Find(x=>x.UserId == _userId && x.Id == id).FirstOrDefault();
+                }
+                else
+                {
+                    product = _productRepository.Get(id);
+                }
 
                 if(product == null)
                 {
@@ -101,7 +94,7 @@ namespace API.Web.Service
             try
             { 
                 var products = _productRepository
-                    .Find(x=> EF.Functions.Like(x.Name, $"%{productName}%"))
+                    .Find(x=> EF.Functions.Like(x.Name, $"%{productName}%") && x.UserId == _userId)
                     .ToList();
 
                 if(products.Count == 0)
@@ -129,7 +122,21 @@ namespace API.Web.Service
                 {
                     return new InvalidResult<ProductDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
+
+                if(!IsProductNameValid(_userId, product?.Id, product.Name))
+                {
+                    return new InvalidResult<ProductDto>($"Product name {product.Name} is invalid!");
+                }
+                     
                 var productEntity = _mapper.Map<Product>(product);
+
+                productEntity.UserId = _userId;
+                
+                if(!_isUserAdmin)
+                {
+                    productEntity.IsDefault = false;
+                }
+                
                 var result = _productRepository.Add(productEntity);
                 _productRepository.SaveChanges();
                 return new SuccessResult<ProductDto>(_mapper.Map<ProductDto>(result));
@@ -150,8 +157,18 @@ namespace API.Web.Service
                 {
                     return new InvalidResult<ProductDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
-                            
-                var productToEdit = _productRepository.Get(product.Id.Value);
+
+                Product productToEdit;
+
+                if(!_isUserAdmin)
+                {
+                    productToEdit = _productRepository.Find(x=>x.UserId == _userId && x.Id == product.Id.Value).FirstOrDefault();
+                    product.IsDefault = false;
+                }
+                else
+                {
+                    productToEdit = _productRepository.Get(product.Id.Value);
+                }
 
                 if(productToEdit == null)
                 {
@@ -159,6 +176,11 @@ namespace API.Web.Service
                     return new NotFoundResult<ProductDto>();
                 }
 
+                if(!IsProductNameValid(_userId, product?.Id, product.Name))
+                {
+                    return new InvalidResult<ProductDto>($"Product name {product.Name} is invalid!");
+                }
+                                
                 var productEntity = _mapper.Map<Product>(product);
                 var result = _productRepository.Update(productEntity);
                 _productRepository.SaveChanges();
@@ -176,7 +198,15 @@ namespace API.Web.Service
         {
             try
             {
-                var productToDelete = _productRepository.Get(id);
+                Product productToDelete;
+                if(!_isUserAdmin)
+                {
+                    productToDelete = _productRepository.Find(x=>x.UserId == _userId && x.Id == id).FirstOrDefault();
+                }
+                else
+                {
+                    productToDelete = _productRepository.Get(id);
+                }
 
                 if(productToDelete == null)
                 {
@@ -199,18 +229,43 @@ namespace API.Web.Service
         {
             try
             {
-                if(_productRepository.Find(x=> x.Name == productName && x.Id != id).FirstOrDefault() != null){
-                    return new SuccessResult<bool>(false);
-                }
-                else{
-                    return new SuccessResult<bool>(true);
-                }
+                var isNameValid = IsProductNameValid(_userId, id, productName);
+                return new SuccessResult<bool>(isNameValid);
             }
             catch(Exception ex)
             {
                 _logger.LogCritical($"Exception while checking if product with name = {productName} exists",ex);
                 return new UnexpectedResult<bool>();
             }
+        }
+
+        private bool IsProductNameValid(int userId, int? productId, string productName)
+        {
+            if(_productRepository.Find(x=>x.Name == productName && (x.UserId == userId || x.IsDefault) && (productId.HasValue ? x.Id != productId : true)).FirstOrDefault() != null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private async Task<int> GetCurrentUserId()
+        {
+            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
+
+            return currentUserId.Id;
+        }
+
+        private async Task<bool> IsCurrentUserAdminRole()
+        {
+            var loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var user = _userManager.FindByNameAsync(loggedInUserName).Result;
+            var loggedInUserRole  = await _userManager.IsInRoleAsync(user,"Admin");
+
+            return loggedInUserRole;
         }
     }
 }
