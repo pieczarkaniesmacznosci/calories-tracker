@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Web.Extensions;
+using Web.Result.ErrorDefinitions;
 
 namespace API.Web.Service
 {
@@ -90,7 +91,7 @@ namespace API.Web.Service
                 if(userNutritionToDelete == null)
                 {
                     _logger.LogInformation($"User nutrition with id = {userNutrition.Id} was not found!");
-                    return new NotFoundResult<UserNutritionDto>();
+                    return new NotFoundResult<UserNutritionDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"UserNutrition",userNutrition.Id.ToString()}));
                 }
 
                 var result = _userNutritionRepository.Delete(userNutritionToDelete);
@@ -114,7 +115,7 @@ namespace API.Web.Service
                 if(userNutritionToDelete == null)
                 {
                     _logger.LogInformation($"User weight with id = {userWeight.Id} was not found!");
-                    return new NotFoundResult<UserWeightDto>();
+                    return new NotFoundResult<UserWeightDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"UserNutrition",userWeight.Id.ToString()}));
                 }
 
                 var result = _userNutritionRepository.Delete(userNutritionToDelete);
@@ -138,7 +139,7 @@ namespace API.Web.Service
                 if(userNutritionToEdit == null)
                 {
                     _logger.LogInformation($"User nutrition with id = {userNutrition.Id} was not found!");
-                    return new NotFoundResult<UserNutritionDto>();
+                    return new NotFoundResult<UserNutritionDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"UserNutrition",userNutrition.Id.ToString()}));
                 }
 
                 var userNutritionEntity = _mapper.Map<UserNutrition>(userNutritionToEdit);
@@ -162,8 +163,8 @@ namespace API.Web.Service
 
                 if(userNutritionToEdit == null)
                 {
-                    _logger.LogInformation($"User nutrition with id = {userWeight.Id} was not found!");
-                    return new NotFoundResult<UserWeightDto>();
+                    _logger.LogInformation($"User weight with id = {userWeight.Id} was not found!");
+                    return new NotFoundResult<UserWeightDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"UserWeight",userWeight.Id.ToString()}));
                 }
 
                 var userWeightEntity = _mapper.Map<UserWeight>(userNutritionToEdit);

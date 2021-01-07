@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
 using API.Web.Identity;
+using Web.Result.ErrorDefinitions;
 
 namespace API.Web.Service
 {
@@ -28,8 +29,7 @@ namespace API.Web.Service
             IRepository<Product> productRepository, 
             IMapper mapper, 
             IProductValidator productValidator,
-            IUserManager userManager
-            )
+            IUserManager userManager)
         {
             _logger = logger;
             _productRepository = productRepository;
@@ -70,7 +70,7 @@ namespace API.Web.Service
                 if(product == null)
                 {
                     _logger.LogInformation($"Product with id = {id} was not found!");
-                    return new NotFoundResult<ProductDto>();
+                    return new NotFoundResult<ProductDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Product",id.ToString()}));
                 }
 
                 var productDto = _mapper.Map<ProductDto>(product);
@@ -90,12 +90,6 @@ namespace API.Web.Service
                 var products = _productRepository
                     .Find(x=> EF.Functions.Like(x.Name, $"%{productName}%") && x.UserId == _userId)
                     .ToList();
-
-                if(products.Count == 0)
-                {
-                    _logger.LogInformation($"No products starting with {productName} were found!");
-                    return new NotFoundResult<IEnumerable<ProductDto>>();
-                }
 
                 var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
                 return new SuccessResult<IEnumerable<ProductDto>>(productsDto);
@@ -167,7 +161,7 @@ namespace API.Web.Service
                 if(productToEdit == null)
                 {
                     _logger.LogInformation($"Product with id = {product.Id} was not found!");
-                    return new NotFoundResult<ProductDto>();
+                    return new NotFoundResult<ProductDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Product",product.Id.ToString()}));
                 }
 
                 if(!IsProductNameValid(_userId, product?.Id, product.Name))
@@ -205,7 +199,7 @@ namespace API.Web.Service
                 if(productToDelete == null)
                 {
                     _logger.LogInformation($"Product with id = {id} was not found!");
-                    return new NotFoundResult<ProductDto>();
+                    return new NotFoundResult<ProductDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Product",id.ToString()}));
                 }
 
                 var result = _productRepository.Delete(productToDelete);

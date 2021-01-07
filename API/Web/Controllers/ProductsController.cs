@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using API.Web.Entities;
 
 namespace API.Web.Controllers
 {
@@ -26,7 +25,6 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(UserRole.User)]
         [Route("product/{id}")]
         public IActionResult GetProduct(int id)
         {

@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using API.Web.Dtos;
-using API.Web.Entities;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace API.Web.Validators
 {
@@ -28,5 +27,9 @@ namespace API.Web.Validators
         {
             return mealProducts.Count() > 0;
         }
+    }
+
+    public interface IMealValidator{
+        ValidationResult Validate(MealDto product);
     }
 }
