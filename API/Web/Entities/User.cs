@@ -19,6 +19,8 @@ namespace API.Web.Entities
     }
     public class UserRole : IdentityUserRole<int>
     {
+        public const string Admin = "Admin";
+        public const string User = "User";
         public int Id {get;set;}
     }
 }

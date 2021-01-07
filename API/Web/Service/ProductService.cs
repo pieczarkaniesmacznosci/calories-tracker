@@ -9,10 +9,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-using Web.Extensions;
+using API.Web.Identity;
 
 namespace API.Web.Service
 {
@@ -21,25 +18,23 @@ namespace API.Web.Service
         private readonly ILogger<ProductService> _logger;
         private readonly IRepository<Product> _productRepository;
         private readonly IMapper _mapper;
-        private readonly ProductValidator _productValidator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<User> _userManager;
-        private int _userId => GetCurrentUserId().Result;
-        private bool _isUserAdmin => IsCurrentUserAdminRole().Result;
+        private readonly IProductValidator _productValidator;
+        private readonly IUserManager _userManager;
+        private int _userId => _userManager.CurrentUserId;
+        private bool _isUserAdmin => _userManager.IsCurrentUserAdmin;
 
         public ProductService(
             ILogger<ProductService> logger, 
             IRepository<Product> productRepository, 
             IMapper mapper, 
-            ProductValidator productValidator, 
-            IHttpContextAccessor httpContextAccessor, 
-            UserManager<User> userManager)
+            IProductValidator productValidator,
+            IUserManager userManager
+            )
         {
             _logger = logger;
             _productRepository = productRepository;
             _mapper = mapper;
             _productValidator = productValidator;
-            _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
         }
 
@@ -47,8 +42,7 @@ namespace API.Web.Service
         {
             try
             {
-                IEnumerable<ProductDto> result = new List<ProductDto>();
-                result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x=>x.UserId == _userId || x.IsDefault == true));
+                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x=>x.UserId == _userId || x.IsDefault == true));
                 return new SuccessResult<IEnumerable<ProductDto>>(result);
             }
             catch(Exception ex)
@@ -251,21 +245,5 @@ namespace API.Web.Service
             }
         }
 
-        private async Task<int> GetCurrentUserId()
-        {
-            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
-            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
-
-            return currentUserId.Id;
-        }
-
-        private async Task<bool> IsCurrentUserAdminRole()
-        {
-            var loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
-            var user = _userManager.FindByNameAsync(loggedInUserName).Result;
-            var loggedInUserRole  = await _userManager.IsInRoleAsync(user,"Admin");
-
-            return loggedInUserRole;
-        }
     }
 }

@@ -18,6 +18,7 @@ using API.Web.Validators;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
+using API.Web.Identity;
 
 namespace API
 {
@@ -74,9 +75,10 @@ namespace API
             services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
 
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserManager, UserManager>();
 
 
-            services.AddTransient<ProductValidator, ProductValidator>();
+            services.AddTransient<IProductValidator, ProductValidator>();
             services.AddTransient<MealValidator, MealValidator>();
 
             services.AddHttpContextAccessor();
