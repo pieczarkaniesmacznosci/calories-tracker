@@ -6,7 +6,7 @@ using FluentValidation.Results;
 
 namespace API.Web.Validators
 {
-    public class MealValidator : AbstractValidator<MealDto>
+    public class MealValidator : AbstractValidator<MealDto>, IMealValidator
     {
         public MealValidator()
         {

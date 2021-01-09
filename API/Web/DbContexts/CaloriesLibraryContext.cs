@@ -134,7 +134,9 @@ namespace API.Web.DbContexts
                     Protein = 21.0d,
                     Carbohydrates = 0.0d,
                     Fat = 3.0d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -145,7 +147,9 @@ namespace API.Web.DbContexts
                     Protein = 6.7d,
                     Carbohydrates = 76.6d,
                     Fat = 0.7d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -156,7 +160,9 @@ namespace API.Web.DbContexts
                     Protein = 7.7d,
                     Carbohydrates = 51.1d,
                     Fat = 38.4d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -167,7 +173,9 @@ namespace API.Web.DbContexts
                     Protein = 4.0d,
                     Carbohydrates = 52.5d,
                     Fat = 1.3d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -178,7 +186,9 @@ namespace API.Web.DbContexts
                     Protein = 1.6d,
                     Carbohydrates = 20.0d,
                     Fat = 0.9d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -189,7 +199,9 @@ namespace API.Web.DbContexts
                     Protein = 25.5d,
                     Carbohydrates = 0.1d,
                     Fat = 20.7d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -200,7 +212,9 @@ namespace API.Web.DbContexts
                     Protein = 1.7d,
                     Carbohydrates = 4.4d,
                     Fat = 0.5d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -211,7 +225,9 @@ namespace API.Web.DbContexts
                     Protein = 1.2d,
                     Carbohydrates = 4.7d,
                     Fat = 0.4d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = false,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -222,7 +238,9 @@ namespace API.Web.DbContexts
                     Protein = 20.1d,
                     Carbohydrates = 0d,
                     Fat = 2.3d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -233,7 +251,9 @@ namespace API.Web.DbContexts
                     Protein = 21.0d,
                     Carbohydrates = 0.0d,
                     Fat = 3.0d,
-                    IsDefault = false
+                    IsDefault = false,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 }
             );
         }

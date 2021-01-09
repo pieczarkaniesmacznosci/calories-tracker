@@ -10,7 +10,7 @@ namespace API.Web.Service
         Result<IEnumerable<ProductDto>> GetProducts();
         Result<IEnumerable<ProductDto>> GetProducts(string productName);
         Result<ProductDto> AddProduct(ProductDto product);
-        Result<ProductDto> EditProduct(ProductDto product);
+        Result<ProductDto> EditProduct(int id, ProductDto product);
         Result<ProductDto> DeleteProduct(int id);
         Result<bool> ProductNameValid(int id,string productName);
     }

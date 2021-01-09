@@ -7,6 +7,10 @@
     <tr>
         <td>
             @item.Product?.Name
+            @if(item.Product != null && !item.Product.IsAvailable)
+            {
+                @:<span class="obsolete-detail">*Obsolete</span>
+            }
         </td>
         <td>
             <form>

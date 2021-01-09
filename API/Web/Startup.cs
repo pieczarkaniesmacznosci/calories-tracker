@@ -79,7 +79,7 @@ namespace API
 
 
             services.AddTransient<IProductValidator, ProductValidator>();
-            services.AddTransient<MealValidator, MealValidator>();
+            services.AddTransient<IMealValidator, MealValidator>();
 
             services.AddHttpContextAccessor();
             
