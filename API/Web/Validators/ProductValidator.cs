@@ -1,10 +1,10 @@
-using System;
 using API.Web.Dtos;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace API.Web.Validators
 {
-    public class ProductValidator : AbstractValidator<ProductDto>
+    public class ProductValidator : AbstractValidator<ProductDto>, IProductValidator 
     {
         public ProductValidator()
         {
@@ -24,10 +24,14 @@ namespace API.Web.Validators
                 .Must(ContainAtLeastOneMacronutrient)
                 .WithMessage($"Product has to contain at least one macro-nutrient!");
         }
-        
+
         private bool ContainAtLeastOneMacronutrient(ProductDto product)
         {
             return (product.Protein + product.Carbohydrates + product.Fat) > 0;
         }
+    }
+
+    public interface IProductValidator{
+        ValidationResult Validate(ProductDto product);
     }
 }

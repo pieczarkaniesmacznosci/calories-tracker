@@ -54,21 +54,21 @@ namespace API.Web.Controllers
         }
         
         [HttpPost]
-        [Route("products")]
+        [Route("product")]
         public IActionResult AddProduct(ProductDto product)
         {
             return base.FromResult(_service.AddProduct(product));
         }
 
         [HttpPut]
-        [Route("products")]
-        public IActionResult EditProduct(ProductDto product)
+        [Route("product/{id}")]
+        public IActionResult EditProduct(int id,ProductDto product)
         {
-            return base.FromResult(_service.EditProduct(product));
+            return base.FromResult(_service.EditProduct(id, product));
         }
 
         [HttpDelete]
-        [Route("products")]
+        [Route("product/{id}")]
         public IActionResult DeleteProduct(int id)
         {
             return base.FromResult(_service.DeleteProduct(id));

@@ -125,7 +125,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/products", stringContent);
+                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/product", stringContent);
             }
         }
 
@@ -137,7 +137,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PutAsync($"{_apiUrl}/products", stringContent);
+                HttpResponseMessage response = await httpClient.PutAsync($"{_apiUrl}/product/{product.Id}", stringContent);
             }
         }
 
@@ -148,7 +148,7 @@ namespace App.Tracly.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.DeleteAsync($"{_apiUrl}/products?id={productId}");
+                HttpResponseMessage response = await httpClient.DeleteAsync($"{_apiUrl}/product/{productId}");
             }
         }
     }

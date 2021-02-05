@@ -78,6 +78,11 @@ h4 {
 	font-size: 0.7rem;
 }
 
+.obsolete-detail {
+	color: darkred;
+	font-size: 0.7rem;
+}
+
 .table td {
 	padding-top: 0.1em;
 	padding-bottom: 0.1em;

@@ -4,13 +4,17 @@ using API.Web.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Web.DbContexts
 {
     public class CaloriesLibraryContext : IdentityDbContext<User, Role, int>
     {
-        public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options) : base(options)
+        private IConfiguration _config;
+
+        public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options, IConfiguration configuration) : base(options)
         {
+            _config = configuration;
             Database.Migrate();
         }
 
@@ -57,28 +61,28 @@ namespace API.Web.DbContexts
             var user = new User
             {
                 Id = 1,
-                FirstName = "First",
-                LastName = "Last",
-                Email = "email@domain.com",
-                UserName = "email@domain.com",
-                NormalizedUserName = "EMAIL@DOMAIN.COM",
+                FirstName = "Mike",
+                LastName = "Smith",
+                Email = _config["AdminName"],
+                UserName = _config["AdminName"],
+                NormalizedUserName = _config["AdminName"].ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
             var regularUser = new User
             {
                 Id = 2,
-                FirstName = "Regular",
-                LastName = "User",
-                Email = "regular@domain.com",
-                UserName = "regular@domain.com",
-                NormalizedUserName = "REGULAR@DOMAIN.COM",
+                FirstName = "Dave",
+                LastName = "Murray",
+                Email = _config["RegularUserName"],
+                UserName = _config["RegularUserName"],
+                NormalizedUserName = _config["RegularUserName"].ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             
             PasswordHasher<User> ph = new PasswordHasher<User>();
-            user.PasswordHash = ph.HashPassword(user, "support");
-            regularUser.PasswordHash = ph.HashPassword(regularUser, "support");
+            user.PasswordHash = ph.HashPassword(user,  _config["AdminPassword"]);
+            regularUser.PasswordHash = ph.HashPassword(regularUser, _config["RegularUserPassword"]);
 
             modelBuilder.Entity<User>().HasData(user, regularUser);
 
@@ -134,7 +138,9 @@ namespace API.Web.DbContexts
                     Protein = 21.0d,
                     Carbohydrates = 0.0d,
                     Fat = 3.0d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -145,7 +151,9 @@ namespace API.Web.DbContexts
                     Protein = 6.7d,
                     Carbohydrates = 76.6d,
                     Fat = 0.7d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -156,7 +164,9 @@ namespace API.Web.DbContexts
                     Protein = 7.7d,
                     Carbohydrates = 51.1d,
                     Fat = 38.4d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -167,7 +177,9 @@ namespace API.Web.DbContexts
                     Protein = 4.0d,
                     Carbohydrates = 52.5d,
                     Fat = 1.3d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -178,7 +190,9 @@ namespace API.Web.DbContexts
                     Protein = 1.6d,
                     Carbohydrates = 20.0d,
                     Fat = 0.9d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -189,7 +203,9 @@ namespace API.Web.DbContexts
                     Protein = 25.5d,
                     Carbohydrates = 0.1d,
                     Fat = 20.7d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -200,7 +216,9 @@ namespace API.Web.DbContexts
                     Protein = 1.7d,
                     Carbohydrates = 4.4d,
                     Fat = 0.5d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -211,7 +229,9 @@ namespace API.Web.DbContexts
                     Protein = 1.2d,
                     Carbohydrates = 4.7d,
                     Fat = 0.4d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = false,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -222,7 +242,9 @@ namespace API.Web.DbContexts
                     Protein = 20.1d,
                     Carbohydrates = 0d,
                     Fat = 2.3d,
-                    IsDefault = true
+                    IsDefault = true,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 },
                 new Product()
                 {
@@ -233,7 +255,9 @@ namespace API.Web.DbContexts
                     Protein = 21.0d,
                     Carbohydrates = 0.0d,
                     Fat = 3.0d,
-                    IsDefault = false
+                    IsDefault = false,
+                    IsAvailable = true,
+                    DateAdded = DateTime.Now
                 }
             );
         }

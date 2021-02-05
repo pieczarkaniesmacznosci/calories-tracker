@@ -86,7 +86,7 @@ namespace App.Tracly
                 app.UseHsts();
             }
 
-            app.UseLiveReload();
+            //app.UseLiveReload();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

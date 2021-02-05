@@ -9,10 +9,8 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using Web.Extensions;
-using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
+using Web.Result.ErrorDefinitions;
+using API.Web.Identity;
 
 namespace API.Web.Service
 {
@@ -22,34 +20,24 @@ namespace API.Web.Service
         private readonly IRepository<Meal> _mealRepository;
         private readonly IRepository<MealLog> _mealLogRepository;
         private readonly IMapper _mapper;
-        private readonly MealValidator _mealValidator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<User> _userManager;
-        private int _userId => GetCurrentUserId().Result;
+        private readonly IMealValidator _mealValidator;
+        private readonly IUserManager _userManager;
+        private int _userId => _userManager.CurrentUserId;
 
-        private async Task<int> GetCurrentUserId()
-        {
-            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
-            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
-
-            return currentUserId.Id;
-        }
 
         public MealService(
             ILogger<MealService> logger, 
             IRepository<Meal> mealRepository,
             IRepository<MealLog> mealLogRepository, 
             IMapper mapper, 
-            MealValidator mealValidator, 
-            IHttpContextAccessor httpContextAccessor, 
-            UserManager<User> userManager)
+            IMealValidator mealValidator,
+            IUserManager userManager)
         {
             _logger = logger;
             _mealRepository = mealRepository;
             _mealLogRepository = mealLogRepository;
             _mapper = mapper;
             _mealValidator = mealValidator;
-            _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
         }
 
@@ -77,7 +65,7 @@ namespace API.Web.Service
                 if(meal == null)
                 {
                     _logger.LogInformation($"Meal with id = {id} was not found!");
-                    return new NotFoundResult<MealDto>();
+                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Meal",id.ToString()}));
                 }
 
                 var mealDto = _mapper.Map<MealDto>(meal);
@@ -166,7 +154,7 @@ namespace API.Web.Service
                 if(mealLogToDelete == null)
                 {
                     _logger.LogInformation($"Meal with id = {mealLogId} was not found!");
-                    return new NotFoundResult<MealLogDto>();
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLogId.ToString()}));
                 }
 
                 _mealLogRepository.Delete(mealLogToDelete);
@@ -208,7 +196,7 @@ namespace API.Web.Service
                 if(productToEdit == null)
                 {
                     _logger.LogInformation($"Meal with id = {meal.Id} was not found!");
-                    return new NotFoundResult<MealDto>();
+                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Meal",meal.Id.ToString()}));
                 }
 
                 var mealEntity = _mapper.Map<Meal>(meal);
@@ -235,7 +223,7 @@ namespace API.Web.Service
                 if(mealToDelete == null)
                 {
                     _logger.LogInformation($"Meal with id = {id} was not found!");
-                    return new NotFoundResult<MealDto>();
+                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Meal",id.ToString()}));
                 }
                 mealToDelete.IsSaved = false;
 
@@ -256,7 +244,7 @@ namespace API.Web.Service
             {
                 if(string.IsNullOrWhiteSpace(mealName))
                 {
-                    return new NotFoundResult<IEnumerable<MealDto>>();
+                    return new InvalidResult<IEnumerable<MealDto>>(null);
                 }
 
                 //https://entityframeworkcore.com/knowledge-base/43277868/entity-framework-core---contains-is-case-sensitive-or-case-insensitive-
@@ -266,7 +254,7 @@ namespace API.Web.Service
 
                 if(!meals.Any())
                 {
-                    return new NotFoundResult<IEnumerable<MealDto>>();
+                    return new NotFoundResult<IEnumerable<MealDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError,new string[]{"Meal"}));
                 }
                 
                 var mealsDto = _mapper.Map<IEnumerable<MealDto>>(meals);
@@ -288,7 +276,7 @@ namespace API.Web.Service
 
                 if(meal ==null)
                 {
-                    return new NotFoundResult<MealLogDto>();
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLog.Id.ToString()}));
                 }
 
                 var log = new MealLog(){
@@ -319,7 +307,7 @@ namespace API.Web.Service
 
                 if(mealLog ==null)
                 {
-                    return new NotFoundResult<MealLogDto>();
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLogId.ToString()}));
                 }
 
                 var mealLogDto = _mapper.Map<MealLogDto>(mealLog);
@@ -346,7 +334,7 @@ namespace API.Web.Service
 
                 if(!mealLog.Any())
                 {
-                    return new NotFoundResult<IEnumerable<MealLogDto>>();
+                    return new NotFoundResult<IEnumerable<MealLogDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError,new string[]{"MealLog"}));
                 }
 
                 var mealLogListDto = _mapper.Map<IEnumerable<MealLog>,IEnumerable<MealLogDto>>(mealLog);
@@ -369,7 +357,7 @@ namespace API.Web.Service
 
                 if(!mealLog.Any())
                 {
-                    return new NotFoundResult<IEnumerable<MealLogDto>>();
+                    return new NotFoundResult<IEnumerable<MealLogDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError,new string[]{"MealLog"}));
                 }
 
                 var mealLogListDto = _mapper.Map<IEnumerable<MealLogDto>>(mealLog);
@@ -393,7 +381,7 @@ namespace API.Web.Service
 
                 if(mealLog == null)
                 {
-                    return new NotFoundResult<MealLogDto>();
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLogId.ToString()}));
                 }
 
                 var mealLogListDto = _mapper.Map<MealLogDto>(mealLog);

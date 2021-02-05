@@ -1,3 +1,5 @@
+using System;
+
 namespace API.Web.Dtos
 {
     public class ProductDto
@@ -9,5 +11,7 @@ namespace API.Web.Dtos
         public double Carbohydrates {get;set;}
         public double Fat {get;set;}
         public bool IsDefault {get;set;}
+        public bool IsAvailable {get;set;}
+        public DateTime? DateAdded {get;set;}
     }
 }

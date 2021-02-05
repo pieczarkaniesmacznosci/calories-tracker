@@ -1,13 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using API.Web.Dtos;
-using API.Web.Entities;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace API.Web.Validators
 {
-    public class MealValidator : AbstractValidator<MealDto>
+    public class MealValidator : AbstractValidator<MealDto>, IMealValidator
     {
         public MealValidator()
         {
@@ -28,5 +27,9 @@ namespace API.Web.Validators
         {
             return mealProducts.Count() > 0;
         }
+    }
+
+    public interface IMealValidator{
+        ValidationResult Validate(MealDto product);
     }
 }

@@ -18,6 +18,7 @@ using API.Web.Validators;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
+using API.Web.Identity;
 
 namespace API
 {
@@ -48,7 +49,7 @@ namespace API
 
             var connectionString = _config["DefaultConnection"];
             services.AddDbContext<CaloriesLibraryContext>(options =>
-            {
+            { 
                 options.UseSqlite(connectionString);
             });
 
@@ -74,10 +75,11 @@ namespace API
             services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
 
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserManager, UserManager>();
 
 
-            services.AddTransient<ProductValidator, ProductValidator>();
-            services.AddTransient<MealValidator, MealValidator>();
+            services.AddTransient<IProductValidator, ProductValidator>();
+            services.AddTransient<IMealValidator, MealValidator>();
 
             services.AddHttpContextAccessor();
             
