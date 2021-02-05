@@ -60,7 +60,7 @@ namespace API.Web.Service
                 Expression<Func<Product,bool>> searchFunction;
                 if(!_isUserAdmin)
                 {
-                    searchFunction = x => x.UserId == _userId && x.Id == id && x.IsAvailable;
+                    searchFunction = x => (x.UserId == _userId || x.IsDefault) && x.Id == id && x.IsAvailable;
                 }
                 else
                 {
@@ -92,7 +92,7 @@ namespace API.Web.Service
                 Expression<Func<Product,bool>> searchFunction;
                 if(!_isUserAdmin)
                 {
-                    searchFunction = x=> EF.Functions.Like(x.Name, $"%{productName}%") && x.UserId == _userId && x.IsAvailable;
+                    searchFunction = x=> EF.Functions.Like(x.Name, $"%{productName}%") && (x.UserId == _userId || x.IsDefault) && x.IsAvailable;
                 }
                 else
                 {

@@ -4,13 +4,17 @@ using API.Web.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Web.DbContexts
 {
     public class CaloriesLibraryContext : IdentityDbContext<User, Role, int>
     {
-        public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options) : base(options)
+        private IConfiguration _config;
+
+        public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options, IConfiguration configuration) : base(options)
         {
+            _config = configuration;
             Database.Migrate();
         }
 
@@ -57,28 +61,28 @@ namespace API.Web.DbContexts
             var user = new User
             {
                 Id = 1,
-                FirstName = "First",
-                LastName = "Last",
-                Email = "email@domain.com",
-                UserName = "email@domain.com",
-                NormalizedUserName = "EMAIL@DOMAIN.COM",
+                FirstName = "Mike",
+                LastName = "Smith",
+                Email = _config["AdminName"],
+                UserName = _config["AdminName"],
+                NormalizedUserName = _config["AdminName"].ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
             var regularUser = new User
             {
                 Id = 2,
-                FirstName = "Regular",
-                LastName = "User",
-                Email = "regular@domain.com",
-                UserName = "regular@domain.com",
-                NormalizedUserName = "REGULAR@DOMAIN.COM",
+                FirstName = "Dave",
+                LastName = "Murray",
+                Email = _config["RegularUserName"],
+                UserName = _config["RegularUserName"],
+                NormalizedUserName = _config["RegularUserName"].ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             
             PasswordHasher<User> ph = new PasswordHasher<User>();
-            user.PasswordHash = ph.HashPassword(user, "support");
-            regularUser.PasswordHash = ph.HashPassword(regularUser, "support");
+            user.PasswordHash = ph.HashPassword(user,  _config["AdminPassword"]);
+            regularUser.PasswordHash = ph.HashPassword(regularUser, _config["RegularUserPassword"]);
 
             modelBuilder.Entity<User>().HasData(user, regularUser);
 

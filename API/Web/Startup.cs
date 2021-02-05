@@ -49,7 +49,7 @@ namespace API
 
             var connectionString = _config["DefaultConnection"];
             services.AddDbContext<CaloriesLibraryContext>(options =>
-            {
+            { 
                 options.UseSqlite(connectionString);
             });
 
