@@ -16,6 +16,8 @@ using API.Web.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using API.Web.Identity;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace API
 {
@@ -95,8 +97,39 @@ namespace API
             services.AddAuthorization();
 
             // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen();
-        }
+            services.AddSwaggerGen(
+                c => {
+                    c.AddSecurityDefinition("Bearer", 
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme{
+                            Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                                Enter 'Bearer' [space] and then your token in the text input below. \r\n\r\n
+                                Example: 'Bearer 12345abcdef'",
+                            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                            Name = "Authorization",
+                            Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                            Scheme = "Bearer"
+                    });
+                
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                            },
+                            new List<string>()
+                        }
+                });
+                });
+            }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
