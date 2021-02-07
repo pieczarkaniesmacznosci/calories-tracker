@@ -101,8 +101,8 @@ namespace API
                 c => {
                     c.AddSecurityDefinition("Bearer", 
                         new Microsoft.OpenApi.Models.OpenApiSecurityScheme{
-                            Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-                                Enter 'Bearer' [space] and then your token in the text input below. \r\n\r\n
+                            Description = @"JWT Authorization header using the Bearer scheme.
+                                Enter 'Bearer' [space] and then your token in the text input below.
                                 Example: 'Bearer 12345abcdef'",
                             In = Microsoft.OpenApi.Models.ParameterLocation.Header,
                             Name = "Authorization",
@@ -154,6 +154,7 @@ namespace API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
             });
 
             //MVC middleware will handel request
