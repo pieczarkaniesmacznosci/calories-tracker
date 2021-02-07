@@ -3,7 +3,6 @@ using API.Web.Repositories;
 using API.Web.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +11,8 @@ using AutoMapper;
 using API.Web;
 using API.Web.Service;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Identity;
 using System.Text;
 using API.Web.Validators;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using API.Web.Identity;
@@ -39,15 +36,10 @@ namespace API
                 cfg.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<CaloriesLibraryContext>();
 
-            services.AddControllers()
-            .AddMvcOptions(options =>
-                options.OutputFormatters.Add(
-                    new XmlDataContractSerializerOutputFormatter()));
-        //     .AddNewtonsoftJson(options => {
-        //    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
-        //    });
+            services.AddControllers();
 
-            var connectionString = _config["DefaultConnection"];
+            var connectionStringVersion = _config["ConnectionString"];
+            var connectionString = _config[connectionStringVersion];
             services.AddDbContext<CaloriesLibraryContext>(options =>
             { 
                 options.UseSqlite(connectionString);
@@ -66,9 +58,6 @@ namespace API
 
             services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IRepository<MealLog>, MealLogRepository>();
-            services.AddTransient<IMealService, MealService>();
-
-            services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IMealService, MealService>();
 
             services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
