@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace API.Web.Extensions
+namespace Data.Extensions
 {
     public static class CloneExtension
     {

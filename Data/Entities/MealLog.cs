@@ -1,6 +1,6 @@
 using System;
 
-namespace API.Web.Entities
+namespace Data.Entities
 {
     public class MealLog : Entity
     {

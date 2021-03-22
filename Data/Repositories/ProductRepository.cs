@@ -1,8 +1,8 @@
 using System.Linq;
-using API.Web.DbContexts;
-using API.Web.Entities;
+using Data.Web.DbContexts;
+using Data.Entities;
 
-namespace API.Web.Repositories
+namespace Data.Repositories
 {
     public class ProductRepository : GenericRepository<Product>
     {

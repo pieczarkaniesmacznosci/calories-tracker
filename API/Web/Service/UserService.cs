@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Web.Dtos;
-using API.Web.Entities;
-using API.Web.Repositories;
 using API.Web.Result;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Web.Extensions;
+using API.Web.Extensions;
 using Web.Result.ErrorDefinitions;
+using Data.Repositories;
+using Data.Entities;
 
 namespace API.Web.Service
 {

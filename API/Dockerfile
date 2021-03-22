@@ -3,12 +3,14 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /api
 
 # Copy csproj and restore
-COPY *.csproj ./
+COPY *.sln .
+COPY Web/*.csproj ./Web/
 RUN dotnet restore
 
 # Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+COPY Web/. ./Web/
+# COPY Web/*.json ./Web/
+RUN dotnet publish -c Debug -o out
 
 # Generate runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1

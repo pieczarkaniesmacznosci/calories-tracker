@@ -1,12 +1,12 @@
 
 using System;
-using API.Web.Entities;
+using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace API.Web.DbContexts
+namespace Data.Web.DbContexts
 {
     public class CaloriesLibraryContext : IdentityDbContext<User, Role, int>
     {
@@ -15,7 +15,6 @@ namespace API.Web.DbContexts
         public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options, IConfiguration configuration) : base(options)
         {
             _config = configuration;
-            Database.Migrate();
         }
 
         public DbSet<Product> Products { get; set; }
@@ -261,7 +260,7 @@ namespace API.Web.DbContexts
                 }
             );
         }
-
+        
         private void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
@@ -281,6 +280,7 @@ namespace API.Web.DbContexts
                 }
             );
         }
+        
         private void SeedMealLogTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealLog>().HasData(

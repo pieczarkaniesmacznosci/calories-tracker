@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using API.Web.DbContexts;
-using API.Web.Entities;
+using Data.Web.DbContexts;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Web.Repositories
+namespace Data.Repositories
 {
     public class MealLogRepository : GenericRepository<MealLog>
     {

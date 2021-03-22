@@ -8,7 +8,7 @@ using System.Text;
 using API.Web.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using API.Web.Entities;
+using Data.Entities;
 using System.Threading.Tasks;
 using API.Web.Result;
 using Microsoft.Extensions.Configuration;

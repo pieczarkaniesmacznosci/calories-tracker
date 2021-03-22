@@ -1,4 +1,4 @@
-namespace API.Web.Entities
+namespace Data.Entities
 {
     public class MealProduct : Entity
     {

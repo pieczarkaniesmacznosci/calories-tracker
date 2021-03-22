@@ -1,4 +1,4 @@
-using API.Web.Entities;
+using Data.Entities;
 using API.Web.Dtos;
 using AutoMapper;
 using System;

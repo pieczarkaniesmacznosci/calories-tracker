@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using API.Web.Entities;
+using Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Web.Extensions;
+using API.Web.Extensions;
 
 namespace API.Web.Identity
 {

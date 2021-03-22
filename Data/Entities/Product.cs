@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace API.Web.Entities
+namespace Data.Entities
 {
     public class Product : Entity
     {

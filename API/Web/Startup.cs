@@ -1,6 +1,6 @@
-using API.Web.DbContexts;
-using API.Web.Repositories;
-using API.Web.Entities;
+using Data.Web.DbContexts;
+using Data.Repositories;
+using Data.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,18 +8,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
-using API.Web;
+using Data.Web;
 using API.Web.Service;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using API.Web.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
-using API.Web.Identity;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using API.Web.Identity;
+using API.Web.Validators;
 
-namespace API
+namespace API.Web
 {
     public class Startup
     {
@@ -56,15 +56,13 @@ namespace API
             services.AddSingleton(mapper);
 
             services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<IProductService, ProductService>();
-
             services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IRepository<MealLog>, MealLogRepository>();
-            services.AddTransient<IMealService, MealService>();
-
             services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
             services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
 
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IMealService, MealService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserManager, UserManager>();
 

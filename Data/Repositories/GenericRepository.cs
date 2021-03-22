@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using API.Web.DbContexts;
-using API.Web.Entities;
-using API.Web.Extensions;
+using Data.Extensions;
+using Data.Web.DbContexts;
 
-namespace API.Web.Repositories
+namespace Data.Repositories
 {
     public abstract class GenericRepository<T> : IRepository<T> where T : class
     {

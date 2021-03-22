@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using API.Web.Entities;
+using Data.Entities;
 using API.Web.Dtos;
-using API.Web.Repositories;
+using Data.Repositories;
 using API.Web.Result;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using API.Web.Validators;
 using Microsoft.EntityFrameworkCore;
 using Web.Result.ErrorDefinitions;
+using API.Web.Validators;
 using API.Web.Identity;
 
 namespace API.Web.Service

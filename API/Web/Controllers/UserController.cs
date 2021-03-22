@@ -6,9 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using API.Web.Entities;
-using System.Threading.Tasks;
 
 namespace API.Web.Controllers
 {

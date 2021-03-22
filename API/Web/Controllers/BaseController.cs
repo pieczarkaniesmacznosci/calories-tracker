@@ -1,7 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using API.Web.Entities;
+using Data.Entities;
 using API.Web.Result;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
