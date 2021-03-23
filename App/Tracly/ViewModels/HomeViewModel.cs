@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using API.Web.Dtos;
+using API.Dtos;
 
 namespace App.Tracly.ViewModels
 {

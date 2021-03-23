@@ -1,0 +1,26 @@
+version: "3"
+services:
+   tracly-api:
+      image: tracly-api:1.0
+      ports:
+         - 5005:5005
+      environment:
+         - ASPNETCORE_ENVIRONMENT=Development
+   sqlite:
+      image: nouchka/sqlite3:latest
+      stdin_open: true
+      tty: true
+      volumes:
+         - tracly-data:/root/db
+      ports:
+         - "9000:9000" # expose ports - HOST:CONTAINER
+      restart: unless-stopped
+   sqlite-web:
+      image: coleifer/sqlite-web
+      environment:
+         - SQLITE_DATABASE="tracly-data"
+      ports:
+         - 8080:8080
+volumes:
+   tracly-data:
+      driver: local

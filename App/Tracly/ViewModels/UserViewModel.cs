@@ -1,4 +1,4 @@
-using API.Web.Dtos;
+using API.Dtos;
 
 namespace App.Tracly.ViewModels
 {

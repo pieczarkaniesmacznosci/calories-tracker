@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using System;
-using API.Web.Dtos;
+using API.Dtos;
 using Tracly.Extensions;
 using Microsoft.Extensions.Configuration;
 

@@ -5,7 +5,7 @@ using App.Tracly.Models;
 using Microsoft.AspNetCore.Authorization;
 using App.Tracly.ViewModels;
 using System.Collections.Generic;
-using API.Web.Dtos;
+using API.Dtos;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System;

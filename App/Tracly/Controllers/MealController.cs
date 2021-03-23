@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
-using API.Web.Dtos;
+using API.Dtos;
 using Tracly.Models;
 using System.Text;
 using App.Tracly.ViewModels;

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using API.Web.Entities;
+using API.Entities;
 
 namespace App.Tracly.Data
 {
