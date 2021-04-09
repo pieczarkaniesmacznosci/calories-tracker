@@ -1,10 +1,7 @@
-using Data.Entities;
-using Data.Repositories;
 using Data.Web.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,15 +26,12 @@ namespace Data
             //     cfg.User.RequireUniqueEmail = true;
             // }).AddEntityFrameworkStores<CaloriesLibraryContext>();
 
-            var connectionStringVersion = _config["ConnectionString"];
-            var connectionString = _config[connectionStringVersion];
+            // var connectionStringVersion = _config["ConnectionString"];
+            // var connectionString = _config[connectionStringVersion];
             services.AddDbContext<CaloriesLibraryContext>(options =>
             { 
-                options.UseSqlite(connectionString);
+                options.UseSqlServer(_config["ConnectionString:SqlServer"]);
             });
- 
-            
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +48,7 @@ namespace Data
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    await context.Response.WriteAsync("Database created!");
                 });
             });
         }
