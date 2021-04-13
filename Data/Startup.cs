@@ -21,13 +21,6 @@ namespace Data
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddIdentity<User, Role>(cfg =>
-            // {
-            //     cfg.User.RequireUniqueEmail = true;
-            // }).AddEntityFrameworkStores<CaloriesLibraryContext>();
-
-            // var connectionStringVersion = _config["ConnectionString"];
-            // var connectionString = _config[connectionStringVersion];
             services.AddDbContext<CaloriesLibraryContext>(options =>
             { 
                 options.UseSqlServer(_config["ConnectionString:SqlServer"]);

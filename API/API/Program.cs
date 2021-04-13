@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
@@ -30,11 +32,13 @@ namespace API.Web
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>().UseNLog();
-                });
+        public static IWebHostBuilder CreateHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+            .UseKestrel()
+            .UseNLog()
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseUrls("http://*:5000")
+            .UseIISIntegration()
+            .UseStartup<Startup>();
     }
 }

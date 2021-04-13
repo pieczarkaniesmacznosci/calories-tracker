@@ -40,11 +40,9 @@ namespace API.Web
 
             services.AddControllers();
 
-            var connectionStringVersion = _config["ConnectionString"];
-            var connectionString = _config[connectionStringVersion];
             services.AddDbContext<CaloriesLibraryContext>(options =>
             { 
-                options.UseSqlite(connectionString);
+                options.UseSqlServer(_config["ConnectionString:SqlServer"]);
             });
 
             var mapperConfig = new MapperConfiguration(mc =>
