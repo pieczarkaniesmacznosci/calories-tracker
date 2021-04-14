@@ -10,6 +10,7 @@ namespace Data.Entities
 
         public IEnumerable<UserNutrition> UserNutritions { get; set; }
         public IEnumerable<UserWeight> UserWeights { get; set; }
+        public IEnumerable<MealLog> MealLogs { get; set; }
         public IEnumerable<Meal> Meals { get; set; }
         public IEnumerable<Product> Products { get; set; }
     }

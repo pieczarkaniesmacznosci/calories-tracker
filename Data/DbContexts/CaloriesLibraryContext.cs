@@ -35,14 +35,16 @@ namespace Data.Web.DbContexts
 
             // modelBuilder.Entity<MealProduct>().HasKey(mp => new { mp.MealId, mp.ProductId });
             modelBuilder.Entity<MealProduct>().Property(x=>x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealProduct>().HasOne(x=>x.Product).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<MealLog>().Property(x=>x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<MealLog>().HasOne(x=>x.Meal);
-
+            modelBuilder.Entity<MealLog>().HasOne(x=>x.User).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Meal>().HasMany(x=>x.MealLogs);
             modelBuilder.Entity<Meal>().Property(x=>x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<User>();
             modelBuilder.Entity<User>().HasMany(x => x.UserNutritions).WithOne(x => x.User);
             modelBuilder.Entity<User>().HasMany(x => x.UserWeights).WithOne(x => x.User);
+            modelBuilder.Entity<User>().HasMany(x => x.MealLogs).WithOne(x => x.User);
 
             modelBuilder.Entity<Role>();
             
