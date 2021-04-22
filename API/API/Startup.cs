@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
-using Data.Web;
 using API.Service;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -18,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using API.Identity;
 using API.Validators;
+using System;
 
 namespace API.Web
 {
@@ -42,7 +42,12 @@ namespace API.Web
 
             services.AddDbContext<CaloriesLibraryContext>(options =>
             { 
-                options.UseSqlServer(_config["ConnectionString:SqlServer"]);
+                var config = new StringBuilder(_config["ConnectionString:SqlServer"]);
+                var conn = config
+                    .Replace("ENVID", _config["DB_UID"])
+                    .Replace("ENVDBPW", _config["DB_PW"])
+                    .ToString();
+                options.UseSqlServer(conn);
             });
 
             var mapperConfig = new MapperConfiguration(mc =>
@@ -63,7 +68,6 @@ namespace API.Web
             services.AddTransient<IMealService, MealService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserManager, UserManager>();
-
 
             services.AddTransient<IProductValidator, ProductValidator>();
             services.AddTransient<IMealValidator, MealValidator>();

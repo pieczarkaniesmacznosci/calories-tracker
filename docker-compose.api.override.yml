@@ -1,0 +1,9 @@
+version: "3.4"
+services:
+   tracly-api:
+      build:
+         context: .
+         dockerfile: API/API/Dockerfile
+      environment:
+         - DB_UID
+         - DB_PW

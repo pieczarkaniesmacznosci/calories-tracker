@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using Data.Web.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,8 +24,13 @@ namespace Data
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CaloriesLibraryContext>(options =>
-            { 
-                options.UseSqlServer(_config["ConnectionString:SqlServer"]);
+            {
+                var config = new StringBuilder(_config["ConnectionString:SqlServer"]);
+                var conn = config
+                    .Replace("ENVID", _config["DB_UID"])
+                    .Replace("ENVDBPW", _config["DB_PW"])
+                    .ToString();
+                options.UseSqlServer(conn);
             });
         }
 

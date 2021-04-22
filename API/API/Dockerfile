@@ -1,7 +1,7 @@
 # Get Base Image (Full .NET Core SDK)
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS base
 WORKDIR /api
-ENV ConnectionString:SqlServer "Server=tracly-db;Database=TraclyDB;Integrated Security=False;User ID=sa;Password=secretAdmin17!;"
+ENV ConnectionString:SqlServer "Server=tracly-db;Database=TraclyDB;Integrated Security=False;User ID=ENVID;Password=ENVDBPW;"
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 COPY API/API/API.csproj ./src/API/API/
