@@ -6,6 +6,9 @@ services:
          - 5000:5000
       depends_on:
          - tracly-db
+      environment:
+         - DB_UID
+         - DB_PW
    tracly-db:
       image: mcr.microsoft.com/mssql/server
       volumes:

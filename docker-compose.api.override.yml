@@ -4,6 +4,3 @@ services:
       build:
          context: .
          dockerfile: API/API/Dockerfile
-      environment:
-         - DB_UID
-         - DB_PW

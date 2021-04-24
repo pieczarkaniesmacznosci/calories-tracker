@@ -4,6 +4,3 @@ services:
       build:
          context: Data/
          dockerfile: Dockerfile
-      environment:
-         - DB_UID
-         - DB_PW
