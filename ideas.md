@@ -6,6 +6,7 @@
 -  [ ] possible MFA
 -  [ ] full testing piramid cover
 -  [ ] release strategy
+-  [ ] create WCF and gRPC services
 
 ## Frontend
 
@@ -25,4 +26,4 @@
 
 -  [ ] Git hooks
 -  [ ] CI/CD
--  [ ] Docker
+-  [x] Docker
