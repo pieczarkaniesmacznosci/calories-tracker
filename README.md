@@ -1,5 +1,5 @@
 # calories-tracker
-Repository for calories and macro nutrients intake logging
+Repository for calories and macro nutrients intake logging application development.
 ## Hints on usage
 To use tracly API for development purposes use docker-compose orchestration. 
 docker-compose.data.yml is created for setting up database, while docker-compose.api.yml for running api in docker container.
