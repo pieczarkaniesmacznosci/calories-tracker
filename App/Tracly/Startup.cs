@@ -8,8 +8,8 @@ using App.Tracly.Models;
 using Westwind.AspNetCore.LiveReload;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using App.Tracly.Data;
-using API.Web.Entities;
-using API.Web.DbContexts;
+using API.Entities;
+using API.DbContexts;
 using Microsoft.AspNetCore.Identity;
 
 namespace App.Tracly

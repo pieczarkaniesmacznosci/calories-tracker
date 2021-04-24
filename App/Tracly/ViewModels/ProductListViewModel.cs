@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using API.Web.Entities;
+using API.Entities;
 
 namespace App.Tracly.ViewModels
 {

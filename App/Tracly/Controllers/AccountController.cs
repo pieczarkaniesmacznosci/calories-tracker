@@ -2,7 +2,7 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using API.Web.Entities;
+using API.Entities;
 using App.Tracly.Models;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;

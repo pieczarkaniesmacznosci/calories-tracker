@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using App.Tracly.ViewModels;
-using API.Web.Dtos;
+using API.Dtos;
 using System.Net.Http;
 using System;
 using System.Threading.Tasks;
