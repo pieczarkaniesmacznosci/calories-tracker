@@ -1,10 +1,10 @@
-﻿using System;
+﻿using API.Dtos;
 using API.Service;
-using API.Dtos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
 
 namespace API.Controllers
 {
@@ -17,7 +17,7 @@ namespace API.Controllers
         private readonly IProductService _service;
 
         public ProductsController(
-            ILogger<ProductsController> logger, 
+            ILogger<ProductsController> logger,
             IProductService service)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -50,9 +50,9 @@ namespace API.Controllers
         [Route("product/{id}/nameValid")]
         public IActionResult ProductNameValid(int id, string productName)
         {
-            return base.FromResult(_service.ProductNameValid(id,productName));
+            return base.FromResult(_service.ProductNameValid(id, productName));
         }
-        
+
         [HttpPost]
         [Route("product")]
         public IActionResult AddProduct(ProductDto product)
@@ -62,7 +62,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("product/{id}")]
-        public IActionResult EditProduct(int id,ProductDto product)
+        public IActionResult EditProduct(int id, ProductDto product)
         {
             return base.FromResult(_service.EditProduct(id, product));
         }

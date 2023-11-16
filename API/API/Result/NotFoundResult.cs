@@ -7,8 +7,9 @@ namespace API.Result
         private string _error;
         private readonly T _data;
 
-        public NotFoundResult(){
-            
+        public NotFoundResult()
+        {
+
         }
         public NotFoundResult(string error)
         {
@@ -20,9 +21,9 @@ namespace API.Result
             _data = data;
         }
         public override ResultType ResultType => ResultType.NotFound;
-    
+
         public override List<string> Errors => new List<string>() { _error ?? $"Entity not found" };
-    
+
         public override T Data => _data;
     }
 }

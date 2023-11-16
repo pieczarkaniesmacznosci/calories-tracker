@@ -1,10 +1,9 @@
-
-using System;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Data.Web.DbContexts
 {
@@ -28,24 +27,24 @@ namespace Data.Web.DbContexts
 
             optionsBuilder.EnableSensitiveDataLogging();
         }
-            
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MealProduct>().Property(x=>x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<MealProduct>().HasOne(x=>x.Product).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<MealLog>().Property(x=>x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<MealLog>().HasOne(x=>x.Meal);
-            modelBuilder.Entity<MealLog>().HasOne(x=>x.User).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Meal>().HasMany(x=>x.MealLogs);
-            modelBuilder.Entity<Meal>().Property(x=>x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealProduct>().Property(x => x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealProduct>().HasOne(x => x.Product).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<MealLog>().Property(x => x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<MealLog>().HasOne(x => x.Meal);
+            modelBuilder.Entity<MealLog>().HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Meal>().HasMany(x => x.MealLogs);
+            modelBuilder.Entity<Meal>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<User>();
             modelBuilder.Entity<User>().HasMany(x => x.UserNutritions).WithOne(x => x.User);
             modelBuilder.Entity<User>().HasMany(x => x.UserWeights).WithOne(x => x.User);
             modelBuilder.Entity<User>().HasMany(x => x.MealLogs).WithOne(x => x.User);
             modelBuilder.Entity<Role>();
-            
+
             SeedUserTable(modelBuilder);
             SeedProductTable(modelBuilder);
             SeedMealTable(modelBuilder);
@@ -78,9 +77,9 @@ namespace Data.Web.DbContexts
                 NormalizedUserName = _config["RegularUserName"].ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            
+
             PasswordHasher<User> ph = new PasswordHasher<User>();
-            user.PasswordHash = ph.HashPassword(user,  _config["AdminPassword"]);
+            user.PasswordHash = ph.HashPassword(user, _config["AdminPassword"]);
             regularUser.PasswordHash = ph.HashPassword(regularUser, _config["RegularUserPassword"]);
 
             modelBuilder.Entity<User>().HasData(user, regularUser);
@@ -89,10 +88,10 @@ namespace Data.Web.DbContexts
                 new Role { Id = 1, Name = "Admin", NormalizedName = "ADMIN", Description = "Administration role" },
                 new Role { Id = 2, Name = "User", NormalizedName = "USER", Description = "User role" }
             );
-            
+
             modelBuilder.Entity<UserRole>().HasData(
-                new UserRole { Id =1 ,RoleId = 1, UserId = 1 },
-                new UserRole { Id =2 ,RoleId = 2, UserId = 2 }
+                new UserRole { Id = 1, RoleId = 1, UserId = 1 },
+                new UserRole { Id = 2, RoleId = 2, UserId = 2 }
             );
         }
 
@@ -260,7 +259,7 @@ namespace Data.Web.DbContexts
                 }
             );
         }
-        
+
         private void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
@@ -280,7 +279,7 @@ namespace Data.Web.DbContexts
                 }
             );
         }
-        
+
         private void SeedMealLogTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealLog>().HasData(

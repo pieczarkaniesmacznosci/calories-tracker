@@ -1,16 +1,16 @@
+using API.Dtos;
+using API.Identity;
+using API.Result;
+using API.Validators;
+using AutoMapper;
+using Data.Entities;
+using Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using Data.Entities;
-using API.Dtos;
-using Data.Repositories;
-using API.Result;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Web.Result.ErrorDefinitions;
-using API.Validators;
-using API.Identity;
 
 namespace API.Service
 {
@@ -26,10 +26,10 @@ namespace API.Service
 
 
         public MealService(
-            ILogger<MealService> logger, 
+            ILogger<MealService> logger,
             IRepository<Meal> mealRepository,
-            IRepository<MealLog> mealLogRepository, 
-            IMapper mapper, 
+            IRepository<MealLog> mealLogRepository,
+            IMapper mapper,
             IMealValidator mealValidator,
             IUserManager userManager)
         {
@@ -45,13 +45,13 @@ namespace API.Service
         {
             try
             {
-                var a = _mealRepository.Find(x=> x.UserId == _userId && x.IsSaved == isSaved);
+                var a = _mealRepository.Find(x => x.UserId == _userId && x.IsSaved == isSaved);
                 var result = _mapper.Map<IEnumerable<MealDto>>(a);
                 return new SuccessResult<IEnumerable<MealDto>>(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meals",ex);
+                _logger.LogCritical($"Exception while getting meals", ex);
                 return new UnexpectedResult<IEnumerable<MealDto>>();
             }
         }
@@ -60,20 +60,20 @@ namespace API.Service
         {
             try
             {
-                var meal = _mealRepository.Find(x=>x.UserId == _userId && x.Id ==id).FirstOrDefault();
+                var meal = _mealRepository.Find(x => x.UserId == _userId && x.Id == id).FirstOrDefault();
 
-                if(meal == null)
+                if (meal == null)
                 {
                     _logger.LogInformation($"Meal with id = {id} was not found!");
-                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Meal",id.ToString()}));
+                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", id.ToString() }));
                 }
 
                 var mealDto = _mapper.Map<MealDto>(meal);
                 return new SuccessResult<MealDto>(mealDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal with id = {id}",ex);
+                _logger.LogCritical($"Exception while getting meal with id = {id}", ex);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -83,10 +83,10 @@ namespace API.Service
             try
             {
                 var meal = _mealRepository
-                    .Find(x=> x.Id == _userId && x.MealName == mealName && x.Id != id && x.IsSaved)
+                    .Find(x => x.Id == _userId && x.MealName == mealName && x.Id != id && x.IsSaved)
                     .FirstOrDefault();
 
-                if(meal != null)
+                if (meal != null)
                 {
                     return new SuccessResult<bool>(false);
                 }
@@ -95,31 +95,32 @@ namespace API.Service
                     return new SuccessResult<bool>(true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while checking if meal name {mealName} is valid",ex);
+                _logger.LogCritical($"Exception while checking if meal name {mealName} is valid", ex);
                 return new UnexpectedResult<bool>();
             }
         }
-        
+
         public Result<MealDto> AddMeal(MealDto meal)
         {
             try
             {
                 var validationResult = _mealValidator.Validate(meal);
-                if(!validationResult.IsValid)
+                if (!validationResult.IsValid)
                 {
                     return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
-                
+
                 var mealEntity = _mapper.Map<Meal>(meal);
-                mealEntity.UserId =_userId;
+                mealEntity.UserId = _userId;
 
                 var result = _mealRepository.Add(mealEntity);
 
-                if(meal.DateEaten != null)
+                if (meal.DateEaten != null)
                 {
-                    _mealLogRepository.Add(new MealLog(){
+                    _mealLogRepository.Add(new MealLog()
+                    {
                         Meal = result,
                         DateEaten = meal.DateEaten.Value,
                         UserId = mealEntity.UserId
@@ -130,9 +131,9 @@ namespace API.Service
                 _mealRepository.SaveChanges();
                 return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while adding meal from {meal.DateEaten}",ex);
+                _logger.LogCritical($"Exception while adding meal from {meal.DateEaten}", ex);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -140,21 +141,21 @@ namespace API.Service
         public Result<MealLogDto> EditEatenMeal(int mealLogId, MealDto meal)
         {
             try
-            {            
+            {
                 var validationResult = _mealValidator.Validate(meal);
-                if(!validationResult.IsValid)
+                if (!validationResult.IsValid)
                 {
                     return new InvalidResult<MealLogDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
-                
+
                 var mealLogToDelete = _mealLogRepository
-                    .Find(x=>x.UserId == _userId && x.Id == mealLogId)
+                    .Find(x => x.UserId == _userId && x.Id == mealLogId)
                     .FirstOrDefault();
 
-                if(mealLogToDelete == null)
+                if (mealLogToDelete == null)
                 {
                     _logger.LogInformation($"Meal with id = {mealLogId} was not found!");
-                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLogId.ToString()}));
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "MealLog", mealLogId.ToString() }));
                 }
 
                 _mealLogRepository.Delete(mealLogToDelete);
@@ -164,7 +165,8 @@ namespace API.Service
                 _mealRepository.Add(mealEntity);
                 _mealRepository.SaveChanges();
 
-                var mealLogToAdd = new MealLog{
+                var mealLogToAdd = new MealLog
+                {
                     UserId = _userId,
                     MealId = mealEntity.Id,
                     DateEaten = mealLogToDelete.DateEaten
@@ -175,28 +177,28 @@ namespace API.Service
 
                 return new SuccessResult<MealLogDto>(_mapper.Map<MealLogDto>(mealLogToAdd));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}",ex);
+                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}", ex);
                 return new UnexpectedResult<MealLogDto>();
             }
         }
         public Result<MealDto> EditMeal(MealDto meal)
         {
             try
-            {            
+            {
                 var validationResult = _mealValidator.Validate(meal);
-                if(!validationResult.IsValid)
+                if (!validationResult.IsValid)
                 {
                     return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
                 }
-                    
+
                 var productToEdit = _mealRepository.Get(meal.Id.Value);
 
-                if(productToEdit == null)
+                if (productToEdit == null)
                 {
                     _logger.LogInformation($"Meal with id = {meal.Id} was not found!");
-                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Meal",meal.Id.ToString()}));
+                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", meal.Id.ToString() }));
                 }
 
                 var mealEntity = _mapper.Map<Meal>(meal);
@@ -205,9 +207,9 @@ namespace API.Service
 
                 return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}",ex);
+                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}", ex);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -217,13 +219,13 @@ namespace API.Service
             try
             {
                 var mealToDelete = _mealRepository
-                    .Find(x=> x.UserId == _userId && x.Id ==id)
+                    .Find(x => x.UserId == _userId && x.Id == id)
                     .FirstOrDefault();
 
-                if(mealToDelete == null)
+                if (mealToDelete == null)
                 {
                     _logger.LogInformation($"Meal with id = {id} was not found!");
-                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"Meal",id.ToString()}));
+                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", id.ToString() }));
                 }
                 mealToDelete.IsSaved = false;
 
@@ -231,9 +233,9 @@ namespace API.Service
                 _mealRepository.SaveChanges();
                 return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while deleting meal with id = {id}",ex);
+                _logger.LogCritical($"Exception while deleting meal with id = {id}", ex);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -242,28 +244,28 @@ namespace API.Service
         {
             try
             {
-                if(string.IsNullOrWhiteSpace(mealName))
+                if (string.IsNullOrWhiteSpace(mealName))
                 {
                     return new InvalidResult<IEnumerable<MealDto>>(null);
                 }
 
                 //https://entityframeworkcore.com/knowledge-base/43277868/entity-framework-core---contains-is-case-sensitive-or-case-insensitive-
                 var meals = _mealRepository
-                    .Find(x=> x.IsSaved && x.UserId == _userId && EF.Functions.Like(x.MealName, $"%{mealName}%"))
-                    .OrderBy(x=>x.DateEaten);
+                    .Find(x => x.IsSaved && x.UserId == _userId && EF.Functions.Like(x.MealName, $"%{mealName}%"))
+                    .OrderBy(x => x.DateEaten);
 
-                if(!meals.Any())
+                if (!meals.Any())
                 {
-                    return new NotFoundResult<IEnumerable<MealDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError,new string[]{"Meal"}));
+                    return new NotFoundResult<IEnumerable<MealDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError, new string[] { "Meal" }));
                 }
-                
+
                 var mealsDto = _mapper.Map<IEnumerable<MealDto>>(meals);
 
-                return new SuccessResult<IEnumerable<MealDto>>(mealsDto);                
+                return new SuccessResult<IEnumerable<MealDto>>(mealsDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meals",ex);
+                _logger.LogCritical($"Exception while getting meals", ex);
                 return new UnexpectedResult<IEnumerable<MealDto>>();
             }
         }
@@ -272,14 +274,15 @@ namespace API.Service
         {
             try
             {
-                var meal = _mealRepository.Find(x=>x.UserId == _userId && x.Id == mealLog.MealId);
+                var meal = _mealRepository.Find(x => x.UserId == _userId && x.Id == mealLog.MealId);
 
-                if(meal ==null)
+                if (meal == null)
                 {
-                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLog.Id.ToString()}));
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "MealLog", mealLog.Id.ToString() }));
                 }
 
-                var log = new MealLog(){
+                var log = new MealLog()
+                {
                     MealId = mealLog.MealId,
                     UserId = _userId,
                     DateEaten = mealLog.DateEaten
@@ -287,12 +290,12 @@ namespace API.Service
 
                 var result = _mealLogRepository.Add(log);
                 _mealLogRepository.SaveChanges();
-                
-                return new SuccessResult<MealLogDto>(_mapper.Map<MealLogDto>(result));                
+
+                return new SuccessResult<MealLogDto>(_mapper.Map<MealLogDto>(result));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while adding meal log",ex);
+                _logger.LogCritical($"Exception while adding meal log", ex);
                 return new UnexpectedResult<MealLogDto>();
             }
         }
@@ -302,12 +305,12 @@ namespace API.Service
             try
             {
                 var mealLog = _mealLogRepository
-                    .Find(x=>x.UserId == _userId && x.Id == mealLogId)
+                    .Find(x => x.UserId == _userId && x.Id == mealLogId)
                     .FirstOrDefault();
 
-                if(mealLog ==null)
+                if (mealLog == null)
                 {
-                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLogId.ToString()}));
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "MealLog", mealLogId.ToString() }));
                 }
 
                 var mealLogDto = _mapper.Map<MealLogDto>(mealLog);
@@ -315,11 +318,11 @@ namespace API.Service
                 _mealLogRepository.Delete(mealLog);
                 _mealLogRepository.SaveChanges();
 
-                return new SuccessResult<MealLogDto>(mealLogDto);                
+                return new SuccessResult<MealLogDto>(mealLogDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while deleting meal log",ex);
+                _logger.LogCritical($"Exception while deleting meal log", ex);
                 return new UnexpectedResult<MealLogDto>();
             }
         }
@@ -329,21 +332,21 @@ namespace API.Service
             try
             {
                 var mealLog = _mealLogRepository
-                    .Find(x=>x.UserId == _userId)
-                    .OrderByDescending(x=>x.DateEaten);
+                    .Find(x => x.UserId == _userId)
+                    .OrderByDescending(x => x.DateEaten);
 
-                if(!mealLog.Any())
+                if (!mealLog.Any())
                 {
-                    return new NotFoundResult<IEnumerable<MealLogDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError,new string[]{"MealLog"}));
+                    return new NotFoundResult<IEnumerable<MealLogDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError, new string[] { "MealLog" }));
                 }
 
-                var mealLogListDto = _mapper.Map<IEnumerable<MealLog>,IEnumerable<MealLogDto>>(mealLog);
+                var mealLogListDto = _mapper.Map<IEnumerable<MealLog>, IEnumerable<MealLogDto>>(mealLog);
 
-                return new SuccessResult<IEnumerable<MealLogDto>>(mealLogListDto);                
+                return new SuccessResult<IEnumerable<MealLogDto>>(mealLogListDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal logs",ex);
+                _logger.LogCritical($"Exception while getting meal logs", ex);
                 return new UnexpectedResult<IEnumerable<MealLogDto>>();
             }
         }
@@ -353,20 +356,20 @@ namespace API.Service
             try
             {
                 var mealLog = _mealLogRepository
-                    .Find(x=>x.UserId == _userId && x.DateEaten.Date.Equals(date.Date));
+                    .Find(x => x.UserId == _userId && x.DateEaten.Date.Equals(date.Date));
 
-                if(!mealLog.Any())
+                if (!mealLog.Any())
                 {
-                    return new NotFoundResult<IEnumerable<MealLogDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError,new string[]{"MealLog"}));
+                    return new NotFoundResult<IEnumerable<MealLogDto>>(string.Format(ErrorDefinitions.NotFoundAnyEntityError, new string[] { "MealLog" }));
                 }
 
                 var mealLogListDto = _mapper.Map<IEnumerable<MealLogDto>>(mealLog);
 
-                return new SuccessResult<IEnumerable<MealLogDto>>(mealLogListDto);                
+                return new SuccessResult<IEnumerable<MealLogDto>>(mealLogListDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal logs by date",ex);
+                _logger.LogCritical($"Exception while getting meal logs by date", ex);
                 return new UnexpectedResult<IEnumerable<MealLogDto>>();
             }
         }
@@ -376,21 +379,21 @@ namespace API.Service
             try
             {
                 var mealLog = _mealLogRepository
-                    .Find(x=>x.UserId == _userId && x.Id == mealLogId)
+                    .Find(x => x.UserId == _userId && x.Id == mealLogId)
                     .FirstOrDefault();
 
-                if(mealLog == null)
+                if (mealLog == null)
                 {
-                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError,new string[]{"MealLog",mealLogId.ToString()}));
+                    return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "MealLog", mealLogId.ToString() }));
                 }
 
                 var mealLogListDto = _mapper.Map<MealLogDto>(mealLog);
 
-                return new SuccessResult<MealLogDto>(mealLogListDto);                
+                return new SuccessResult<MealLogDto>(mealLogListDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal log by id",ex);
+                _logger.LogCritical($"Exception while getting meal log by id", ex);
                 return new UnexpectedResult<MealLogDto>();
             }
         }

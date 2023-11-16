@@ -1,10 +1,10 @@
+using Data.Entities;
+using Data.Web.DbContexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Data.Web.DbContexts;
-using Data.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
@@ -19,17 +19,17 @@ namespace Data.Repositories
             return _context
                 .Meals
                 .AsQueryable()
-                .Include(x=>x.MealProducts)
-                .ThenInclude(x=>x.Product)
-                .FirstOrDefault(x=>x.Id == id);
-        } 
+                .Include(x => x.MealProducts)
+                .ThenInclude(x => x.Product)
+                .FirstOrDefault(x => x.Id == id);
+        }
 
         public override IEnumerable<Meal> Find(Expression<Func<Meal, bool>> predicate)
         {
             return _context.Meals
                 .AsQueryable()
-                .Include(x=>x.MealProducts)
-                .ThenInclude(x=>x.Product)
+                .Include(x => x.MealProducts)
+                .ThenInclude(x => x.Product)
                 .Where(predicate)
                 .ToList();
         }
@@ -38,20 +38,20 @@ namespace Data.Repositories
         {
             return _context
                 .Meals
-                .Include(x=>x.MealProducts)
-                .ThenInclude(x=>x.Product)
+                .Include(x => x.MealProducts)
+                .ThenInclude(x => x.Product)
                 .ToList();
         }
 
         public override Meal Update(Meal entity)
         {
             var meal = _context.Meals.Single(m => m.Id == entity.Id);
-            
+
             meal.MealProducts = entity.MealProducts;
 
             return base.Update(meal);
-        } 
-        
+        }
+
         public override Meal Delete(Meal entity)
         {
             var meal = _context.Meals.Single(m => m.Id == entity.Id);

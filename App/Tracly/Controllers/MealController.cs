@@ -1,18 +1,17 @@
+using App.Tracly.Models;
+using App.Tracly.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using App.Tracly.Models;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
-using API.Dtos;
-using Tracly.Models;
-using System.Text;
-using App.Tracly.ViewModels;
-using Tracly.Extensions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Tracly.Extensions;
+using Tracly.Models;
 
 namespace App.Tracly.Controllers
 {
@@ -23,7 +22,7 @@ namespace App.Tracly.Controllers
         private readonly IMealRepository _mealRepository;
         private MealViewModel _viewModel;
         private IConfiguration _config { get; }
-        private string _apiUrl{ get; }
+        private string _apiUrl { get; }
 
         public MealController(ILogger<MealController> logger, IMealRepository mealRepository, IConfiguration configuration)
         {
@@ -66,7 +65,7 @@ namespace App.Tracly.Controllers
                 HttpResponseMessage response;
                 var builder = new UriBuilder(getMeals);
                 response = await httpClient.GetAsync(builder.ToString());
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -87,7 +86,7 @@ namespace App.Tracly.Controllers
                 HttpResponseMessage response;
                 var builder = new UriBuilder(getMeals);
                 response = await httpClient.GetAsync(builder.ToString());
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -129,14 +128,17 @@ namespace App.Tracly.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             _viewModel = new MealViewModel();
-            _viewModel.MealLog = new MealLogDto(){
-                Meal = new MealDto(){
-                    MealProducts = new List<MealProductDto>()}
+            _viewModel.MealLog = new MealLogDto()
+            {
+                Meal = new MealDto()
+                {
+                    MealProducts = new List<MealProductDto>()
+                }
             };
             _viewModel.Products = new List<ProductDto>();
-            if(id == null)
+            if (id == null)
             {
-                _viewModel.IsEdit= false;
+                _viewModel.IsEdit = false;
             }
             else
             {
@@ -148,7 +150,7 @@ namespace App.Tracly.Controllers
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         _viewModel.MealLog = JsonConvert.DeserializeObject<MealLogDto>(apiResponse);
-                        _viewModel.IsEdit= true;
+                        _viewModel.IsEdit = true;
                     }
                     else
                     {
@@ -162,7 +164,8 @@ namespace App.Tracly.Controllers
 
         public async Task<MealDto> MealDto(int id)
         {
-            var meal = new MealDto(){
+            var meal = new MealDto()
+            {
                 MealProducts = new List<MealProductDto>()
             };
 
@@ -210,9 +213,9 @@ namespace App.Tracly.Controllers
 
         [HttpPost]
         [Route("MealNameValid")]
-        public async Task<bool> ProductNameValid(int productId,string productName)
+        public async Task<bool> ProductNameValid(int productId, string productName)
         {
-            bool nameIsValid= false;
+            bool nameIsValid = false;
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();

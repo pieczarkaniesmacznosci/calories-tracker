@@ -1,12 +1,10 @@
-using System;
-using API.Service;
 using API.Dtos;
+using API.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Data.Entities;
+using System;
 
 namespace API.Controllers
 {
@@ -37,7 +35,7 @@ namespace API.Controllers
         {
             return base.FromResult(_service.GetMeals(isSaved));
         }
-                
+
         [HttpGet]
         [Route("meals/mealsByName")]
         public IActionResult FindProductByName(string mealName)
@@ -49,7 +47,7 @@ namespace API.Controllers
         [Route("meal/{id}/nameValid")]
         public IActionResult MealNameValid(int id, string mealName)
         {
-            return base.FromResult(_service.MealNameValid(id,mealName));
+            return base.FromResult(_service.MealNameValid(id, mealName));
         }
 
         [HttpPost]
@@ -103,9 +101,9 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("mealLog/{mealLogId:int}/editEaten")]
-        public IActionResult EditEatenMeal(int mealLogId,MealDto meal)
+        public IActionResult EditEatenMeal(int mealLogId, MealDto meal)
         {
-            return base.FromResult(_service.EditEatenMeal(mealLogId,meal));
+            return base.FromResult(_service.EditEatenMeal(mealLogId, meal));
         }
 
         [HttpPut]
@@ -114,7 +112,7 @@ namespace API.Controllers
         {
             return base.FromResult(_service.EditMeal(meal));
         }
-        
+
         [HttpDelete]
         [Route("meal/{mealId:int}")]
         public IActionResult DeleteMeal(int mealId)

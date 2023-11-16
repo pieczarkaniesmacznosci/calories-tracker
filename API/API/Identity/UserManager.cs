@@ -1,8 +1,8 @@
-using System.Threading.Tasks;
+using API.Extensions;
 using Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using API.Extensions;
+using System.Threading.Tasks;
 
 namespace API.Identity
 {
@@ -23,7 +23,7 @@ namespace API.Identity
 
         private async Task<int> GetCurrentUserId()
         {
-            var  loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
             var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
 
             return currentUserId.Id;
@@ -31,17 +31,17 @@ namespace API.Identity
 
         private async Task<bool> IsCurrentUserAdminRole()
         {
-            var loggedInUserName  = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
             var user = _userManager.FindByNameAsync(loggedInUserName).Result;
-            var loggedInUserRole  = await _userManager.IsInRoleAsync(user,"Admin");
+            var loggedInUserRole = await _userManager.IsInRoleAsync(user, "Admin");
 
             return loggedInUserRole;
         }
     }
-    
+
     public interface IUserManager
     {
-        int CurrentUserId {get;}
-        bool IsCurrentUserAdmin {get;}
+        int CurrentUserId { get; }
+        bool IsCurrentUserAdmin { get; }
     }
 }

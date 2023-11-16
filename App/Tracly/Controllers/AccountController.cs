@@ -1,11 +1,4 @@
-using System;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using API.Entities;
 using App.Tracly.Models;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Web.Dtos;
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace App.Tracly.Controllers
 {
@@ -22,7 +18,7 @@ namespace App.Tracly.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IUserRepository _userRepository;
         private IConfiguration _config { get; }
-        private string _apiUrl{ get; }
+        private string _apiUrl { get; }
 
         /// <summary>
         /// The manager for handling user creation, deletion, searching, roles etc...
@@ -38,7 +34,7 @@ namespace App.Tracly.Controllers
             ILogger<AccountController> logger,
             IUserRepository userRepository,
             UserManager<User> userManager,
-            SignInManager<User> signInManager, 
+            SignInManager<User> signInManager,
             IConfiguration configuration)
         {
             _logger = logger;
@@ -72,7 +68,7 @@ namespace App.Tracly.Controllers
 
                 if (result.Succeeded)
                 {
-                    var content = new StringContent(JsonConvert.SerializeObject( new {Login = model.UserName, Password=model.Password}), Encoding.UTF8, "application/json");
+                    var content = new StringContent(JsonConvert.SerializeObject(new { Login = model.UserName, Password = model.Password }), Encoding.UTF8, "application/json");
 
                     using (var httpClient = new HttpClient())
                     {
@@ -112,16 +108,16 @@ namespace App.Tracly.Controllers
                         ModelState.AddModelError("", error.Description);
                     }
 
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
-                        var resultRole = await _userManager.AddToRoleAsync(user,"User");
+                        var resultRole = await _userManager.AddToRoleAsync(user, "User");
 
                         foreach (var error in resultRole.Errors)
                         {
                             ModelState.AddModelError("", error.Description);
                         }
 
-                        if(resultRole.Succeeded)
+                        if (resultRole.Succeeded)
                         {
                             return LocalRedirect("/Home/Index");
                         }

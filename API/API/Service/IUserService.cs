@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using API.Dtos;
 using API.Result;
+using System;
+using System.Collections.Generic;
 
 namespace API.Service
 {

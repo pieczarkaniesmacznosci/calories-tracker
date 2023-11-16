@@ -1,6 +1,6 @@
-using Data.Entities;
 using API.Dtos;
 using AutoMapper;
+using Data.Entities;
 using System;
 
 namespace API.Web
@@ -15,11 +15,12 @@ namespace API.Web
             CreateMap<Meal, MealDto>();
 
             CreateMap<MealDto, Meal>()
-            .ForMember(dest=>dest.MealName,
-            opt =>{
+            .ForMember(dest => dest.MealName,
+            opt =>
+            {
                 opt.MapFrom<DefaultMealNameResolver>();
             })
-            .ForMember(x=>x.MealLogs, opt=>opt.Ignore());
+            .ForMember(x => x.MealLogs, opt => opt.Ignore());
 
             CreateMap<MealLog, MealLogDto>()
             .MaxDepth(1)
@@ -36,12 +37,12 @@ namespace API.Web
             .ReverseMap();
         }
     }
-    
+
     public class DefaultMealNameResolver : IValueResolver<MealDto, Meal, string>
     {
         public string Resolve(MealDto source, Meal destination, string destMember, ResolutionContext context)
         {
-            if(!string.IsNullOrWhiteSpace(source.MealName))
+            if (!string.IsNullOrWhiteSpace(source.MealName))
             {
                 return source.MealName;
             }

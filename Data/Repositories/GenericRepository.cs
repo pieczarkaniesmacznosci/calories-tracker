@@ -1,9 +1,9 @@
+using Data.Extensions;
+using Data.Web.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Data.Extensions;
-using Data.Web.DbContexts;
 
 namespace Data.Repositories
 {
@@ -45,12 +45,12 @@ namespace Data.Repositories
         {
             return _context.Update(entity).Entity;
         }
-        
+
         public virtual T Delete(T entity)
         {
             return _context.Remove(entity).Entity;
         }
-        public virtual T Clone (T entity)
+        public virtual T Clone(T entity)
         {
             var newEntity = CloneExtension.Clone(entity);
             return newEntity;
