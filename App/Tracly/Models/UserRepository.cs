@@ -1,7 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace App.Tracly.Models
 {

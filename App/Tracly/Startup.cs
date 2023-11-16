@@ -1,16 +1,13 @@
+using App.Tracly.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using App.Tracly.Models;
 using Westwind.AspNetCore.LiveReload;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using App.Tracly.Data;
-using API.Entities;
-using API.DbContexts;
-using Microsoft.AspNetCore.Identity;
 
 namespace App.Tracly
 {

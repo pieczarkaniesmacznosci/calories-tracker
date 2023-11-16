@@ -10,9 +10,9 @@ namespace Data.Repositories
         T Update(T entity);
         T Get(int id);
         IEnumerable<T> All();
-        IEnumerable<T> Find(Expression<Func<T,bool>> predicate);
+        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
         T Delete(T entity);
-        T Clone (T entity);
+        T Clone(T entity);
         void SaveChanges();
     }
 }

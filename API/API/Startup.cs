@@ -1,23 +1,22 @@
-using Data.Web.DbContexts;
-using Data.Repositories;
+using API.Identity;
+using API.Service;
+using API.Validators;
+using AutoMapper;
 using Data.Entities;
+using Data.Repositories;
+using Data.Web.DbContexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AutoMapper;
-using API.Service;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Threading.Tasks;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
-using API.Identity;
-using API.Validators;
-using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace API.Web
 {
@@ -41,7 +40,7 @@ namespace API.Web
             services.AddControllers();
 
             services.AddDbContext<CaloriesLibraryContext>(options =>
-            { 
+            {
                 var config = new StringBuilder(_config["ConnectionString:SqlServer"]);
                 var conn = config
                     .Replace("ENVID", _config["DB_UID"])
@@ -73,7 +72,7 @@ namespace API.Web
             services.AddTransient<IMealValidator, MealValidator>();
 
             services.AddHttpContextAccessor();
-            
+
             services.AddAuthentication()
             .AddCookie()
             .AddJwtBearer(cfg =>
@@ -96,20 +95,21 @@ namespace API.Web
             );
             services.AddAuthorization();
 
-            // Register the Swagger generator, defining 1 or more Swagger documents// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(
-                c => {
-                    c.AddSecurityDefinition("Bearer", 
-                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme{
+                c =>
+                {
+                    c.AddSecurityDefinition("Bearer",
+                        new OpenApiSecurityScheme
+                        {
                             Description = @"JWT Authorization header using the Bearer scheme.
                                 Enter 'Bearer' [space] and then your token in the text input below.
                                 Example: 'Bearer 12345abcdef'",
-                            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                            In = ParameterLocation.Header,
                             Name = "Authorization",
-                            Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                            Type = SecuritySchemeType.ApiKey,
                             Scheme = "Bearer"
-                    });
-                
+                        });
+
                     c.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
                         {
@@ -129,13 +129,11 @@ namespace API.Web
                         }
                 });
                 });
-            }
+        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
         IWebHostEnvironment env)
         {
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
             if (env.IsDevelopment())
@@ -149,23 +147,16 @@ namespace API.Web
 
             app.UseHttpsRedirection();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
+                c.RoutePrefix = string.Empty;
             });
-
-            //MVC middleware will handel request
-            // app.UseMvc();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            // app.UseStatusCodePages();
 
             app.UseEndpoints(endpoints =>
             {

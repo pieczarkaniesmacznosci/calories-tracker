@@ -1,15 +1,14 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using App.Tracly.ViewModels;
-using API.Dtos;
-using System.Net.Http;
-using System;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Text;
-using Tracly.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Tracly.Extensions;
 
 namespace App.Tracly.Controllers
 {
@@ -18,7 +17,7 @@ namespace App.Tracly.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private IConfiguration _config { get; }
-        private string _apiUrl{ get; }
+        private string _apiUrl { get; }
         public UserController(ILogger<UserController> logger, IConfiguration configuration)
         {
             _logger = logger;
@@ -42,7 +41,7 @@ namespace App.Tracly.Controllers
         {
             var weight = new UserWeightDto();
             var getUserWeight = $"{_apiUrl}/user/weight";
-            
+
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
@@ -64,7 +63,7 @@ namespace App.Tracly.Controllers
         {
             var nutrition = new UserNutritionDto();
             var getUserWeight = $"{_apiUrl}/user/nutrition";
-            
+
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
@@ -98,7 +97,7 @@ namespace App.Tracly.Controllers
         public async void PostUserNutrition(UserNutritionDto userNutrition)
         {
             var postUserNutrition = $"{_apiUrl}/user/nutrition";
-            
+
             userNutrition.Date = DateTime.Now;
             var stringContent = new StringContent(JsonConvert.SerializeObject(userNutrition), Encoding.UTF8, "application/json");
 

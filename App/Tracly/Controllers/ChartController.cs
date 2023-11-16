@@ -4,7 +4,7 @@ namespace Tracly.Controllers
 {
     public class ChartController : Controller
     {
-        
+
         [HttpGet]
         public IActionResult Index()
         {

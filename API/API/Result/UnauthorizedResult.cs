@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using API.Result;
+using System.Collections.Generic;
 
 namespace Web.Result
 {
@@ -8,7 +8,7 @@ namespace Web.Result
         private readonly T _data;
         public UnauthorizedResult()
         {
-            
+
         }
         public UnauthorizedResult(T data)
         {

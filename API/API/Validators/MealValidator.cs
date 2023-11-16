@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using API.Dtos;
 using FluentValidation;
 using FluentValidation.Results;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace API.Validators
 {
@@ -10,7 +10,7 @@ namespace API.Validators
     {
         public MealValidator()
         {
-            RuleFor(x=>x.MealProducts)
+            RuleFor(x => x.MealProducts)
             .Cascade(CascadeMode.Stop)
                 .Must(ContainAtLeastOneProduct)
                 .WithMessage("Meal has to contain at least one product !")
@@ -20,7 +20,7 @@ namespace API.Validators
 
         private bool EveryProductHasWeight(IEnumerable<MealProductDto> mealProducts)
         {
-            return !mealProducts.Any(x=>x.Weight == 0);
+            return !mealProducts.Any(x => x.Weight == 0);
         }
 
         private bool ContainAtLeastOneProduct(IEnumerable<MealProductDto> mealProducts)
@@ -29,7 +29,8 @@ namespace API.Validators
         }
     }
 
-    public interface IMealValidator{
+    public interface IMealValidator
+    {
         ValidationResult Validate(MealDto product);
     }
 }

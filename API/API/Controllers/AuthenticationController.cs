@@ -1,17 +1,17 @@
 
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using System;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using API.Dtos;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Data.Entities;
-using System.Threading.Tasks;
 using API.Result;
+using Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 using Web.Result;
 
 namespace API.Controllers
@@ -25,28 +25,29 @@ namespace API.Controllers
         private readonly IConfiguration _config;
 
         public AuthenticationController(
-            ILogger<MealsController> logger, 
-            SignInManager<User> signInManager, 
-            IConfiguration config, 
+            ILogger<MealsController> logger,
+            SignInManager<User> signInManager,
+            IConfiguration config,
             UserManager<User> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreateToken( TokenAccessDto tokenAccess)
+        public async Task<IActionResult> CreateToken(TokenAccessDto tokenAccess)
         {
             var user = await _userManager.FindByNameAsync(tokenAccess.Login);
-            
-            if(user == null)
+
+            if (user == null)
             {
                 return base.FromResult(new UnauthorizedResult<TokenAccessDto>(tokenAccess));
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user,tokenAccess.Password,false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, tokenAccess.Password, false);
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 return base.FromResult(new UnauthorizedResult<TokenAccessDto>(tokenAccess));
             }
@@ -60,12 +61,12 @@ namespace API.Controllers
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            
+
             var token = new JwtSecurityToken(
                 _config["Tokens:Issuer"],
                 _config["Tokens:Audience"],
                 claims,
-                expires:DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: credentials
                 );
 

@@ -1,10 +1,10 @@
-using System;
-using API.Service;
 using API.Dtos;
+using API.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
 using System.Security.Claims;
 
 namespace API.Controllers
@@ -28,7 +28,7 @@ namespace API.Controllers
         public IActionResult GetUserWeights()
         {
             string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
+
             return base.FromResult(_service.GetUserWeights());
         }
 

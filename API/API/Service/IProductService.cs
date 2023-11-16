@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using API.Dtos;
 using API.Result;
+using System.Collections.Generic;
 
 namespace API.Service
 {
@@ -12,6 +12,6 @@ namespace API.Service
         Result<ProductDto> AddProduct(ProductDto product);
         Result<ProductDto> EditProduct(int id, ProductDto product);
         Result<ProductDto> DeleteProduct(int id);
-        Result<bool> ProductNameValid(int id,string productName);
+        Result<bool> ProductNameValid(int id, string productName);
     }
 }

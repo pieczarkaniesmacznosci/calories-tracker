@@ -1,10 +1,6 @@
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Data.Entities;
 using API.Result;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace API.Controllers
 {

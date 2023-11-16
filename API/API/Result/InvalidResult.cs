@@ -10,9 +10,9 @@ namespace API.Result
             _error = error;
         }
         public override ResultType ResultType => ResultType.Invalid;
-    
+
         public override List<string> Errors => new List<string> { _error ?? "The input was invalid." };
-    
+
         public override T Data => default(T);
     }
 }

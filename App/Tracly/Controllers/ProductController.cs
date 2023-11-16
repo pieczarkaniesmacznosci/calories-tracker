@@ -1,15 +1,14 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using System.Text;
-using System;
-using API.Dtos;
+using System.Threading.Tasks;
 using Tracly.Extensions;
-using Microsoft.Extensions.Configuration;
 
 namespace App.Tracly.Controllers
 {
@@ -18,7 +17,7 @@ namespace App.Tracly.Controllers
     {
         private readonly ILogger<ProductController> _logger;
         private IConfiguration _config { get; }
-        private string _apiUrl{ get; }
+        private string _apiUrl { get; }
 
         public ProductController(ILogger<ProductController> logger, IConfiguration configuration)
         {
@@ -34,7 +33,7 @@ namespace App.Tracly.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();    
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/products");
                 if (response.IsSuccessStatusCode)
                 {
@@ -101,9 +100,9 @@ namespace App.Tracly.Controllers
 
         [HttpPost]
         [Route("Product/ProductNameValid")]
-        public async Task<bool> ProductNameValid(int productId,string productName)
+        public async Task<bool> ProductNameValid(int productId, string productName)
         {
-            bool nameIsValid= false;
+            bool nameIsValid = false;
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();

@@ -1,6 +1,6 @@
-using System.Linq;
-using Data.Web.DbContexts;
 using Data.Entities;
+using Data.Web.DbContexts;
+using System.Linq;
 
 namespace Data.Repositories
 {
@@ -13,7 +13,7 @@ namespace Data.Repositories
         public override Product Update(Product entity)
         {
             var product = _context.Products.Single(p => p.Id == entity.Id);
-            
+
             product.Name = entity.Name;
             product.Kcal = entity.Kcal;
             product.Carbohydrates = entity.Carbohydrates;
@@ -21,8 +21,8 @@ namespace Data.Repositories
             product.Fat = entity.Fat;
 
             return base.Update(product);
-        } 
-        
+        }
+
         public override Product Delete(Product entity)
         {
             var product = _context.Products.Single(p => p.Id == entity.Id);
