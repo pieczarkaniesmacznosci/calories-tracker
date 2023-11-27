@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Tracly.Dtos;
 
 namespace Tracly.Models
 {

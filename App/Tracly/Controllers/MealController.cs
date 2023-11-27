@@ -1,4 +1,3 @@
-using App.Tracly.Models;
 using App.Tracly.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +9,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Tracly.Dtos;
 using Tracly.Extensions;
 using Tracly.Models;
 
@@ -19,15 +19,13 @@ namespace App.Tracly.Controllers
     public class MealController : Controller
     {
         private readonly ILogger<MealController> _logger;
-        private readonly IMealRepository _mealRepository;
         private MealViewModel _viewModel;
         private IConfiguration _config { get; }
         private string _apiUrl { get; }
 
-        public MealController(ILogger<MealController> logger, IMealRepository mealRepository, IConfiguration configuration)
+        public MealController(ILogger<MealController> logger, IConfiguration configuration)
         {
             _logger = logger;
-            _mealRepository = mealRepository;
             _config = configuration;
             _apiUrl = _config["APIUrl"];
         }

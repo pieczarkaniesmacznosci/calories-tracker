@@ -43,11 +43,12 @@ namespace API.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x => ((x.UserId == _userId || x.IsDefault == true) && x.IsAvailable)));
+                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x => ((x.UserId == 1 || x.IsDefault == true) && x.IsAvailable)));
                 return new SuccessResult<IEnumerable<ProductDto>>(result);
             }
             catch (Exception ex)
             {
+                throw;
                 _logger.LogCritical($"Exception while getting products", ex);
                 return new UnexpectedResult<IEnumerable<ProductDto>>();
             }

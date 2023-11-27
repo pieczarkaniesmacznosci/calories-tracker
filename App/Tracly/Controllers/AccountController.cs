@@ -10,40 +10,31 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Tracly.Data;
+using Tracly.Dtos;
 
 namespace App.Tracly.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
-        private readonly IUserRepository _userRepository;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+
         private IConfiguration _config { get; }
         private string _apiUrl { get; }
 
-        /// <summary>
-        /// The manager for handling user creation, deletion, searching, roles etc...
-        /// </summary>
-        protected UserManager<User> _userManager;
-
-        /// <summary>
-        /// The manager for handling signing in and out for our users
-        /// </summary>
-        protected SignInManager<User> _signInManager;
-
         public AccountController(
             ILogger<AccountController> logger,
-            IUserRepository userRepository,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IConfiguration configuration)
         {
             _logger = logger;
-            _userRepository = userRepository;
             _userManager = userManager;
             _signInManager = signInManager;
             _config = configuration;
             _apiUrl = _config["APIUrl"];
-
         }
 
         [AllowAnonymous]
@@ -78,7 +69,7 @@ namespace App.Tracly.Controllers
                         Response.Cookies.Append("X-Access-Token", tokenDto.Token, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
                     }
 
-                    return LocalRedirect(model.ReturnUrl);// used local insterd od simple redirect to avoid open redirection attacks
+                    return LocalRedirect(model.ReturnUrl);// used local instead od simple redirect to avoid open redirection attacks
                 }
             }
             return View(model);

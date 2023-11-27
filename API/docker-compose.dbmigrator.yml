@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+   tracly-db:
+      container_name: tracly_db
+      image: mcr.microsoft.com/mssql/server
+      user: root
+      volumes:
+         - ~docker-volumes/tracly-db-server:/var/opt/mssql/data
+      environment:
+         MSSQL_SA_PASSWORD: "${DB_PW}"
+         MSSQL_PID: "Developer"
+         ACCEPT_EULA: "Y"
+      ports:
+         - "1434:1433"
+      networks:
+         - tracly-network
+   tracly-db-migrator:
+      build:
+         context: .
+         dockerfile: ./DbMigrator/Dockerfile
+      container_name: tracly-db-migrator
+      env_file:
+      - ./../.env
+      depends_on:
+         - tracly-db
+      networks:
+         - tracly-network
+volumes:
+   tracly-db-server:
+networks:
+  tracly-network:
+    driver: bridge
