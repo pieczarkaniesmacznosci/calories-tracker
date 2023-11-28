@@ -41,7 +41,11 @@ namespace API.Web
 
             services.AddDbContext<CaloriesLibraryContext>(options =>
             {
-                var rawConnectionString = new StringBuilder(_configuration.GetConnectionString("SqlServerLocal"));
+                string connectionStingName = "SqlServer";
+                if (_configuration["TRACLY_PROFILE"] == "Local")
+                    connectionStingName = "SqlServerLocal";
+
+                var rawConnectionString = new StringBuilder(_configuration.GetConnectionString(connectionStingName));
                 var connectionString = rawConnectionString
                     .Replace("ENVID", _configuration["DB_UID"])
                     .Replace("ENVDBPW", _configuration["DB_PW"])
@@ -79,9 +83,9 @@ namespace API.Web
                 {
                     cfg.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidIssuer = _configuration["Tokens:Issuer"],
-                        ValidAudience = _configuration["Tokens:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]))
+                        ValidIssuer = _configuration["Token:Issuer"],
+                        ValidAudience = _configuration["Token:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TOKEN_KEY"]))
                     };
                     cfg.Events = new JwtBearerEvents
                     {
