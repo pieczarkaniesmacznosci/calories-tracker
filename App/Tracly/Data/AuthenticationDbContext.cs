@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Tracly.Data;
 
 namespace App.Tracly.Data
 {
@@ -9,6 +10,7 @@ namespace App.Tracly.Data
         {
 
         }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

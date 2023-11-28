@@ -1,6 +1,13 @@
+using App.Tracly.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Text;
+using Tracly.Data;
 
 namespace App.Tracly
 {
@@ -8,24 +15,50 @@ namespace App.Tracly
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+            var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(SetupConfiguration)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<AuthenticationDbContext>(options =>
+            {
+                var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString("SqlServer"));
+                var connectionString = rawConnectionString
+                    .Replace("ENVID", builder.Configuration["DB_UID"])
+                    .Replace("ENVDBPW", builder.Configuration["DB_PW"])
+                    .ToString();
+                options.UseSqlServer(connectionString);
+            });
+            builder.Services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<AuthenticationDbContext>()
+                .AddDefaultTokenProviders();
+            builder.Services.AddAuthentication();
+            var app = builder.Build();
 
-        private static void SetupConfiguration(HostBuilderContext ctx, IConfigurationBuilder builder)
-        {
-            // Removing the default configuration options
-            builder.Sources.Clear();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Shared/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-            builder.AddJsonFile("config.json", false, true)
-                    .AddEnvironmentVariables();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Account}/{action=Login}/{id?}");
+
+            app.Run();
         }
     }
 }

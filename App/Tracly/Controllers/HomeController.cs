@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Tracly.Dtos;
 using Tracly.Extensions;
 
 namespace App.Tracly.Controllers

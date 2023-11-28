@@ -432,10 +432,6 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 
-#appsettings files
-**/appsettings.json
-**/appsettings.Development.json
-
 #db files
 *.db
 *.db-wal
@@ -443,10 +439,6 @@ $RECYCLE.BIN/
 
 #settings files
 .vscode/settings.json
-
-#Migrations
-
-Migrations
 
 #config files
 *config.json

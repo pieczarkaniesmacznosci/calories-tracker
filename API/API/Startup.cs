@@ -2,9 +2,9 @@ using API.Identity;
 using API.Service;
 using API.Validators;
 using AutoMapper;
+using Data.DbContexts;
 using Data.Entities;
 using Data.Repositories;
-using Data.Web.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,11 +22,11 @@ namespace API.Web
 {
     public class Startup
     {
-        private IConfiguration _config { get; }
+        private IConfiguration _configuration { get; }
 
-        public Startup(IConfiguration config)
+        public Startup(IConfiguration configuration)
         {
-            _config = config;
+            _configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -41,12 +41,16 @@ namespace API.Web
 
             services.AddDbContext<CaloriesLibraryContext>(options =>
             {
-                var config = new StringBuilder(_config["ConnectionString:SqlServer"]);
-                var conn = config
-                    .Replace("ENVID", _config["DB_UID"])
-                    .Replace("ENVDBPW", _config["DB_PW"])
+                string connectionStingName = "SqlServer";
+                if (_configuration["TRACLY_PROFILE"] == "Local")
+                    connectionStingName = "SqlServerLocal";
+
+                var rawConnectionString = new StringBuilder(_configuration.GetConnectionString(connectionStingName));
+                var connectionString = rawConnectionString
+                    .Replace("ENVID", _configuration["DB_UID"])
+                    .Replace("ENVDBPW", _configuration["DB_PW"])
                     .ToString();
-                options.UseSqlServer(conn);
+                options.UseSqlServer(connectionString);
             });
 
             var mapperConfig = new MapperConfiguration(mc =>
@@ -79,9 +83,9 @@ namespace API.Web
                 {
                     cfg.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidIssuer = _config["Tokens:Issuer"],
-                        ValidAudience = _config["Tokens:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]))
+                        ValidIssuer = _configuration["Token:Issuer"],
+                        ValidAudience = _configuration["Token:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TOKEN_KEY"]))
                     };
                     cfg.Events = new JwtBearerEvents
                     {
@@ -145,7 +149,7 @@ namespace API.Web
                 app.UseExceptionHandler("/error");
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseSwaggerUI(c =>
             {

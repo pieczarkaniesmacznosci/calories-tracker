@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+using Tracly.Dtos;
 namespace App.Tracly.ViewModels
 {
     public class MealListViewModel
