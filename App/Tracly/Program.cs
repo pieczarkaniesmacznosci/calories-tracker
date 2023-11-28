@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Text;
 using Tracly.Data;
 
 namespace App.Tracly
@@ -19,10 +20,17 @@ namespace App.Tracly
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<AuthenticationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
+            {
+                var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString("SqlServer"));
+                var connectionString = rawConnectionString
+                    .Replace("ENVID", builder.Configuration["DB_UID"])
+                    .Replace("ENVDBPW", builder.Configuration["DB_PW"])
+                    .ToString();
+                options.UseSqlServer(connectionString);
+            });
             builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>()
-                .AddDefaultTokenProviders(); ;
+                .AddDefaultTokenProviders();
             builder.Services.AddAuthentication();
             var app = builder.Build();
 

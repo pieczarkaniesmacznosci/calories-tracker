@@ -4,7 +4,7 @@ using Tracly.Data;
 
 namespace App.Tracly.Data
 {
-    public class AuthenticationDbContext : IdentityDbContext<User, Role, string>
+    public class AuthenticationDbContext : IdentityDbContext<User, Role, int>
     {
         public AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> options) : base(options)
         {
