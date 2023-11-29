@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Tracly.Data;
 
-namespace App.Tracly.Data
+namespace Tracly.Data
 {
     public class AuthenticationDbContext : IdentityDbContext<User, Role, int>
     {

@@ -1,4 +1,3 @@
-using App.Tracly.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -10,8 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Tracly.Dtos;
 using Tracly.Extensions;
+using Tracly.ViewModels;
 
-namespace App.Tracly.Controllers
+namespace Tracly.Controllers
 {
     [Authorize]
     public class UserController : Controller
@@ -87,11 +87,9 @@ namespace App.Tracly.Controllers
             userWeight.Date = DateTime.Now;
             var stringContent = new StringContent(JsonConvert.SerializeObject(userWeight), Encoding.UTF8, "application/json");
 
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/user/weight", stringContent);
-            }
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+            HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/user/weight", stringContent);
         }
 
         [HttpPost]
@@ -102,11 +100,9 @@ namespace App.Tracly.Controllers
             userNutrition.Date = DateTime.Now;
             var stringContent = new StringContent(JsonConvert.SerializeObject(userNutrition), Encoding.UTF8, "application/json");
 
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync(postUserNutrition, stringContent);
-            }
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+            HttpResponseMessage response = await httpClient.PostAsync(postUserNutrition, stringContent);
         }
     }
 }

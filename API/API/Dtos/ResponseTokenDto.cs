@@ -1,6 +1,6 @@
 using System;
 
-namespace Web.Dtos
+namespace API.Dtos
 {
     public class ResponseTokenDto
     {

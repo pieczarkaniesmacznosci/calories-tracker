@@ -5,7 +5,7 @@ using NLog.Web;
 using System;
 using System.IO;
 
-namespace API.Web
+namespace API
 {
     public class Program
     {

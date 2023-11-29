@@ -1,6 +1,7 @@
 using API.Dtos;
 using API.Identity;
 using API.Result;
+using API.Result.ErrorDefinitions;
 using API.Validators;
 using AutoMapper;
 using Data.Entities;
@@ -11,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Web.Result.ErrorDefinitions;
 
 namespace API.Service
 {
@@ -43,13 +43,12 @@ namespace API.Service
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x => ((x.UserId == 1 || x.IsDefault == true) && x.IsAvailable)));
+                var result = _mapper.Map<IEnumerable<ProductDto>>(_productRepository.Find(x => ((x.UserId == _userId || x.IsDefault == true) && x.IsAvailable)));
                 return new SuccessResult<IEnumerable<ProductDto>>(result);
             }
             catch (Exception ex)
             {
-                throw;
-                _logger.LogCritical($"Exception while getting products", ex);
+                _logger.LogError(ex, "Exception while getting products");
                 return new UnexpectedResult<IEnumerable<ProductDto>>();
             }
         }
@@ -72,7 +71,7 @@ namespace API.Service
 
                 if (product == null)
                 {
-                    _logger.LogInformation($"Product with id = {id} was not found!");
+                    _logger.LogInformation("Product with id= {id} was not found!", id);
                     return new NotFoundResult<ProductDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Product", id.ToString() }));
                 }
 
@@ -81,7 +80,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting product with id = {id}", ex);
+                _logger.LogError(ex, "Exception while getting product with id= {id}", id);
                 return new UnexpectedResult<ProductDto>();
             }
         }
@@ -109,7 +108,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting products", ex);
+                _logger.LogError(ex, "Exception while getting products");
                 return new UnexpectedResult<IEnumerable<ProductDto>>();
             }
         }
@@ -145,7 +144,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while adding product with name = {product.Name}", ex);
+                _logger.LogError(ex, "Exception while adding product with name= {productName}", ex);
                 return new UnexpectedResult<ProductDto>();
             }
         }
@@ -180,7 +179,7 @@ namespace API.Service
 
                 if (productToEdit == null)
                 {
-                    _logger.LogInformation($"Product with id = {id} was not found!");
+                    _logger.LogInformation("Product with id= {id} was not found!", id);
                     return new NotFoundResult<ProductDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Product", id.ToString() }));
                 }
 
@@ -200,7 +199,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while editing product with name = {product.Name}", ex);
+                _logger.LogError(ex, "Exception while editing product with name= {productName}", product.Name);
                 return new UnexpectedResult<ProductDto>();
             }
         }
@@ -223,7 +222,7 @@ namespace API.Service
 
                 if (productToDelete == null)
                 {
-                    _logger.LogInformation($"Product with id = {id} was not found!");
+                    _logger.LogInformation("Product with id= {id} was not found!", id);
                     return new NotFoundResult<ProductDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Product", id.ToString() }));
                 }
 
@@ -245,7 +244,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while deleting product with id = {id}", ex);
+                _logger.LogError(ex, "Exception while deleting product with id= {id}", id);
                 return new UnexpectedResult<ProductDto>();
             }
         }
@@ -259,7 +258,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while checking if product with name = {productName} exists", ex);
+                _logger.LogCritical(ex, "Exception while checking if product with name= {productName} exists", productName);
                 return new UnexpectedResult<bool>();
             }
         }
@@ -275,6 +274,5 @@ namespace API.Service
                 return true;
             }
         }
-
     }
 }

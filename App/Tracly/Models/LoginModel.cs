@@ -1,4 +1,4 @@
-namespace App.Tracly.Models
+namespace Tracly.Models
 {
     public class LoginModel
     {
