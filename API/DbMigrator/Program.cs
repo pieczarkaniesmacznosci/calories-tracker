@@ -37,22 +37,20 @@ namespace DbMigrator
                 })
                 .Build();
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<CaloriesLibraryContext>();
+            using var scope = host.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<CaloriesLibraryContext>();
 
-                try
-                {
-                    Console.WriteLine("Waiting 10s for database initialization...");
-                    Thread.Sleep(10 * 1000);
-                    Console.WriteLine("Applying Migrations...");
-                    dbContext.Database.Migrate();
-                    Console.WriteLine("Migrations applied successfully.");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error applying migrations: {ex.Message}");
-                }
+            try
+            {
+                Console.WriteLine("Waiting 10s for database initialization...");
+                Thread.Sleep(10 * 1000);
+                Console.WriteLine("Applying Migrations...");
+                dbContext.Database.Migrate();
+                Console.WriteLine("Migrations applied successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error applying migrations: {ex.Message}");
             }
         }
     }

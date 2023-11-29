@@ -1,4 +1,4 @@
-namespace Web.Result.ErrorDefinitions
+namespace API.Result.ErrorDefinitions
 {
     public static class ErrorDefinitions
     {

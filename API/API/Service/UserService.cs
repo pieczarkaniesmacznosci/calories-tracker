@@ -1,6 +1,7 @@
 using API.Dtos;
 using API.Extensions;
 using API.Result;
+using API.Result.ErrorDefinitions;
 using AutoMapper;
 using Data.Entities;
 using Data.Repositories;
@@ -11,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Result.ErrorDefinitions;
 
 namespace API.Service
 {
@@ -59,7 +59,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while adding user untrition from {userNutrition.Date}", ex);
+                _logger.LogError(ex, "Exception while adding user untrition from {userNutritionDate}", userNutrition.Date);
                 return new UnexpectedResult<UserNutritionDto>();
             }
         }
@@ -77,7 +77,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while adding user untrition from {userWeight.Date}", ex);
+                _logger.LogError(ex, "Exception while adding user untrition from {userWeightDate}", userWeight.Date);
                 return new UnexpectedResult<UserWeightDto>();
             }
         }
@@ -90,7 +90,7 @@ namespace API.Service
 
                 if (userNutritionToDelete == null)
                 {
-                    _logger.LogInformation($"User nutrition with id = {userNutrition.Id} was not found!");
+                    _logger.LogInformation("User nutrition with id= {userNutritionId} was not found!", userNutrition.Id);
                     return new NotFoundResult<UserNutritionDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userNutrition.Id.ToString() }));
                 }
 
@@ -101,7 +101,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while deleting user nutrition", ex);
+                _logger.LogError(ex, "Exception while deleting user nutrition");
                 return new UnexpectedResult<UserNutritionDto>();
             }
         }
@@ -114,7 +114,7 @@ namespace API.Service
 
                 if (userNutritionToDelete == null)
                 {
-                    _logger.LogInformation($"User weight with id = {userWeight.Id} was not found!");
+                    _logger.LogInformation("User weight with id= {userWeightId} was not found!", userWeight.Id);
                     return new NotFoundResult<UserWeightDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userWeight.Id.ToString() }));
                 }
 
@@ -125,7 +125,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while deleting user weight", ex);
+                _logger.LogError(ex, "Exception while deleting user weight");
                 return new UnexpectedResult<UserWeightDto>();
             }
         }
@@ -138,7 +138,7 @@ namespace API.Service
 
                 if (userNutritionToEdit == null)
                 {
-                    _logger.LogInformation($"User nutrition with id = {userNutrition.Id} was not found!");
+                    _logger.LogInformation("User nutrition with id= {userNutritionId} was not found!", userNutrition.Id);
                     return new NotFoundResult<UserNutritionDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userNutrition.Id.ToString() }));
                 }
 
@@ -150,7 +150,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while editing user nutrition with id = {userNutrition.Id}", ex);
+                _logger.LogError(ex, "Exception while editing user nutrition with id= {userNutritionId}", userNutrition.Id);
                 return new UnexpectedResult<UserNutritionDto>();
             }
         }
@@ -163,7 +163,7 @@ namespace API.Service
 
                 if (userNutritionToEdit == null)
                 {
-                    _logger.LogInformation($"User weight with id = {userWeight.Id} was not found!");
+                    _logger.LogInformation("User weight with id= {userWeightId} was not found!", userWeight.Id);
                     return new NotFoundResult<UserWeightDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserWeight", userWeight.Id.ToString() }));
                 }
 
@@ -175,7 +175,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while editing user weight with id = {userWeight.Id}", ex);
+                _logger.LogError(ex, "Exception while editing user weight with id= {userWeightId}", userWeight.Id);
                 return new UnexpectedResult<UserWeightDto>();
             }
         }
@@ -200,7 +200,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meals", ex);
+                _logger.LogCritical(ex, "Exception while getting meals");
                 return new UnexpectedResult<UserNutritionDto>();
             }
         }
@@ -225,7 +225,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meals", ex);
+                _logger.LogError(ex, "Exception while getting meals");
                 return new UnexpectedResult<UserWeightDto>();
             }
         }
@@ -238,7 +238,7 @@ namespace API.Service
 
                 if (userNutrition == null)
                 {
-                    _logger.LogInformation($"User nutrition with date = {date} was not found!");
+                    _logger.LogInformation("User nutrition with date= {date} was not found!", date);
                     return new NotFoundResult<UserNutritionDto>();
                 }
 
@@ -247,7 +247,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting user nutrition with date = {date}", ex);
+                _logger.LogError(ex, "Exception while getting user nutrition with date= {date}", date);
                 return new UnexpectedResult<UserNutritionDto>();
             }
         }
@@ -261,7 +261,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting user nutritions", ex);
+                _logger.LogCritical(ex, "Exception while getting user nutritions");
                 return new UnexpectedResult<IEnumerable<UserNutritionDto>>();
             }
         }
@@ -274,7 +274,7 @@ namespace API.Service
 
                 if (userWeight == null)
                 {
-                    _logger.LogInformation($"User weight with date = {date} was not found!");
+                    _logger.LogInformation("User weight with date= {date} was not found!", date);
                     return new NotFoundResult<UserWeightDto>();
                 }
 
@@ -283,7 +283,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting user weight with date = {date}", ex);
+                _logger.LogError(ex, "Exception while getting user weight with date= {date}", date);
                 return new UnexpectedResult<UserWeightDto>();
             }
         }
@@ -297,7 +297,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting user weights", ex);
+                _logger.LogError(ex, "Exception while getting user weights");
                 return new UnexpectedResult<IEnumerable<UserWeightDto>>();
             }
         }

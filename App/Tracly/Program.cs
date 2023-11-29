@@ -1,4 +1,3 @@
-using App.Tracly.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System.Text;
 using Tracly.Data;
 
-namespace App.Tracly
+namespace Tracly
 {
     public class Program
     {
@@ -32,13 +31,14 @@ namespace App.Tracly
                 .AddEntityFrameworkStores<AuthenticationDbContext>()
                 .AddDefaultTokenProviders();
             builder.Services.AddAuthentication();
+
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {

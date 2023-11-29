@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Tracly.Dtos;
 using Tracly.Extensions;
 
-namespace App.Tracly.Controllers
+namespace Tracly.Controllers
 {
     [Authorize]
     public class ProductController : Controller

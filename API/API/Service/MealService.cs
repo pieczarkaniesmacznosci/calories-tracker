@@ -1,6 +1,7 @@
 using API.Dtos;
 using API.Identity;
 using API.Result;
+using API.Result.ErrorDefinitions;
 using API.Validators;
 using AutoMapper;
 using Data.Entities;
@@ -10,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Web.Result.ErrorDefinitions;
 
 namespace API.Service
 {
@@ -23,7 +23,6 @@ namespace API.Service
         private readonly IMealValidator _mealValidator;
         private readonly IUserManager _userManager;
         private int _userId => _userManager.CurrentUserId;
-
 
         public MealService(
             ILogger<MealService> logger,
@@ -51,7 +50,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meals", ex);
+                _logger.LogError(ex, "Exception while getting meals");
                 return new UnexpectedResult<IEnumerable<MealDto>>();
             }
         }
@@ -64,7 +63,7 @@ namespace API.Service
 
                 if (meal == null)
                 {
-                    _logger.LogInformation($"Meal with id = {id} was not found!");
+                    _logger.LogInformation("Meal with id= {id} was not found!", id);
                     return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", id.ToString() }));
                 }
 
@@ -73,7 +72,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal with id = {id}", ex);
+                _logger.LogError(ex, "Exception while getting meal with id= {id}", id);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -97,7 +96,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while checking if meal name {mealName} is valid", ex);
+                _logger.LogError(ex, "Exception while checking if meal name {mealName} is valid", mealName);
                 return new UnexpectedResult<bool>();
             }
         }
@@ -133,7 +132,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while adding meal from {meal.DateEaten}", ex);
+                _logger.LogError(ex, "Exception while adding meal from {mealDateEaten}", meal.DateEaten);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -154,7 +153,7 @@ namespace API.Service
 
                 if (mealLogToDelete == null)
                 {
-                    _logger.LogInformation($"Meal with id = {mealLogId} was not found!");
+                    _logger.LogInformation("Meal with id= {mealLogId} was not found!", mealLogId);
                     return new NotFoundResult<MealLogDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "MealLog", mealLogId.ToString() }));
                 }
 
@@ -179,7 +178,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}", ex);
+                _logger.LogError(ex, "Exception while editing meal from {mealDateEaten}", meal.DateEaten);
                 return new UnexpectedResult<MealLogDto>();
             }
         }
@@ -197,7 +196,7 @@ namespace API.Service
 
                 if (productToEdit == null)
                 {
-                    _logger.LogInformation($"Meal with id = {meal.Id} was not found!");
+                    _logger.LogInformation("Meal with id= {mealId} was not found!", meal.Id);
                     return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", meal.Id.ToString() }));
                 }
 
@@ -209,7 +208,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while editing meal from {meal.DateEaten}", ex);
+                _logger.LogError(ex, "Exception while editing meal from {mealDateEaten}", meal.DateEaten);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -224,7 +223,7 @@ namespace API.Service
 
                 if (mealToDelete == null)
                 {
-                    _logger.LogInformation($"Meal with id = {id} was not found!");
+                    _logger.LogInformation("Meal with id= {id} was not found!", id);
                     return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", id.ToString() }));
                 }
                 mealToDelete.IsSaved = false;
@@ -235,7 +234,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while deleting meal with id = {id}", ex);
+                _logger.LogError(ex, "Exception while deleting meal with id= {id}", id);
                 return new UnexpectedResult<MealDto>();
             }
         }
@@ -265,7 +264,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meals", ex);
+                _logger.LogError(ex, "Exception while getting meals");
                 return new UnexpectedResult<IEnumerable<MealDto>>();
             }
         }
@@ -295,7 +294,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while adding meal log", ex);
+                _logger.LogError(ex, "Exception while adding meal log");
                 return new UnexpectedResult<MealLogDto>();
             }
         }
@@ -322,7 +321,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while deleting meal log", ex);
+                _logger.LogError(ex, "Exception while deleting meal log");
                 return new UnexpectedResult<MealLogDto>();
             }
         }
@@ -346,7 +345,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal logs", ex);
+                _logger.LogError(ex, "Exception while getting meal logs");
                 return new UnexpectedResult<IEnumerable<MealLogDto>>();
             }
         }
@@ -369,7 +368,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal logs by date", ex);
+                _logger.LogError(ex, $"Exception while getting meal logs by date");
                 return new UnexpectedResult<IEnumerable<MealLogDto>>();
             }
         }
@@ -393,7 +392,7 @@ namespace API.Service
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting meal log by id", ex);
+                _logger.LogError(ex, "Exception while getting meal log by id");
                 return new UnexpectedResult<MealLogDto>();
             }
         }

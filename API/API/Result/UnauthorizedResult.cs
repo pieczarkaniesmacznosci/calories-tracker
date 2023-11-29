@@ -1,7 +1,6 @@
-using API.Result;
 using System.Collections.Generic;
 
-namespace Web.Result
+namespace API.Result
 {
     public class UnauthorizedResult<T> : Result<T>
     {

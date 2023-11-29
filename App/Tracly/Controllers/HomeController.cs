@@ -1,6 +1,4 @@
-﻿using App.Tracly.Models;
-using App.Tracly.ViewModels;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -12,8 +10,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Tracly.Dtos;
 using Tracly.Extensions;
+using Tracly.Models;
+using Tracly.ViewModels;
 
-namespace App.Tracly.Controllers
+namespace Tracly.Controllers
 {
     [Authorize]
     public class HomeController : Controller
@@ -46,7 +46,7 @@ namespace App.Tracly.Controllers
                 TodayMealLog = new List<MealLogDto>(),
                 UserUntrition = new UserNutritionDto()
             };
-            var mealLog = new List<MealLogDto>();
+
             var getMeals = $"{_apiUrl}/meal/todaysMealLog";
             var getUserNutrition = $"{_apiUrl}/user/nutrition";
             using (var httpClient = new HttpClient())

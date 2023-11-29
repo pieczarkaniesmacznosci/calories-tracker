@@ -3,7 +3,7 @@ using AutoMapper;
 using Data.Entities;
 using System;
 
-namespace API.Web
+namespace API
 {
     public class MappingProfile : Profile
     {

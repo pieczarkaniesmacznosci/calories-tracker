@@ -1,4 +1,3 @@
-using App.Tracly.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,8 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Tracly.Data;
 using Tracly.Dtos;
+using Tracly.Models;
 
-namespace App.Tracly.Controllers
+namespace Tracly.Controllers
 {
     public class AccountController : Controller
     {
@@ -59,7 +59,7 @@ namespace App.Tracly.Controllers
 
                 if (result.Succeeded)
                 {
-                    var content = new StringContent(JsonConvert.SerializeObject(new { Login = model.UserName, Password = model.Password }), Encoding.UTF8, "application/json");
+                    var content = new StringContent(JsonConvert.SerializeObject(new { Login = model.UserName, model.Password }), Encoding.UTF8, "application/json");
 
                     using (var httpClient = new HttpClient())
                     {

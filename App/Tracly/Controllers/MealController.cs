@@ -1,4 +1,3 @@
-using App.Tracly.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,8 +11,9 @@ using System.Threading.Tasks;
 using Tracly.Dtos;
 using Tracly.Extensions;
 using Tracly.Models;
+using Tracly.ViewModels;
 
-namespace App.Tracly.Controllers
+namespace Tracly.Controllers
 {
     [Authorize]
     public class MealController : Controller
@@ -33,21 +33,16 @@ namespace App.Tracly.Controllers
         [HttpGet]
         public IActionResult RedirectToList()
         {
-            var mealsVM = new MealListViewModel()
-            {
-                MealLogs = new List<MealLogDto>(),
-                SavedMeals = new List<MealDto>()
-            };
             return Redirect("List");
         }
 
         [HttpGet]
         public IActionResult List()
         {
-            var mealsVM = new MealListViewModel()
+            MealListViewModel mealsVM = new()
             {
-                MealLogs = new List<MealLogDto>(),
-                SavedMeals = new List<MealDto>()
+                MealLogs = [],
+                SavedMeals = []
             };
             return View("List", mealsVM);
         }
@@ -103,8 +98,10 @@ namespace App.Tracly.Controllers
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response;
-                var builder = new UriBuilder(getByNamePath);
-                builder.Query = $"productName={queryString}";
+                UriBuilder builder = new(getByNamePath)
+                {
+                    Query = $"productName={queryString}"
+                };
                 response = await httpClient.GetAsync(builder.ToString());
 
                 if (response.IsSuccessStatusCode)
@@ -119,41 +116,41 @@ namespace App.Tracly.Controllers
         [HttpPost]
         public IActionResult ProductForMealTable(List<ProductDto> products)
         {
-            products ??= new List<ProductDto>();
+            products ??= [];
             return PartialView("_ProductListForMealTable", products);
         }
 
         public async Task<IActionResult> Details(int? id)
         {
-            _viewModel = new MealViewModel();
-            _viewModel.MealLog = new MealLogDto()
+            _viewModel = new MealViewModel
             {
-                Meal = new MealDto()
+                MealLog = new()
                 {
-                    MealProducts = new List<MealProductDto>()
-                }
+                    Meal = new()
+                    {
+                        MealProducts = []
+                    }
+                },
+                Products = []
             };
-            _viewModel.Products = new List<ProductDto>();
             if (id == null)
             {
                 _viewModel.IsEdit = false;
             }
             else
             {
-                using (var httpClient = new HttpClient())
+                using HttpClient httpClient = new();
+                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+                HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/meal/mealsLog/{id}");
+                if (response.IsSuccessStatusCode)
                 {
-                    httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                    HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/meal/mealsLog/{id}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        _viewModel.MealLog = JsonConvert.DeserializeObject<MealLogDto>(apiResponse);
-                        _viewModel.IsEdit = true;
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    _viewModel.MealLog = JsonConvert.DeserializeObject<MealLogDto>(apiResponse);
+                    _viewModel.IsEdit = true;
+                }
+                else
+                {
+                    return NotFound();
                 }
             }
 
@@ -162,9 +159,9 @@ namespace App.Tracly.Controllers
 
         public async Task<MealDto> MealDto(int id)
         {
-            var meal = new MealDto()
+            MealDto meal = new()
             {
-                MealProducts = new List<MealProductDto>()
+                MealProducts = []
             };
 
             using (var httpClient = new HttpClient())
@@ -192,8 +189,10 @@ namespace App.Tracly.Controllers
                 HttpResponseMessage response;
                 if (!string.IsNullOrWhiteSpace(queryString))
                 {
-                    var builder = new UriBuilder(getByNamePath);
-                    builder.Query = $"mealName={queryString}";
+                    UriBuilder builder = new(getByNamePath)
+                    {
+                        Query = $"mealName={queryString}"
+                    };
                     response = await httpClient.GetAsync(builder.ToString());
                 }
                 else
@@ -214,7 +213,7 @@ namespace App.Tracly.Controllers
         public async Task<bool> ProductNameValid(int productId, string productName)
         {
             bool nameIsValid = false;
-            using (var httpClient = new HttpClient())
+            using (HttpClient httpClient = new())
             {
                 httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
                 HttpResponseMessage response = await httpClient.GetAsync($"{_apiUrl}/product/{productId}/nameValid?productName={productName}");
@@ -226,6 +225,7 @@ namespace App.Tracly.Controllers
             }
             return nameIsValid;
         }
+
         [HttpPost]
         public IActionResult GenerateMealProductListTable(List<MealProductDto> mealProducts)
         {
@@ -237,11 +237,9 @@ namespace App.Tracly.Controllers
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(meal), Encoding.UTF8, "application/json");
 
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/meal", stringContent);
-            }
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+            HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/meal", stringContent);
         }
 
         [HttpPost]
@@ -249,11 +247,9 @@ namespace App.Tracly.Controllers
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(mealLog.Meal), Encoding.UTF8, "application/json");
 
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PutAsync($"{_apiUrl}/mealLog/{mealLog?.Id}/editEaten", stringContent);
-            }
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+            HttpResponseMessage response = await httpClient.PutAsync($"{_apiUrl}/mealLog/{mealLog?.Id}/editEaten", stringContent);
         }
 
         [HttpPost]
@@ -261,33 +257,27 @@ namespace App.Tracly.Controllers
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(mealLog), Encoding.UTF8, "application/json");
 
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/meal/logMeal", stringContent);
-            }
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+            HttpResponseMessage response = await httpClient.PostAsync($"{_apiUrl}/meal/logMeal", stringContent);
         }
 
         [HttpDelete]
         public async void DeleteSavedMeal(int mealId)
         {
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                var builder = new UriBuilder($"{_apiUrl}/meal/{mealId}");
-                HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
-            }
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+            var builder = new UriBuilder($"{_apiUrl}/meal/{mealId}");
+            HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
         }
 
         [HttpDelete]
         public async void DeleteConsumedMeal(int mealLogId)
         {
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
-                var builder = new UriBuilder($"{_apiUrl}/meal/logMeal/{mealLogId}");
-                HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
-            }
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Authorization = Request.AddAuthenticationToken();
+            var builder = new UriBuilder($"{_apiUrl}/meal/logMeal/{mealLogId}");
+            HttpResponseMessage response = await httpClient.DeleteAsync(builder.ToString());
         }
     }
 }

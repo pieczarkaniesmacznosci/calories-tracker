@@ -9,7 +9,7 @@ docker-compose.dbmigrator.yml is created for setting up and seeding SQL database
 3. To create and migrate db `execute docker-compose -f .\docker-compose.dbmigrator.yml up --build`. After execution of all scripts stop containers by `CTRL+C`.
 4. To run API two options are configured:
     a. Running containerized API application and SQL server:
-    -  execute ` docker-compose -f .\docker-compose.api.yml up --build`. This will run API and provide API documentation, which can be accessed from http://localhost:5000.
+    -  execute `docker-compose -f .\docker-compose.api.yml up --build`. This will run API and provide API documentation, which can be accessed from http://localhost:5000.
 
     b. Running local API application and containerized SQL server:
     - execute `docker-compose -f .\docker-compose.db.yml up --build`

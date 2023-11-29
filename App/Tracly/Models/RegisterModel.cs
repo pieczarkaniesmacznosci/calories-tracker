@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Tracly.Models
+namespace Tracly.Models
 {
     public class RegisterModel
     {
