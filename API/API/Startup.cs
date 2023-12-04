@@ -77,15 +77,24 @@ namespace API
 
             services.AddHttpContextAccessor();
 
-            services.AddAuthentication()
-            .AddCookie()
+            services.AddAuthentication(
+                x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
             .AddJwtBearer(cfg =>
                 {
                     cfg.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidIssuer = _configuration["Token:Issuer"],
-                        ValidAudience = _configuration["Token:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TOKEN_KEY"]))
+                        ValidIssuer = _configuration["JwtSettings:Issuer"],
+                        ValidAudience = _configuration["JwtSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TOKEN_KEY"])),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
                     };
                     cfg.Events = new JwtBearerEvents
                     {
@@ -149,14 +158,13 @@ namespace API
                 app.UseExceptionHandler("/error");
             }
 
-            //app.UseHttpsRedirection();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });
 
+            //app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthentication();
