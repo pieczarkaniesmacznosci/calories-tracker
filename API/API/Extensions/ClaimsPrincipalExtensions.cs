@@ -26,12 +26,12 @@ namespace API.Extensions
             }
         }
 
-        public static string GetLoggedInUserName(this ClaimsPrincipal principal)
+        public static string GetLoggedInUserNameIdentifier(this ClaimsPrincipal principal)
         {
             if (principal == null)
                 throw new ArgumentNullException(nameof(principal));
 
-            return principal.FindFirstValue(ClaimTypes.Name);
+            return principal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         public static string GetLoggedInUserEmail(this ClaimsPrincipal principal)

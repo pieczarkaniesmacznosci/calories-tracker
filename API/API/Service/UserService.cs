@@ -27,7 +27,7 @@ namespace API.Service
 
         private async Task<int> GetCurrentUserId()
         {
-            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserNameIdentifier();
             var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
             return currentUserId.Id;
         }
