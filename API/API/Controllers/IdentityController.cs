@@ -66,8 +66,8 @@ namespace API.Controllers
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.Add(_tokenLifetime),
-                Issuer = _config["Token:Issuer"],
-                Audience = _config["Token:Audience"],
+                Issuer = _config["JwtSettings:Issuer"],
+                Audience = _config["JwtSettings:Audience"],
                 SigningCredentials = credentials
             };
 
