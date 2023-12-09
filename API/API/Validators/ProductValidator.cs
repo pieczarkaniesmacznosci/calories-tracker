@@ -1,6 +1,5 @@
 using API.Dtos;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace API.Validators
 {
@@ -21,18 +20,13 @@ namespace API.Validators
                 .InclusiveBetween(0, 100)
                 .WithMessage($"Product contains (0-100 g) of fat!");
             RuleFor(x => x)
-                .Must(ContainAtLeastOneMacronutrient)
+                .Must(ContainsAtLeastOneMacronutrient)
                 .WithMessage($"Product has to contain at least one macro-nutrient!");
         }
 
-        private bool ContainAtLeastOneMacronutrient(ProductDto product)
+        private bool ContainsAtLeastOneMacronutrient(ProductDto product)
         {
             return (product.Protein + product.Carbohydrates + product.Fat) > 0;
         }
-    }
-
-    public interface IProductValidator
-    {
-        ValidationResult Validate(ProductDto product);
     }
 }

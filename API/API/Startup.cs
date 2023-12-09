@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -61,19 +62,21 @@ namespace API
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(GenericAsyncRepository<>));
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IRepository<Meal>, MealRepository>();
             services.AddTransient<IRepository<MealLog>, MealLogRepository>();
             services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
             services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
 
-            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IMealService, MealService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserManager, UserManager>();
 
             services.AddTransient<IProductValidator, ProductValidator>();
             services.AddTransient<IMealValidator, MealValidator>();
+
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             services.AddHttpContextAccessor();
 
@@ -157,6 +160,8 @@ namespace API
             {
                 app.UseExceptionHandler("/error");
             }
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseSwaggerUI(c =>
             {
