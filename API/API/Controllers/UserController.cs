@@ -13,10 +13,10 @@ namespace API.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        private readonly ILogger<MealsController> _logger;
+        private readonly ILogger<MealController> _logger;
         private readonly IUserService _service;
 
-        public UserController(ILogger<MealsController> logger, IUserService service)
+        public UserController(ILogger<MealController> logger, IUserService service)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _service = service;

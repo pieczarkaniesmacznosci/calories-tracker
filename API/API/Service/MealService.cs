@@ -40,104 +40,7 @@ namespace API.Service
             _userManager = userManager;
         }
 
-        public Result<IEnumerable<MealDto>> GetMeals(bool isSaved)
-        {
-            try
-            {
-                var a = _mealRepository.Find(x => x.UserId == _userId && x.IsSaved == isSaved);
-                var result = _mapper.Map<IEnumerable<MealDto>>(a);
-                return new SuccessResult<IEnumerable<MealDto>>(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while getting meals");
-                return new UnexpectedResult<IEnumerable<MealDto>>();
-            }
-        }
-
-        public Result<MealDto> GetMeal(int id)
-        {
-            try
-            {
-                var meal = _mealRepository.Find(x => x.UserId == _userId && x.Id == id).FirstOrDefault();
-
-                if (meal == null)
-                {
-                    _logger.LogInformation("Meal with id= {id} was not found!", id);
-                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", id.ToString() }));
-                }
-
-                var mealDto = _mapper.Map<MealDto>(meal);
-                return new SuccessResult<MealDto>(mealDto);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while getting meal with id= {id}", id);
-                return new UnexpectedResult<MealDto>();
-            }
-        }
-
-        public Result<bool> MealNameValid(int id, string mealName)
-        {
-            try
-            {
-                var meal = _mealRepository
-                    .Find(x => x.Id == _userId && x.MealName == mealName && x.Id != id && x.IsSaved)
-                    .FirstOrDefault();
-
-                if (meal != null)
-                {
-                    return new SuccessResult<bool>(false);
-                }
-                else
-                {
-                    return new SuccessResult<bool>(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while checking if meal name {mealName} is valid", mealName);
-                return new UnexpectedResult<bool>();
-            }
-        }
-
-        public Result<MealDto> AddMeal(MealDto meal)
-        {
-            try
-            {
-                var validationResult = _mealValidator.Validate(meal);
-                if (!validationResult.IsValid)
-                {
-                    return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
-                }
-
-                var mealEntity = _mapper.Map<Meal>(meal);
-                mealEntity.UserId = _userId;
-
-                var result = _mealRepository.Add(mealEntity);
-
-                if (meal.DateEaten != null)
-                {
-                    _mealLogRepository.Add(new MealLog()
-                    {
-                        Meal = result,
-                        DateEaten = meal.DateEaten.Value,
-                        UserId = mealEntity.UserId
-                    });
-                    _mealLogRepository.SaveChanges();
-                }
-
-                _mealRepository.SaveChanges();
-                return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while adding meal from {mealDateEaten}", meal.DateEaten);
-                return new UnexpectedResult<MealDto>();
-            }
-        }
-
-        public Result<MealLogDto> EditEatenMeal(int mealLogId, MealDto meal)
+        public Result<MealLogDto> EditMealLog(int mealLogId, MealDto meal)
         {
             try
             {
@@ -182,36 +85,7 @@ namespace API.Service
                 return new UnexpectedResult<MealLogDto>();
             }
         }
-        public Result<MealDto> EditMeal(MealDto meal)
-        {
-            try
-            {
-                var validationResult = _mealValidator.Validate(meal);
-                if (!validationResult.IsValid)
-                {
-                    return new InvalidResult<MealDto>(validationResult.Errors.FirstOrDefault().ErrorMessage);
-                }
 
-                var productToEdit = _mealRepository.Get(meal.Id.Value);
-
-                if (productToEdit == null)
-                {
-                    _logger.LogInformation("Meal with id= {mealId} was not found!", meal.Id);
-                    return new NotFoundResult<MealDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", meal.Id.ToString() }));
-                }
-
-                var mealEntity = _mapper.Map<Meal>(meal);
-                var result = _mealRepository.Update(mealEntity);
-                _mealRepository.SaveChanges();
-
-                return new SuccessResult<MealDto>(_mapper.Map<MealDto>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while editing meal from {mealDateEaten}", meal.DateEaten);
-                return new UnexpectedResult<MealDto>();
-            }
-        }
 
         public Result<MealDto> DeleteMeal(int id)
         {

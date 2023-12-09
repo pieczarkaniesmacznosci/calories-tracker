@@ -2,7 +2,6 @@
 using Data.Entities;
 using Data.Repositories;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,8 +13,7 @@ namespace API.Mediator.Handlers
     {
         private readonly IAsyncRepository<Product> _productAsyncRepository;
 
-        public DeleteProductCommandHandler(ILogger<DeleteProductCommandHandler> logger,
-            IAsyncRepository<Product> productAsyncRepository)
+        public DeleteProductCommandHandler(IAsyncRepository<Product> productAsyncRepository)
         {
             _productAsyncRepository = productAsyncRepository;
         }

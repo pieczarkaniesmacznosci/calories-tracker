@@ -25,7 +25,7 @@ namespace API.Controllers
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromMinutes(30);
 
         public IdentityController(
-            ILogger<MealsController> logger,
+            ILogger<MealController> logger,
             IConfiguration config,
             UserManager<User> userManager,
             SignInManager<User> signInManager)
