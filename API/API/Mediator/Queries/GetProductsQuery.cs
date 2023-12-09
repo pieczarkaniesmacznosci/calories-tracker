@@ -1,11 +1,11 @@
 ﻿using API.Dtos;
 using MediatR;
+using System.Collections.Generic;
 
 namespace API.Mediator.Queries
 {
-    public class GetProductByIdQuery : IRequest<ProductDto>
+    public class GetProductsQuery : IRequest<IEnumerable<ProductDto>>
     {
-        public int ProductId { get; set; }
         public bool IsUserAdmin { get; set; }
         public int UserId { get; set; }
     }

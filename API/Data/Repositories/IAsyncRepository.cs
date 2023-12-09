@@ -2,7 +2,7 @@
 
 namespace Data.Repositories
 {
-    internal interface IAsyncRepository<T>
+    public interface IAsyncRepository<T>
     {
         Task<T> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
