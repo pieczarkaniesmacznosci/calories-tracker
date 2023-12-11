@@ -1,10 +1,10 @@
 using API.Dtos;
 using API.Identity;
+using API.Mediator.Command;
 using API.Mediator.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,17 +15,13 @@ namespace API.Controllers
     [Authorize]
     public class MealController : ControllerBase
     {
-        private readonly ILogger<MealController> _logger;
         private readonly IUserManager _userManager;
         private readonly IMediator _mediator;
         private int _userId => _userManager.CurrentUserId;
-        private bool _isUserAdmin => _userManager.IsCurrentUserAdmin;
         public MealController(
-            ILogger<MealController> logger,
             IUserManager userManager,
             IMediator mediator)
         {
-            _logger = logger;
             _userManager = userManager;
             _mediator = mediator;
         }
@@ -52,8 +48,8 @@ namespace API.Controllers
         [Route("meals/{mealName}")]
         public async Task<IActionResult> FindProductByName(string mealName)
         {
-            GetMealByIdQuery query = new() { MealId = id, UserId = _userId };
-            MealDto result = await _mediator.Send(query);
+            GetMealsByNameQuery query = new() { MealName = mealName, UserId = _userId };
+            IEnumerable<MealDto> result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -61,27 +57,27 @@ namespace API.Controllers
         [Route("meal")]
         public async Task<IActionResult> CreateMeal(MealDto meal)
         {
-            GetMealByIdQuery query = new() { MealId = id, UserId = _userId };
-            MealDto result = await _mediator.Send(query);
-            return Ok(result);
+            CreateMealCommand command = new() { Meal = meal, UserId = _userId };
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpPut]
         [Route("meal")]
-        public async Task<IActionResult> EditMeal(MealDto meal)
+        public async Task<IActionResult> EditMeal(int mealId, MealDto meal)
         {
-            GetMealByIdQuery query = new() { MealId = id, UserId = _userId };
-            MealDto result = await _mediator.Send(query);
-            return Ok(result);
+            EditMealCommand command = new() { MealId = mealId, Meal = meal, UserId = _userId };
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpDelete]
         [Route("meal/{mealId:int}")]
         public async Task<IActionResult> DeleteMeal(int mealId)
         {
-            GetMealByIdQuery query = new() { MealId = id, UserId = _userId };
-            MealDto result = await _mediator.Send(query);
-            return Ok(result);
+            DeleteMealCommand command = new() { MealId = mealId, UserId = _userId };
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

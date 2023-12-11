@@ -1,7 +1,12 @@
 ﻿using API.Dtos;
+using API.Identity;
+using API.Mediator.Command;
+using API.Mediator.Query;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -11,53 +16,66 @@ namespace API.Controllers
     [Authorize]
     public class MealLogController : ControllerBase
     {
-        [HttpGet]
-        [Route("meal/mealsLog")]
-        public Task<IActionResult> GetMealLog()
+        private readonly IUserManager _userManager;
+        private readonly IMediator _mediator;
+        private int _userId => _userManager.CurrentUserId;
+        public MealLogController(
+            IUserManager userManager,
+            IMediator mediator)
         {
-            return base.FromResult(_service.GetMealLog());
+            _userManager = userManager;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        [Route("meal/mealsLog/{mealLogId:int}")]
-        public Task<IActionResult> GetMealLog(int mealLogId)
+        [Route("mealLogs")]
+        public async Task<IActionResult> GetMealLogs()
         {
-            return base.FromResult(_service.GetMealLog(mealLogId));
+            GetMealLogsQuery query = new() { UserId = _userId };
+            IEnumerable<MealLogDto> result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{mealLogId:int}")]
+        public async Task<IActionResult> GetMealLog(int mealLogId)
+        {
+            GetMealLogByIdQuery query = new() { UserId = _userId, MealLogId = mealLogId };
+            MealLogDto result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{date:dateTime}")]
+        public async Task<IActionResult> GetMealLog(DateTime date)
+        {
+            GetMealLogsByDateQuery query = new() { UserId = _userId, MealLogDate = date };
+            IEnumerable<MealLogDto> result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpPost]
-        [Route("meal/logMeal")]
-        public Task<IActionResult> EatMeal(MealLogDto mealLog)
+        public async Task<IActionResult> CreateMealLog(MealLogDto mealLog)
         {
-            return base.FromResult(_service.AddMealLog(mealLog));
-        }
-
-        [HttpDelete]
-        [Route("meal/logMeal/{mealLogId:int}")]
-        public Task<IActionResult> ThrowUp(int mealLogId)
-        {
-            return base.FromResult(_service.DeleteMealLog(mealLogId));
+            CreateMealLogCommand command = new() { UserId = _userId, MealLog = mealLog };
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpPut]
-        [Route("mealLog/{mealLogId:int}/editEaten")]
-        public Task<IActionResult> EditEatenMeal(int mealLogId, MealDto meal)
+        public async Task<IActionResult> EditMealLog(int mealLogId, MealLogDto mealLog)
         {
-            return base.FromResult(_service.EditMealLog(mealLogId, meal));
+            EditMealLogCommand command = new() { UserId = _userId, MealLogId = mealLogId, MealLog = mealLog };
+            await _mediator.Send(command);
+            return Ok();
         }
 
-        [HttpGet]
-        [Route("meal/mealsLog/{date:dateTime}")]
-        public async Task<IActionResult> GetMealLog(DateTime date)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMealLog(int mealLogId)
         {
-            return base.FromResult(_service.GetMealLog(date));
-        }
-
-        [HttpGet]
-        [Route("meal/todaysMealLog")]
-        public async Task<IActionResult> GetTodaysMealLog()
-        {
-            return base.FromResult(_service.GetMealLog(DateTime.Now.Date));
+            DeleteMealLogCommand command = new() { UserId = _userId, MealLogId = mealLogId };
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

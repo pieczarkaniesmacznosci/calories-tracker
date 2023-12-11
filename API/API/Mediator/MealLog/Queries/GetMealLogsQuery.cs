@@ -1,11 +1,11 @@
 ﻿using API.Dtos;
 using MediatR;
+using System.Collections.Generic;
 
 namespace API.Mediator.Query
 {
-    public class GetMealByIdQuery : IRequest<MealDto>
+    public class GetMealLogsQuery : IRequest<IEnumerable<MealLogDto>>
     {
         public int UserId { get; set; }
-        public int MealId { get; set; }
     }
 }

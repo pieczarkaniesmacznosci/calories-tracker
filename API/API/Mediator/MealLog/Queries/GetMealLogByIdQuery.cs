@@ -3,9 +3,9 @@ using MediatR;
 
 namespace API.Mediator.Query
 {
-    public class GetMealByIdQuery : IRequest<MealDto>
+    public class GetMealLogByIdQuery : IRequest<MealLogDto>
     {
+        public int MealLogId { get; set; }
         public int UserId { get; set; }
-        public int MealId { get; set; }
     }
 }

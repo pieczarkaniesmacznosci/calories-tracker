@@ -8,7 +8,7 @@ namespace Data.DbContexts
 {
     public class CaloriesLibraryContext : IdentityDbContext<User, Role, int>
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
 
         public CaloriesLibraryContext(DbContextOptions<CaloriesLibraryContext> options, IConfiguration configuration) : base(options)
         {
@@ -78,7 +78,7 @@ namespace Data.DbContexts
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            PasswordHasher<User> ph = new PasswordHasher<User>();
+            PasswordHasher<User> ph = new();
             user.PasswordHash = ph.HashPassword(user, _config["AdminPassword"]);
             regularUser.PasswordHash = ph.HashPassword(regularUser, _config["RegularUserPassword"]);
 
@@ -95,7 +95,7 @@ namespace Data.DbContexts
             );
         }
 
-        private void SeedUserWeightTable(ModelBuilder modelBuilder)
+        private static void SeedUserWeightTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserWeight>().HasData(
                 new UserWeight
@@ -108,7 +108,7 @@ namespace Data.DbContexts
             );
         }
 
-        private void SeedUserNutritionTable(ModelBuilder modelBuilder)
+        private static void SeedUserNutritionTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserNutrition>().HasData(
                 new UserNutrition()
@@ -124,7 +124,7 @@ namespace Data.DbContexts
             );
         }
 
-        private void SeedProductTable(ModelBuilder modelBuilder)
+        private static void SeedProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
                 new Product()
@@ -260,13 +260,13 @@ namespace Data.DbContexts
             );
         }
 
-        private void SeedMealTable(ModelBuilder modelBuilder)
+        private static void SeedMealTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().HasData(
                 new Meal()
                 {
                     Id = 1,
-                    // DateEaten = DateTime.Now,
+                    Deleted = true,
                     UserId = 1,
                     MealName = "Initial meal"
                 },
@@ -275,13 +275,12 @@ namespace Data.DbContexts
                     Id = 2,
                     DateEaten = DateTime.Now,
                     UserId = 1,
-                    IsSaved = true,
                     MealName = "Chicken stew"
                 }
             );
         }
 
-        private void SeedMealLogTable(ModelBuilder modelBuilder)
+        private static void SeedMealLogTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealLog>().HasData(
                 new MealLog()
@@ -308,7 +307,7 @@ namespace Data.DbContexts
             );
         }
 
-        private void SeedMealProductTable(ModelBuilder modelBuilder)
+        private static void SeedMealProductTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MealProduct>().HasData(
                 new MealProduct()

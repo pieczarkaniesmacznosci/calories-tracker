@@ -26,7 +26,7 @@ namespace API.Mediator.Handler
 
         public async Task<MealDto> Handle(GetMealByIdQuery request, CancellationToken cancellationToken)
         {
-            var meal = (await _mealAsyncRepository.FindAsync(x => x.UserId == request.UserId && x.Id == request.MealId)).SingleOrDefault();
+            var meal = (await _mealAsyncRepository.FindAsync(x => x.UserId == request.UserId && x.Id == request.MealId && !x.Deleted)).SingleOrDefault();
 
             if (meal == null)
             {

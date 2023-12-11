@@ -30,7 +30,7 @@ namespace API.Mediator.Handler
             {
                 throw new KeyNotFoundException(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Meal", request.MealId.ToString() }));
             }
-            mealToDelete.IsSaved = false;
+            mealToDelete.Deleted = true;
 
             var result = _mealAsyncRepository.UpdateAsync(mealToDelete);
         }

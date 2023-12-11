@@ -23,7 +23,7 @@ namespace API.Mediator.Handler
         }
         public async Task<IEnumerable<MealDto>> Handle(GetMealsQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<IEnumerable<MealDto>>(await _mealAsyncRepository.FindAsync(x => x.UserId == request.UserId && x.IsSaved);
+            return _mapper.Map<IEnumerable<MealDto>>(await _mealAsyncRepository.FindAsync(x => x.UserId == request.UserId && !x.Deleted));
         }
     }
 }
