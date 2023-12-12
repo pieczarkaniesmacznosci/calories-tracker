@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/")]
     [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IUserManager _userManager;
         private readonly IMediator _mediator;
-        private int _userId => _userManager.CurrentUserId;
-        private bool _isUserAdmin => _userManager.IsCurrentUserAdmin;
+        private int UserId => _userManager.CurrentUserId;
+        private bool IsAdmin => _userManager.IsCurrentUserAdmin;
 
         public ProductsController(
             IUserManager userManager,
@@ -29,10 +29,19 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Route("products")]
+        public async Task<IActionResult> GetProducts()
+        {
+            GetProductsQuery query = new() { UserId = UserId, IsUserAdmin = IsAdmin };
+            IEnumerable<ProductDto> result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("product/{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
-            GetProductByIdQuery query = new() { ProductId = id, UserId = _userId, IsUserAdmin = _isUserAdmin };
+            GetProductByIdQuery query = new() { ProductId = id, UserId = UserId, IsUserAdmin = IsAdmin };
             ProductDto result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -41,16 +50,7 @@ namespace API.Controllers
         [Route("products/{name}")]
         public async Task<IActionResult> FindProductsByName(string name)
         {
-            GetProductByNameQuery query = new() { ProductName = name, UserId = _userId, IsUserAdmin = _isUserAdmin };
-            IEnumerable<ProductDto> result = await _mediator.Send(query);
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("products")]
-        public async Task<IActionResult> GetProducts()
-        {
-            GetProductsQuery query = new() { UserId = _userId, IsUserAdmin = _isUserAdmin };
+            GetProductByNameQuery query = new() { ProductName = name, UserId = UserId, IsUserAdmin = IsAdmin };
             IEnumerable<ProductDto> result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -59,7 +59,7 @@ namespace API.Controllers
         [Route("product")]
         public async Task<IActionResult> CreateProduct(ProductDto product)
         {
-            CreateProductCommand command = new() { UserId = _userId, IsUserAdmin = _isUserAdmin, Product = product };
+            CreateProductCommand command = new() { UserId = UserId, IsUserAdmin = IsAdmin, Product = product };
             await _mediator.Send(command);
 
             // TODO: Change to Created response
@@ -70,7 +70,7 @@ namespace API.Controllers
         [Route("product/{id}")]
         public async Task<IActionResult> EditProduct(int id, ProductDto product)
         {
-            EditProductCommand command = new() { UserId = _userId, IsUserAdmin = _isUserAdmin, ProductId = id, Product = product };
+            EditProductCommand command = new() { UserId = UserId, IsUserAdmin = IsAdmin, ProductId = id, Product = product };
             await _mediator.Send(command);
 
             return Ok();
@@ -80,7 +80,7 @@ namespace API.Controllers
         [Route("product/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            DeleteProductCommand command = new() { UserId = _userId, IsUserAdmin = _isUserAdmin, ProductId = id };
+            DeleteProductCommand command = new() { UserId = UserId, IsUserAdmin = IsAdmin, ProductId = id };
             await _mediator.Send(command);
 
             return Ok();

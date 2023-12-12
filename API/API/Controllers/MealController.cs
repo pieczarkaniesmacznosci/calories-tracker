@@ -17,7 +17,7 @@ namespace API.Controllers
     {
         private readonly IUserManager _userManager;
         private readonly IMediator _mediator;
-        private int _userId => _userManager.CurrentUserId;
+        private int UserId => _userManager.CurrentUserId;
         public MealController(
             IUserManager userManager,
             IMediator mediator)
@@ -30,7 +30,7 @@ namespace API.Controllers
         [Route("meals")]
         public async Task<IActionResult> GetMeals()
         {
-            GetMealsQuery query = new() { UserId = _userId };
+            GetMealsQuery query = new() { UserId = UserId };
             IEnumerable<MealDto> result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -39,7 +39,7 @@ namespace API.Controllers
         [Route("meal/{id}")]
         public async Task<IActionResult> GetMeal(int id)
         {
-            GetMealByIdQuery query = new() { MealId = id, UserId = _userId };
+            GetMealByIdQuery query = new() { MealId = id, UserId = UserId };
             MealDto result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -48,7 +48,7 @@ namespace API.Controllers
         [Route("meals/{mealName}")]
         public async Task<IActionResult> FindProductByName(string mealName)
         {
-            GetMealsByNameQuery query = new() { MealName = mealName, UserId = _userId };
+            GetMealsByNameQuery query = new() { MealName = mealName, UserId = UserId };
             IEnumerable<MealDto> result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -57,7 +57,7 @@ namespace API.Controllers
         [Route("meal")]
         public async Task<IActionResult> CreateMeal(MealDto meal)
         {
-            CreateMealCommand command = new() { Meal = meal, UserId = _userId };
+            CreateMealCommand command = new() { Meal = meal, UserId = UserId };
             await _mediator.Send(command);
             return Ok();
         }
@@ -66,7 +66,7 @@ namespace API.Controllers
         [Route("meal")]
         public async Task<IActionResult> EditMeal(int mealId, MealDto meal)
         {
-            EditMealCommand command = new() { MealId = mealId, Meal = meal, UserId = _userId };
+            EditMealCommand command = new() { MealId = mealId, Meal = meal, UserId = UserId };
             await _mediator.Send(command);
             return Ok();
         }
@@ -75,7 +75,7 @@ namespace API.Controllers
         [Route("meal/{mealId:int}")]
         public async Task<IActionResult> DeleteMeal(int mealId)
         {
-            DeleteMealCommand command = new() { MealId = mealId, UserId = _userId };
+            DeleteMealCommand command = new() { MealId = mealId, UserId = UserId };
             await _mediator.Send(command);
             return Ok();
         }

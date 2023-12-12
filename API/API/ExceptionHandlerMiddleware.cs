@@ -43,6 +43,10 @@ namespace API
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         message = ex.Message;
                         break;
+                    case UnauthorizedAccessException:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        message = "Unauthorized";
+                        break;
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         message = "Something went wrong while processing request.";

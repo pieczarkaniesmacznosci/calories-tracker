@@ -1,6 +1,5 @@
 ﻿using API.Dtos;
 using API.Mediator.Query;
-using API.Result.ErrorDefinitions;
 using AutoMapper;
 using Data.Entities;
 using Data.Repositories;

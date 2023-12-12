@@ -1,5 +1,4 @@
 ﻿using API.Mediator.Command;
-using API.Result.ErrorDefinitions;
 using Data.Entities;
 using Data.Repositories;
 using MediatR;

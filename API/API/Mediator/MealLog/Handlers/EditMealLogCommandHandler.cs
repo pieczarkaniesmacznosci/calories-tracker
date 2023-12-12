@@ -1,5 +1,4 @@
 ﻿using API.Mediator.Command;
-using API.Result.ErrorDefinitions;
 using API.Validators;
 using AutoMapper;
 using Data.Entities;

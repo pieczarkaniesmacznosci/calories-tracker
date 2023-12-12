@@ -1,13 +1,7 @@
 using API.Dtos;
-using API.Extensions;
-using API.Result;
-using API.Result.ErrorDefinitions;
 using AutoMapper;
 using Data.Entities;
 using Data.Repositories;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,289 +11,145 @@ namespace API.Service
 {
     public class UserService : IUserService
     {
-        private readonly ILogger<UserService> _logger;
-        private readonly IRepository<UserWeight> _userWeightRepository;
-        private readonly IRepository<UserNutrition> _userNutritionRepository;
+        private readonly IAsyncRepository<UserWeight> _userWeightAsyncRepository;
+        private readonly IAsyncRepository<UserNutrition> _userNutritionAsyncRepository;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<User> _userManager;
-        private int _userId => GetCurrentUserId().Result;
 
-        private async Task<int> GetCurrentUserId()
-        {
-            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserNameIdentifier();
-            var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
-            return currentUserId.Id;
-        }
         public UserService(
-            ILogger<UserService> logger,
-            IRepository<UserWeight> userWeightRepository,
-            IRepository<UserNutrition> userNutritionRepository,
-            IMapper mapper,
-            IHttpContextAccessor httpContextAccessor,
-            UserManager<User> userManager)
+            IAsyncRepository<UserWeight> userWeightAsyncRepository,
+            IAsyncRepository<UserNutrition> userNutritionAsyncRepository,
+            IMapper mapper)
         {
-            _logger = logger;
-            _userWeightRepository = userWeightRepository;
-            _userNutritionRepository = userNutritionRepository;
+            _userWeightAsyncRepository = userWeightAsyncRepository;
+            _userNutritionAsyncRepository = userNutritionAsyncRepository;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
         }
 
-        public Result<UserNutritionDto> AddUserNutrition(UserNutritionDto userNutrition)
+        public async Task<IEnumerable<UserWeightDto>> GetUserWeightsAsync(int userId)
         {
-            try
-            {
-                var userNutritionEntity = _mapper.Map<UserNutrition>(userNutrition);
-                userNutritionEntity.UserId = _userId;
-                var result = _userNutritionRepository.Add(userNutritionEntity);
-                _userNutritionRepository.SaveChanges();
-                return new SuccessResult<UserNutritionDto>(_mapper.Map<UserNutritionDto>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while adding user untrition from {userNutritionDate}", userNutrition.Date);
-                return new UnexpectedResult<UserNutritionDto>();
-            }
+            return _mapper.Map<IEnumerable<UserWeightDto>>(await _userWeightAsyncRepository.FindAsync(x => x.UserId == userId));
         }
 
-
-        public Result<UserWeightDto> AddUserWeight(UserWeightDto userWeight)
+        public async Task<UserWeightDto> GetUserWeightAsync(int userId)
         {
-            try
+            var currentUserWeight = (await _userWeightAsyncRepository
+            .FindAsync(x => x.UserId == userId))
+            .OrderByDescending(x => x.Date)
+            .FirstOrDefault();
+
+            if (currentUserWeight == null)
             {
-                userWeight.UserId = _userId;
-                var userWeightEntity = _mapper.Map<UserWeight>(userWeight);
-                var result = _userWeightRepository.Add(userWeightEntity);
-                _userWeightRepository.SaveChanges();
-                return new SuccessResult<UserWeightDto>(_mapper.Map<UserWeightDto>(result));
+                throw new KeyNotFoundException("Current user weight was not found!");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while adding user untrition from {userWeightDate}", userWeight.Date);
-                return new UnexpectedResult<UserWeightDto>();
-            }
+
+            return _mapper.Map<UserWeightDto>(currentUserWeight);
         }
 
-        public Result<UserNutritionDto> DeleteUserNutrition(UserNutritionDto userNutrition)
+        public async Task<UserWeightDto> GetUserWeightAsync(int userId, DateTime date)
         {
-            try
+            var userWeight = await _userWeightAsyncRepository.FindAsync(x => x.Date.Date == date.Date && x.UserId == userId);
+
+            if (userWeight == null)
             {
-                var userNutritionToDelete = _userNutritionRepository.Find(x => x.UserId == userNutrition.Id && x.UserId == _userId).FirstOrDefault();
-
-                if (userNutritionToDelete == null)
-                {
-                    _logger.LogInformation("User nutrition with id= {userNutritionId} was not found!", userNutrition.Id);
-                    return new NotFoundResult<UserNutritionDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userNutrition.Id.ToString() }));
-                }
-
-                var result = _userNutritionRepository.Delete(userNutritionToDelete);
-                _userNutritionRepository.SaveChanges();
-
-                return new SuccessResult<UserNutritionDto>(_mapper.Map<UserNutritionDto>(result));
+                throw new KeyNotFoundException($"User weight for date= {date} was not found!");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while deleting user nutrition");
-                return new UnexpectedResult<UserNutritionDto>();
-            }
+
+            return _mapper.Map<UserWeightDto>(userWeight);
         }
 
-        public Result<UserWeightDto> DeleteUserWeight(UserWeightDto userWeight)
+        public async Task AddUserWeightAsync(UserWeightDto userWeight)
         {
-            try
-            {
-                var userNutritionToDelete = _userNutritionRepository.Find(x => x.UserId == userWeight.Id && x.UserId == _userId).FirstOrDefault();
-
-                if (userNutritionToDelete == null)
-                {
-                    _logger.LogInformation("User weight with id= {userWeightId} was not found!", userWeight.Id);
-                    return new NotFoundResult<UserWeightDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userWeight.Id.ToString() }));
-                }
-
-                var result = _userNutritionRepository.Delete(userNutritionToDelete);
-                _userNutritionRepository.SaveChanges();
-
-                return new SuccessResult<UserWeightDto>(_mapper.Map<UserWeightDto>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while deleting user weight");
-                return new UnexpectedResult<UserWeightDto>();
-            }
+            var userWeightEntity = _mapper.Map<UserWeight>(userWeight);
+            await _userWeightAsyncRepository.AddAsync(userWeightEntity);
         }
 
-        public Result<UserNutritionDto> EditUserNutrition(UserNutritionDto userNutrition)
+        public async Task EditUserWeightAsync(UserWeightDto userWeight)
         {
-            try
+            var userNutritionToEdit = (await _userWeightAsyncRepository.FindAsync(x => x.UserId == userWeight.Id && x.UserId == userWeight.UserId)).SingleOrDefault();
+
+            if (userNutritionToEdit == null)
             {
-                var userNutritionToEdit = _userNutritionRepository.Find(x => x.UserId == userNutrition.Id && x.UserId == _userId).FirstOrDefault();
-
-                if (userNutritionToEdit == null)
-                {
-                    _logger.LogInformation("User nutrition with id= {userNutritionId} was not found!", userNutrition.Id);
-                    return new NotFoundResult<UserNutritionDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userNutrition.Id.ToString() }));
-                }
-
-                var userNutritionEntity = _mapper.Map<UserNutrition>(userNutritionToEdit);
-                var result = _userNutritionRepository.Update(userNutritionEntity);
-                _userNutritionRepository.SaveChanges();
-
-                return new SuccessResult<UserNutritionDto>(_mapper.Map<UserNutritionDto>(result));
+                throw new KeyNotFoundException(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserWeight", userWeight.Id.ToString() }));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while editing user nutrition with id= {userNutritionId}", userNutrition.Id);
-                return new UnexpectedResult<UserNutritionDto>();
-            }
+
+            var userWeightEntity = _mapper.Map<UserWeight>(userNutritionToEdit);
+            var result = _userWeightAsyncRepository.UpdateAsync(userWeightEntity);
         }
 
-        public Result<UserWeightDto> EditUserWeight(UserWeightDto userWeight)
+        public async Task DeleteUserWeightAsync(int userId, int userWeightId)
         {
-            try
+            var userWeightToDelete = (await _userNutritionAsyncRepository.FindAsync(x => x.Id == userWeightId && x.UserId == userId)).FirstOrDefault();
+
+            if (userWeightToDelete == null)
             {
-                var userNutritionToEdit = _userWeightRepository.Find(x => x.UserId == userWeight.Id && x.UserId == _userId).FirstOrDefault();
-
-                if (userNutritionToEdit == null)
-                {
-                    _logger.LogInformation("User weight with id= {userWeightId} was not found!", userWeight.Id);
-                    return new NotFoundResult<UserWeightDto>(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserWeight", userWeight.Id.ToString() }));
-                }
-
-                var userWeightEntity = _mapper.Map<UserWeight>(userNutritionToEdit);
-                var result = _userWeightRepository.Update(userWeightEntity);
-                _userWeightRepository.SaveChanges();
-
-                return new SuccessResult<UserWeightDto>(_mapper.Map<UserWeightDto>(result));
+                throw new KeyNotFoundException(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserWeight", userWeightId.ToString() }));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while editing user weight with id= {userWeightId}", userWeight.Id);
-                return new UnexpectedResult<UserWeightDto>();
-            }
+
+            await _userNutritionAsyncRepository.DeleteAsync(userWeightToDelete);
         }
 
-        public Result<UserNutritionDto> GetCurrentUserNutrition()
+        public async Task<UserNutritionDto> GetUserCurrentNutritionAsync(int userId)
         {
-            try
-            {
-                var currentUserNutrition = _userNutritionRepository
-                    .Find(x => x.UserId == _userId)
-                    .OrderByDescending(x => x.Date)
-                    .FirstOrDefault();
-
-                if (currentUserNutrition == null)
-                {
-                    _logger.LogInformation($"Current user nutrition was not found!");
-                    return new NotFoundResult<UserNutritionDto>();
-                }
-
-                var result = _mapper.Map<UserNutritionDto>(currentUserNutrition);
-                return new SuccessResult<UserNutritionDto>(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(ex, "Exception while getting meals");
-                return new UnexpectedResult<UserNutritionDto>();
-            }
-        }
-
-        public Result<UserWeightDto> GetCurrentUserWeight()
-        {
-            try
-            {
-                var currentUserWeight = _userWeightRepository
-                .Find(x => x.UserId == _userId)
+            var currentUserNutrition = (await _userNutritionAsyncRepository
+                .FindAsync(x => x.UserId == userId))
                 .OrderByDescending(x => x.Date)
                 .FirstOrDefault();
 
-                if (currentUserWeight == null)
-                {
-                    _logger.LogInformation($"Current user weight was not found!");
-                    return new NotFoundResult<UserWeightDto>();
-                }
-
-                var result = _mapper.Map<UserWeightDto>(currentUserWeight);
-                return new SuccessResult<UserWeightDto>(result);
-            }
-            catch (Exception ex)
+            if (currentUserNutrition == null)
             {
-                _logger.LogError(ex, "Exception while getting meals");
-                return new UnexpectedResult<UserWeightDto>();
+                throw new KeyNotFoundException("Current user nutrition was not found!");
             }
+
+            return _mapper.Map<UserNutritionDto>(currentUserNutrition);
         }
 
-        public Result<UserNutritionDto> GetUserNutrition(DateTime date)
+        public async Task<UserNutritionDto> GetUserNutritionAsync(int userId, DateTime date)
         {
-            try
-            {
-                var userNutrition = _userNutritionRepository.Find(x => x.Date.Date == date.Date && x.UserId == _userId);
+            var userNutrition = await _userNutritionAsyncRepository.FindAsync(x => x.Date.Date == date.Date && x.UserId == userId);
 
-                if (userNutrition == null)
-                {
-                    _logger.LogInformation("User nutrition with date= {date} was not found!", date);
-                    return new NotFoundResult<UserNutritionDto>();
-                }
-
-                var userNutritionDto = _mapper.Map<UserNutritionDto>(userNutrition);
-                return new SuccessResult<UserNutritionDto>(userNutritionDto);
-            }
-            catch (Exception ex)
+            if (userNutrition == null)
             {
-                _logger.LogError(ex, "Exception while getting user nutrition with date= {date}", date);
-                return new UnexpectedResult<UserNutritionDto>();
+                throw new KeyNotFoundException($"User nutrition for date= {date} was not found!");
             }
+
+            return _mapper.Map<UserNutritionDto>(userNutrition);
         }
 
-        public Result<IEnumerable<UserNutritionDto>> GetUserNutritions()
+        public async Task<IEnumerable<UserNutritionDto>> GetUserNutritionsAsync(int userId)
         {
-            try
-            {
-                var result = _mapper.Map<IEnumerable<UserNutritionDto>>(_userNutritionRepository.Find(x => x.UserId == _userId));
-                return new SuccessResult<IEnumerable<UserNutritionDto>>(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(ex, "Exception while getting user nutritions");
-                return new UnexpectedResult<IEnumerable<UserNutritionDto>>();
-            }
+            return _mapper.Map<IEnumerable<UserNutritionDto>>(await _userNutritionAsyncRepository.FindAsync(x => x.UserId == userId));
         }
 
-        public Result<UserWeightDto> GetUserWeight(DateTime date)
+        public async Task AddUserNutritionAsync(int userId, UserNutritionDto userNutrition)
         {
-            try
-            {
-                var userWeight = _userWeightRepository.Find(x => x.Date.Date == date.Date && x.UserId == _userId);
-
-                if (userWeight == null)
-                {
-                    _logger.LogInformation("User weight with date= {date} was not found!", date);
-                    return new NotFoundResult<UserWeightDto>();
-                }
-
-                var userWeightDto = _mapper.Map<UserWeightDto>(userWeight);
-                return new SuccessResult<UserWeightDto>(userWeightDto);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception while getting user weight with date= {date}", date);
-                return new UnexpectedResult<UserWeightDto>();
-            }
+            var userNutritionEntity = _mapper.Map<UserNutrition>(userNutrition);
+            userNutritionEntity.UserId = userId;
+            await _userNutritionAsyncRepository.AddAsync(userNutritionEntity);
         }
 
-        public Result<IEnumerable<UserWeightDto>> GetUserWeights()
+        public async Task EditUserNutritionAsync(int userId, UserNutritionDto userNutrition)
         {
-            try
+            var userNutritionToEdit = (await _userNutritionAsyncRepository.FindAsync(x => x.UserId == userNutrition.Id && x.UserId == userId)).FirstOrDefault();
+
+            if (userNutritionToEdit == null)
             {
-                var result = _mapper.Map<IEnumerable<UserWeightDto>>(_userWeightRepository.Find(x => x.UserId == _userId));
-                return new SuccessResult<IEnumerable<UserWeightDto>>(result);
+                throw new KeyNotFoundException(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userNutrition.Id.ToString() }));
             }
-            catch (Exception ex)
+
+            var userNutritionEntity = _mapper.Map<UserNutrition>(userNutritionToEdit);
+            var result = _userNutritionAsyncRepository.UpdateAsync(userNutritionEntity);
+        }
+
+        public async Task DeleteUserNutritionAsync(int userId, int userNutritionId)
+        {
+            var userNutritionToDelete = (await _userNutritionAsyncRepository.FindAsync(x => x.UserId == userNutritionId && x.UserId == userId)).SingleOrDefault();
+
+            if (userNutritionToDelete == null)
             {
-                _logger.LogError(ex, "Exception while getting user weights");
-                return new UnexpectedResult<IEnumerable<UserWeightDto>>();
+                throw new KeyNotFoundException(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "UserNutrition", userNutritionId.ToString() }));
             }
+
+            await _userNutritionAsyncRepository.DeleteAsync(userNutritionToDelete);
         }
     }
 }
