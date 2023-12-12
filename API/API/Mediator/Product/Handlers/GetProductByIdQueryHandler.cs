@@ -4,6 +4,7 @@ using AutoMapper;
 using Data.Entities;
 using Data.Repositories;
 using MediatR;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,10 @@ namespace API.Mediator.Handlers
             else
             {
                 product = await _productAsyncRepository.GetByIdAsync(request.ProductId);
+            }
+            if (product == null)
+            {
+                throw new KeyNotFoundException(string.Format(ErrorDefinitions.NotFoundEntityWithIdError, new string[] { "Product", request.ProductId.ToString() }));
             }
 
             return _mapper.Map<ProductDto>(product);

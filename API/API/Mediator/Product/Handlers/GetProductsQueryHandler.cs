@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace API.Mediator.Handlers
 {
-    public class GetProductsHandler : IRequestHandler<GetProductsQuery, IEnumerable<ProductDto>>
+    public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, IEnumerable<ProductDto>>
     {
         private readonly IAsyncRepository<Product> _productAsyncRepository;
         private readonly IMapper _mapper;
 
-        public GetProductsHandler(
+        public GetProductsQueryHandler(
             IAsyncRepository<Product> productAsyncRepository,
             IMapper mapper)
         {
