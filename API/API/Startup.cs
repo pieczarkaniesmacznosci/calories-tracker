@@ -63,12 +63,6 @@ namespace API
             services.AddSingleton(mapper);
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(GenericAsyncRepository<>));
-            services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<IRepository<Meal>, MealRepository>();
-            services.AddTransient<IRepository<MealLog>, MealLogRepository>();
-            services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
-            services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
-
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserManager, UserManager>();
 
