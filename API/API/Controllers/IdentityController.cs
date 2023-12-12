@@ -1,10 +1,8 @@
 using API.Dtos;
-using API.Result;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -17,7 +15,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/token")]
-    public class IdentityController : BaseController
+    public class IdentityController : ControllerBase
     {
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
@@ -25,7 +23,6 @@ namespace API.Controllers
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromMinutes(30);
 
         public IdentityController(
-            ILogger<MealsController> logger,
             IConfiguration config,
             UserManager<User> userManager,
             SignInManager<User> signInManager)
@@ -42,14 +39,14 @@ namespace API.Controllers
 
             if (user == null)
             {
-                return FromResult(new UnauthorizedResult<TokenAccessDto>(tokenAccess));
+                throw new UnauthorizedAccessException();
             }
 
             Microsoft.AspNetCore.Identity.SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(user, tokenAccess.Password, false);
 
             if (!signInResult.Succeeded)
             {
-                return FromResult(new UnauthorizedResult<TokenAccessDto>(tokenAccess));
+                throw new UnauthorizedAccessException();
             }
 
             List<Claim> claims = new()
@@ -75,7 +72,7 @@ namespace API.Controllers
 
             var jwt = tokenHandler.WriteToken(token);
 
-            return FromResult(new SuccessResult<string>(jwt));
+            return Ok(jwt);
         }
     }
 }

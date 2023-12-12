@@ -5,7 +5,7 @@ namespace Data.Entities
         public int UserId { get; set; }
         public User User { get; set; }
         public double Weight => MealProducts.Sum(x => x.Weight);
-        public bool IsSaved { get; set; }
+        public bool Deleted { get; set; }
         public string MealName { get; set; }
         public DateTime? DateEaten { get; set; }
         public IEnumerable<MealLog> MealLogs { get; set; }

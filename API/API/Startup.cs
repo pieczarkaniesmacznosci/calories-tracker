@@ -69,7 +69,6 @@ namespace API
             services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
             services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
 
-            services.AddTransient<IMealService, MealService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserManager, UserManager>();
 

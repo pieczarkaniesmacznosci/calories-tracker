@@ -1,111 +1,127 @@
 using API.Dtos;
+using API.Identity;
 using API.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Security.Claims;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/user")]
     [Authorize]
-    public class UserController : BaseController
+    public class UserController : ControllerBase
     {
-        private readonly ILogger<MealsController> _logger;
+        private readonly IUserManager _userManager;
         private readonly IUserService _service;
+        private int UserId => _userManager.CurrentUserId;
 
-        public UserController(ILogger<MealsController> logger, IUserService service)
+        public UserController(
+            IUserManager userManager,
+            IUserService service)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _userManager = userManager;
             _service = service;
         }
 
         [HttpGet]
-        [Route("user/weights")]
-        public IActionResult GetUserWeights()
+        [Route("weights")]
+        public async Task<IActionResult> GetUserWeights()
         {
-            string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            return base.FromResult(_service.GetUserWeights());
+            IEnumerable<UserWeightDto> userWeights = await _service.GetUserWeightsAsync(UserId);
+            return Ok(userWeights);
         }
 
         [HttpGet]
-        [Route("user/weight")]
-        public IActionResult GetCurrentUserWeight()
+        [Route("currentweight")]
+        public async Task<IActionResult> GetUserCurrentWeight()
         {
-            return base.FromResult(_service.GetCurrentUserWeight());
+            UserWeightDto userWeight = await _service.GetUserWeightAsync(UserId);
+            return Ok(userWeight);
         }
 
         [HttpGet]
-        [Route("user/weight/{date}")]
-        public IActionResult GetUserWeight(DateTime date)
+        [Route("weight/{date}")]
+        public async Task<IActionResult> GetUserWeight(DateTime date)
         {
-            return base.FromResult(_service.GetUserWeight(date));
+            UserWeightDto userWeight = await _service.GetUserWeightAsync(UserId, date);
+            return Ok(userWeight);
         }
 
         [HttpPost]
-        [Route("user/weight")]
-        public IActionResult AddUserWeight(UserWeightDto userWeight)
+        [Route("weight")]
+        public async Task<IActionResult> AddUserWeight(UserWeightDto userWeight)
         {
-            return base.FromResult(_service.AddUserWeight(userWeight));
+            userWeight.UserId = UserId;
+            await _service.AddUserWeightAsync(userWeight);
+            return Ok(userWeight);
         }
 
         [HttpPut]
-        [Route("user/weight")]
-        public IActionResult EditUserWeight(UserWeightDto userWeight)
+        [Route("weight")]
+        public async Task<IActionResult> EditUserWeight(UserWeightDto userWeight)
         {
-            return base.FromResult(_service.EditUserWeight(userWeight));
+            userWeight.UserId = UserId;
+            await _service.EditUserWeightAsync(userWeight);
+            return Ok(userWeight);
         }
 
         [HttpDelete]
-        [Route("user/weight")]
-        public IActionResult DeleteUserWeight(UserWeightDto userWeight)
+        [Route("weight")]
+        public async Task<IActionResult> DeleteUserWeight(int userWeightId)
         {
-            return base.FromResult(_service.DeleteUserWeight(userWeight));
+            await _service.DeleteUserWeightAsync(UserId, userWeightId);
+            return Ok();
         }
 
         [HttpGet]
-        [Route("user/nutritions")]
-        public IActionResult GetUserNutritions()
+        [Route("nutritions")]
+        public async Task<IActionResult> GetUserNutritions()
         {
-            return base.FromResult(_service.GetUserNutritions());
+            IEnumerable<UserNutritionDto> result = await _service.GetUserNutritionsAsync(UserId);
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("user/nutrition")]
-        public IActionResult GetCurrentUserNutrition()
+        [Route("currentnutrition")]
+        public async Task<IActionResult> GetUserCurrentNutrition()
         {
-            return base.FromResult(_service.GetCurrentUserNutrition());
+            UserNutritionDto result = await _service.GetUserCurrentNutritionAsync(UserId);
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("user/nutrition/{date}")]
-        public IActionResult GetUserNutrition(DateTime date)
+        [Route("nutrition/{date}")]
+        public async Task<IActionResult> GetUserNutrition(DateTime date)
         {
-            return base.FromResult(_service.GetUserNutrition(date));
+            UserNutritionDto result = await _service.GetUserNutritionAsync(UserId, date);
+            return Ok(result);
         }
 
         [HttpPost]
-        [Route("user/nutrition")]
-        public IActionResult AddUserNutrition(UserNutritionDto userNutrition)
+        [Route("nutrition")]
+        public async Task<IActionResult> AddUserNutrition(UserNutritionDto userNutrition)
         {
-            return base.FromResult(_service.AddUserNutrition(userNutrition));
+            await _service.AddUserNutritionAsync(UserId, userNutrition);
+            return Ok();
         }
 
         [HttpPut]
-        [Route("user/nutrition")]
-        public IActionResult EditUserNutrition(UserNutritionDto userNutrition)
+        [Route("nutrition")]
+        public async Task<IActionResult> EditUserNutrition(UserNutritionDto userNutrition)
         {
-            return base.FromResult(_service.EditUserNutrition(userNutrition));
+            await _service.EditUserNutritionAsync(UserId, userNutrition);
+            return Ok();
         }
 
         [HttpDelete]
-        [Route("user/nutrition")]
-        public IActionResult DeleteUserNutrition(UserNutritionDto userNutrition)
+        [Route("nutrition")]
+        public async Task<IActionResult> DeleteUserNutrition(int userNutritionId)
         {
-            return base.FromResult(_service.DeleteUserNutrition(userNutrition));
+            await _service.DeleteUserNutritionAsync(UserId, userNutritionId);
+            return Ok();
         }
     }
 }
