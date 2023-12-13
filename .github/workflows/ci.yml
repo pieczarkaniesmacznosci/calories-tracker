@@ -3,7 +3,10 @@ name: Build and Test
 on:
   push:
     branches:
-      - actions
+      - develop
+  pull_request:
+    types:
+      - opened
 
 jobs:
   build:
