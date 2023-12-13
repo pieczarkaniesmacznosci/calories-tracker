@@ -7,6 +7,8 @@
 -  [ ] full testing piramid cover
 -  [ ] release strategy
 -  [ ] create WCF and gRPC services
+-  [x] implement mediator
+-  [ ] implement GrapgQL
 
 ## Frontend
 
@@ -25,5 +27,6 @@
 ## Misc
 
 -  [ ] Git hooks
--  [ ] CI/CD
+-  [x] CI (implemented with use of Github Actions)
+-  [ ] /CD
 -  [x] Docker

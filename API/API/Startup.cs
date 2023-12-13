@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -61,31 +62,35 @@ namespace API
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
-            services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<IRepository<Meal>, MealRepository>();
-            services.AddTransient<IRepository<MealLog>, MealLogRepository>();
-            services.AddTransient<IRepository<UserNutrition>, UserNutritionRepository>();
-            services.AddTransient<IRepository<UserWeight>, UserWeightRepository>();
-
-            services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<IMealService, MealService>();
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(GenericAsyncRepository<>));
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserManager, UserManager>();
 
             services.AddTransient<IProductValidator, ProductValidator>();
             services.AddTransient<IMealValidator, MealValidator>();
 
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
             services.AddHttpContextAccessor();
 
-            services.AddAuthentication()
-            .AddCookie()
+            services.AddAuthentication(
+                x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
             .AddJwtBearer(cfg =>
                 {
                     cfg.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidIssuer = _configuration["Token:Issuer"],
-                        ValidAudience = _configuration["Token:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TOKEN_KEY"]))
+                        ValidIssuer = _configuration["JwtSettings:Issuer"],
+                        ValidAudience = _configuration["JwtSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TOKEN_KEY"])),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
                     };
                     cfg.Events = new JwtBearerEvents
                     {
@@ -149,7 +154,7 @@ namespace API
                 app.UseExceptionHandler("/error");
             }
 
-            //app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseSwaggerUI(c =>
             {
@@ -157,6 +162,7 @@ namespace API
                 c.RoutePrefix = string.Empty;
             });
 
+            //app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthentication();

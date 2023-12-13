@@ -23,7 +23,7 @@ namespace API.Identity
 
         private async Task<int> GetCurrentUserId()
         {
-            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
+            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserNameIdentifier();
             var currentUserId = await _userManager.FindByNameAsync(loggedInUserName);
 
             return currentUserId.Id;
@@ -31,8 +31,8 @@ namespace API.Identity
 
         private async Task<bool> IsCurrentUserAdminRole()
         {
-            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserName();
-            var user = _userManager.FindByNameAsync(loggedInUserName).Result;
+            var loggedInUserName = _httpContextAccessor.HttpContext.User.GetLoggedInUserNameIdentifier();
+            var user = await _userManager.FindByNameAsync(loggedInUserName);
             var loggedInUserRole = await _userManager.IsInRoleAsync(user, "Admin");
 
             return loggedInUserRole;

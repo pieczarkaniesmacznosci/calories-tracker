@@ -33,11 +33,10 @@ namespace Data.Migrations
                     b.Property<DateTime?>("DateEaten")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsSaved")
+                    b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("MealName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
@@ -53,15 +52,15 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsSaved = false,
+                            Deleted = true,
                             MealName = "Initial meal",
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            DateEaten = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5913),
-                            IsSaved = true,
+                            DateEaten = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5788),
+                            Deleted = false,
                             MealName = "Chicken stew",
                             UserId = 1
                         });
@@ -96,21 +95,21 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateEaten = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5925),
+                            DateEaten = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5802),
                             MealId = 1,
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            DateEaten = new DateTime(2023, 11, 26, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5927),
+                            DateEaten = new DateTime(2023, 12, 10, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5804),
                             MealId = 1,
                             UserId = 1
                         },
                         new
                         {
                             Id = 3,
-                            DateEaten = new DateTime(2023, 11, 25, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5928),
+                            DateEaten = new DateTime(2023, 12, 9, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5806),
                             MealId = 2,
                             UserId = 1
                         });
@@ -213,7 +212,6 @@ namespace Data.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Protein")
@@ -233,7 +231,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             Carbohydrates = 0.0,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5846),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5722),
                             Fat = 3.0,
                             IsAvailable = true,
                             IsDefault = true,
@@ -246,7 +244,7 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             Carbohydrates = 76.599999999999994,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5881),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5757),
                             Fat = 0.69999999999999996,
                             IsAvailable = true,
                             IsDefault = true,
@@ -259,7 +257,7 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             Carbohydrates = 51.100000000000001,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5883),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5759),
                             Fat = 38.399999999999999,
                             IsAvailable = true,
                             IsDefault = true,
@@ -272,7 +270,7 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             Carbohydrates = 52.5,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5884),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5761),
                             Fat = 1.3,
                             IsAvailable = true,
                             IsDefault = true,
@@ -285,7 +283,7 @@ namespace Data.Migrations
                         {
                             Id = 5,
                             Carbohydrates = 20.0,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5886),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5762),
                             Fat = 0.90000000000000002,
                             IsAvailable = true,
                             IsDefault = true,
@@ -298,7 +296,7 @@ namespace Data.Migrations
                         {
                             Id = 6,
                             Carbohydrates = 0.10000000000000001,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5887),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5764),
                             Fat = 20.699999999999999,
                             IsAvailable = true,
                             IsDefault = true,
@@ -311,7 +309,7 @@ namespace Data.Migrations
                         {
                             Id = 7,
                             Carbohydrates = 4.4000000000000004,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5889),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5765),
                             Fat = 0.5,
                             IsAvailable = true,
                             IsDefault = true,
@@ -324,7 +322,7 @@ namespace Data.Migrations
                         {
                             Id = 8,
                             Carbohydrates = 4.7000000000000002,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5891),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5767),
                             Fat = 0.40000000000000002,
                             IsAvailable = false,
                             IsDefault = true,
@@ -337,7 +335,7 @@ namespace Data.Migrations
                         {
                             Id = 9,
                             Carbohydrates = 0.0,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5893),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5768),
                             Fat = 2.2999999999999998,
                             IsAvailable = true,
                             IsDefault = true,
@@ -350,7 +348,7 @@ namespace Data.Migrations
                         {
                             Id = 10,
                             Carbohydrates = 0.0,
-                            DateAdded = new DateTime(2023, 11, 27, 22, 32, 2, 117, DateTimeKind.Local).AddTicks(5895),
+                            DateAdded = new DateTime(2023, 12, 11, 23, 9, 50, 614, DateTimeKind.Local).AddTicks(5770),
                             Fat = 3.0,
                             IsAvailable = true,
                             IsDefault = false,
@@ -374,7 +372,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -398,7 +395,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0e501356-d541-4046-a68b-4b69e54efdd6",
+                            ConcurrencyStamp = "c94d2952-4ee8-42dc-9ba1-a9830660a9eb",
                             Description = "Administration role",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -406,7 +403,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "fa4c858e-43fe-44cc-b839-7ed95380cc4d",
+                            ConcurrencyStamp = "556bd23b-a44f-46c2-a35c-940b667bcb9e",
                             Description = "User role",
                             Name = "User",
                             NormalizedName = "USER"
@@ -436,11 +433,9 @@ namespace Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -493,16 +488,16 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9704633c-83f1-445c-a121-64172c1cdfd5",
+                            ConcurrencyStamp = "838a721f-d0d7-4f1d-b829-c15038202980",
                             Email = "admin@tracly.com",
                             EmailConfirmed = false,
                             FirstName = "Mike",
                             LastName = "Smith",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN@TRACLY.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOlRiDLN/J1Lxjp+MZhw2P3yID9I6YJUFCe+GZiaXFh203QZ/i9rjT7ZtDLATYARqg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENMmuLCkiG4fCv81QGc46Yfs2QmwiwY6CqDLZGNsKd50m44ZjbxbRywCD3eazqrx0A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "20d35364-f1e9-482e-b431-159a120d6362",
+                            SecurityStamp = "028b0f6e-7669-4a6f-be51-206d65383b18",
                             TwoFactorEnabled = false,
                             UserName = "admin@tracly.com"
                         },
@@ -510,16 +505,16 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "45fde987-15bc-4ee4-a5e4-44946260923a",
+                            ConcurrencyStamp = "c11f4dad-e50e-4f2c-b5db-1ac5e1fbaf04",
                             Email = "user@tracly.com",
                             EmailConfirmed = false,
                             FirstName = "Dave",
                             LastName = "Murray",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER@TRACLY.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEtb3P8WGbjT6+h/NF2LFyCg+o7Bj7jbuTQc0xCbgYpzLJVBw0FxdN/6zGPBj0ht9A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKc1ZzlDK2sVZUOV9AvApXPVgJLR/RH7CBHtqHStmtUGd19UM73Y22nmR6UnLTbzIQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c9806488-96b8-4245-95f2-23a196e32de4",
+                            SecurityStamp = "1b7172e6-7ab6-4989-bc23-8f36780451e4",
                             TwoFactorEnabled = false,
                             UserName = "user@tracly.com"
                         });
