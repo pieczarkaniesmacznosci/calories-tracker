@@ -27,5 +27,6 @@
 ## Misc
 
 -  [ ] Git hooks
--  [ ] CI/CD
+-  [x] CI (implemented with use of Github Actions)
+-  [ ] /CD
 -  [x] Docker
