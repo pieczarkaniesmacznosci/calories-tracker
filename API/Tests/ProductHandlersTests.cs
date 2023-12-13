@@ -145,14 +145,13 @@ namespace Tests
         }
 
         [Test]
-        public async Task GetProductByIdQueryHandler_WhenInvalidIdUserHasAdminRole_ReturnsNotFoundResult()
+        public void GetProductByIdQueryHandler_WhenInvalidIdUserHasAdminRole_ReturnsNotFoundResult()
         {
             int productId = It.IsAny<int>();
             int userId = 1;
             bool isUserAdmin = true;
 
             _productRepository.Setup(x => x.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult((Product)null));
-
 
             GetProductByIdQueryHandler getProductByIdQueryHandler = new(
                 _productRepository.Object,
