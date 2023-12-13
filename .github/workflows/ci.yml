@@ -19,10 +19,10 @@ jobs:
         dotnet-version: '6.0'  # Change this to your desired .NET Core version
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore .\API\API.sln
 
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build .\API\API.sln --configuration Release
 
     - name: Test
-      run: dotnet test --configuration Release --no-build
+      run: dotnet test .\API\API.sln --configuration Release --no-build
