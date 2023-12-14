@@ -3,12 +3,13 @@
 ## Backend
 
 -  [ ] OAuth
--  [ ] possible MFA
+-  [ ] MFA
 -  [ ] full testing piramid cover
 -  [ ] release strategy
--  [ ] create WCF and gRPC services
+-  [ ] message broker
+-  [ ] create gRPC service
 -  [x] implement mediator
--  [ ] implement GrapgQL
+-  [ ] implement GraphQL
 
 ## Frontend
 
@@ -26,7 +27,6 @@
 
 ## Misc
 
--  [ ] Git hooks
 -  [x] CI (implemented with use of Github Actions)
 -  [ ] /CD
 -  [x] Docker
