@@ -1,5 +1,4 @@
-﻿using Data.DbContexts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +18,7 @@ namespace DbMigrator
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddDbContext<CaloriesLibraryContext>(options =>
+                    services.AddDbContext<TraclyDbContext>(options =>
                     {
                         var rawConnectionString = new StringBuilder(context.Configuration.GetConnectionString("SqlServer"));
                         var connectionString = rawConnectionString

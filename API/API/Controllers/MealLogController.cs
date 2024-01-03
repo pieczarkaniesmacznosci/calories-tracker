@@ -1,5 +1,4 @@
 ﻿using API.Dtos;
-using API.Identity;
 using API.Mediator.Command;
 using API.Mediator.Query;
 using MediatR;
@@ -16,14 +15,10 @@ namespace API.Controllers
     [Authorize]
     public class MealLogController : ControllerBase
     {
-        private readonly IUserManager _userManager;
         private readonly IMediator _mediator;
-        private int UserId => _userManager.CurrentUserId;
         public MealLogController(
-            IUserManager userManager,
             IMediator mediator)
         {
-            _userManager = userManager;
             _mediator = mediator;
         }
 
@@ -31,7 +26,7 @@ namespace API.Controllers
         [Route("mealLogs")]
         public async Task<IActionResult> GetMealLogs()
         {
-            GetMealLogsQuery query = new() { UserId = UserId };
+            GetMealLogsQuery query = new() { UserId = 1 };
             IEnumerable<MealLogDto> result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -40,7 +35,7 @@ namespace API.Controllers
         [Route("{mealLogId:int}")]
         public async Task<IActionResult> GetMealLog(int mealLogId)
         {
-            GetMealLogByIdQuery query = new() { UserId = UserId, MealLogId = mealLogId };
+            GetMealLogByIdQuery query = new() { UserId = 1, MealLogId = mealLogId };
             MealLogDto result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -49,7 +44,7 @@ namespace API.Controllers
         [Route("{date:dateTime}")]
         public async Task<IActionResult> GetMealLog(DateTime date)
         {
-            GetMealLogsByDateQuery query = new() { UserId = UserId, MealLogDate = date };
+            GetMealLogsByDateQuery query = new() { UserId = 1, MealLogDate = date };
             IEnumerable<MealLogDto> result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -57,7 +52,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMealLog(MealLogDto mealLog)
         {
-            CreateMealLogCommand command = new() { UserId = UserId, MealLog = mealLog };
+            CreateMealLogCommand command = new() { UserId = 1, MealLog = mealLog };
             await _mediator.Send(command);
             return Ok();
         }
@@ -65,7 +60,7 @@ namespace API.Controllers
         [HttpPut]
         public async Task<IActionResult> EditMealLog(int mealLogId, MealLogDto mealLog)
         {
-            EditMealLogCommand command = new() { UserId = UserId, MealLogId = mealLogId, MealLog = mealLog };
+            EditMealLogCommand command = new() { UserId = 1, MealLogId = mealLogId, MealLog = mealLog };
             await _mediator.Send(command);
             return Ok();
         }
@@ -73,7 +68,7 @@ namespace API.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteMealLog(int mealLogId)
         {
-            DeleteMealLogCommand command = new() { UserId = UserId, MealLogId = mealLogId };
+            DeleteMealLogCommand command = new() { UserId = 1, MealLogId = mealLogId };
             await _mediator.Send(command);
             return Ok();
         }

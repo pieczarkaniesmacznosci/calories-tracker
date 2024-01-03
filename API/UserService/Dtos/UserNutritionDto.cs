@@ -1,8 +1,8 @@
-namespace Data.Entities
+namespace UserService.Dtos
 {
-    public class UserNutrition : Entity
+    public class UserNutritionDto
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
         public double Kcal { get; set; }
         public double Protein { get; set; }
         public double Carbohydrates { get; set; }

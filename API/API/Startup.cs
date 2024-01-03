@@ -1,23 +1,18 @@
-using API.Identity;
-using API.Service;
 using API.Validators;
 using AutoMapper;
-using Data.DbContexts;
-using Data.Entities;
 using Data.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DbContexts;
+using JwtAuthenticationManager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace API
 {
@@ -33,14 +28,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<User, Role>(cfg =>
-            {
-                cfg.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<CaloriesLibraryContext>();
-
             services.AddControllers();
+            services.AddCustomJwtAuthentication();
 
-            services.AddDbContext<CaloriesLibraryContext>(options =>
+            services.AddDbContext<TraclyDbContext>(options =>
             {
                 string connectionStingName = "SqlServer";
                 if (_configuration["TRACLY_PROFILE"] == "Local")
@@ -63,8 +54,6 @@ namespace API
             services.AddSingleton(mapper);
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(GenericAsyncRepository<>));
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IUserManager, UserManager>();
 
             services.AddTransient<IProductValidator, ProductValidator>();
             services.AddTransient<IMealValidator, MealValidator>();
@@ -73,35 +62,6 @@ namespace API
 
             services.AddHttpContextAccessor();
 
-            services.AddAuthentication(
-                x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-            .AddJwtBearer(cfg =>
-                {
-                    cfg.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidIssuer = _configuration["JwtSettings:Issuer"],
-                        ValidAudience = _configuration["JwtSettings:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TOKEN_KEY"])),
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true
-                    };
-                    cfg.Events = new JwtBearerEvents
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            context.Token = context.Request.Cookies["X-Access-Token"];
-                            return Task.CompletedTask;
-                        },
-                    };
-                }
-            );
             services.AddAuthorization();
 
             services.AddSwaggerGen(

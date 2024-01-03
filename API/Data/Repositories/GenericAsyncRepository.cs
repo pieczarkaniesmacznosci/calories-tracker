@@ -1,14 +1,13 @@
-﻿using Data.DbContexts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Data.Repositories
 {
     public class GenericAsyncRepository<T> : IAsyncRepository<T> where T : class
     {
-        private readonly CaloriesLibraryContext _dbContext;
+        private readonly DbContext _dbContext;
 
-        public GenericAsyncRepository(CaloriesLibraryContext dbContext)
+        public GenericAsyncRepository(DbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }

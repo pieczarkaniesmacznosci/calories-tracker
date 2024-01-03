@@ -30,11 +30,11 @@ namespace API
             CreateMap<MealProduct, MealProductDto>()
             .ReverseMap();
 
-            CreateMap<UserNutrition, UserNutritionDto>()
-            .ReverseMap();
+            //CreateMap<UserNutrition, UserNutritionDto>()
+            //.ReverseMap();
 
-            CreateMap<UserWeight, UserWeightDto>()
-            .ReverseMap();
+            //CreateMap<UserWeight, UserWeightDto>()
+            //.ReverseMap();
         }
     }
 

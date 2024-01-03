@@ -1,8 +1,8 @@
 ﻿using API.Dtos;
 using API.Mediator.Queries;
 using AutoMapper;
-using Data.Entities;
 using Data.Repositories;
+using Entities;
 using MediatR;
 using System.Collections.Generic;
 using System.Threading;
