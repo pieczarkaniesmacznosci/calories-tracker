@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Web": {
+    "TraclyAPI": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

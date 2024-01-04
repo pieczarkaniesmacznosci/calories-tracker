@@ -9,14 +9,15 @@
     }
   },
   "profiles": {
-    "UserService": {
+    "UserAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5052",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TRACLY_PROFILE": "Local"
       }
     },
     "IIS Express": {

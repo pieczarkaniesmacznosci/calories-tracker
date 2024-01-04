@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "http": {
+    "AuthenticationAPI": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

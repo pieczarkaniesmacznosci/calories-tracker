@@ -68,7 +68,7 @@ namespace Tests
 
             var result = await getProductsQueryHandler.Handle(new GetProductsQuery(), CancellationToken.None);
 
-            Assert.AreEqual(3, result.Count());
+            Assert.That(3, Is.EqualTo(result.Count()));
         }
 
         [Test]
@@ -105,8 +105,8 @@ namespace Tests
 
             ProductDto result = await getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { IsUserAdmin = isUserAdmin, UserId = userId, ProductId = productId }, CancellationToken.None);
 
-            Assert.AreEqual(4, result.Id);
-            Assert.AreEqual(productName, result.Name);
+            Assert.That(4, Is.EqualTo(result.Id));
+            Assert.That(productName, Is.EqualTo(result.Name));
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace Tests
 
             var result = await getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { UserId = userId, IsUserAdmin = true, ProductId = productId }, CancellationToken.None);
 
-            Assert.AreEqual(productName, result.Name);
+            Assert.That(productName, Is.EqualTo(result.Name));
         }
 
         [Test]
