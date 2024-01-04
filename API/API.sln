@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{0E432106-E695-44E2-9180-448470A878F3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtAuthenticationManager", "JwtAuthenticationManager\JwtAuthenticationManager.csproj", "{6D56A91F-2277-40B2-8A01-07BDD66A4C18}"
@@ -12,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationAPI", "AuthenticationAPI\AuthenticationAPI.csproj", "{FF0D7E2C-67DC-4FC0-AAC4-893B80E378FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAPI", "UserAPI\UserAPI.csproj", "{AEC0C526-78ED-4269-805F-C9FDED44F8C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaloriesAPI", "CaloriesAPI\CaloriesAPI.csproj", "{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,18 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Debug|x64.Build.0 = Debug|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Debug|x86.Build.0 = Debug|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Release|x64.ActiveCfg = Release|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Release|x64.Build.0 = Release|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Release|x86.ActiveCfg = Release|Any CPU
-		{DE2F7537-4A65-4A61-AB22-AF3B8C523A58}.Release|x86.Build.0 = Release|Any CPU
 		{0E432106-E695-44E2-9180-448470A878F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E432106-E695-44E2-9180-448470A878F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E432106-E695-44E2-9180-448470A878F3}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -83,6 +71,18 @@ Global
 		{AEC0C526-78ED-4269-805F-C9FDED44F8C2}.Release|x64.Build.0 = Release|Any CPU
 		{AEC0C526-78ED-4269-805F-C9FDED44F8C2}.Release|x86.ActiveCfg = Release|Any CPU
 		{AEC0C526-78ED-4269-805F-C9FDED44F8C2}.Release|x86.Build.0 = Release|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Debug|x64.Build.0 = Debug|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Debug|x86.Build.0 = Debug|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Release|x64.ActiveCfg = Release|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Release|x64.Build.0 = Release|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Release|x86.ActiveCfg = Release|Any CPU
+		{BAD61B0B-8E13-4D95-BCB2-B56D8426BFCA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

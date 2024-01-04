@@ -1,7 +1,7 @@
-using API.Dtos;
-using API.Mediator.Handlers;
-using API.Mediator.Queries;
 using AutoMapper;
+using CaloriesAPI.Dtos;
+using CaloriesAPI.Mediator.Handlers;
+using CaloriesAPI.Mediator.Queries;
 using Entities;
 using Moq;
 using NUnit.Framework;

@@ -8,7 +8,7 @@
         "TRACLY_PROFILE": "Local"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5199"
+      "applicationUrl": "http://localhost:5001"
     },
     "IIS Express": {
       "commandName": "IISExpress",
