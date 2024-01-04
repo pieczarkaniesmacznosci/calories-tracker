@@ -1,6 +1,6 @@
 using API.Dtos;
 using AutoMapper;
-using Data.Entities;
+using Entities;
 using System;
 
 namespace API

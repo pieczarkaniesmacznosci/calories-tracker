@@ -1,14 +1,11 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 
 namespace DbContexts
 {
     public class TraclyDbContext : DbContext
     {
-        private readonly IConfiguration _config;
-
         public TraclyDbContext(DbContextOptions<TraclyDbContext> options) : base(options)
         {
         }

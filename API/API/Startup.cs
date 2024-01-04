@@ -1,6 +1,5 @@
 using API.Validators;
 using AutoMapper;
-using Data.Repositories;
 using DbContexts;
 using JwtAuthenticationManager;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Repositories;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;

@@ -1,4 +1,4 @@
-namespace Data.Entities
+namespace Entities
 {
     public class UserWeight : Entity
     {

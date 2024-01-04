@@ -1,8 +1,8 @@
 ﻿using API.Mediator.Command;
 using API.Mediator.Query;
-using Data.Entities;
-using Data.Repositories;
+using Entities;
 using MediatR;
+using Repositories;
 using System.Threading;
 using System.Threading.Tasks;
 

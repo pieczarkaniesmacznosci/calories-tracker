@@ -1,9 +1,9 @@
 ﻿using API.Mediator.Commands;
 using API.Validators;
 using AutoMapper;
-using Data.Entities;
-using Data.Repositories;
+using Entities;
 using MediatR;
+using Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

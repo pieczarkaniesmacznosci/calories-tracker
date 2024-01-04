@@ -1,12 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 
-namespace UserService
+namespace UserAPI.DbContexts
 {
-    public class DbContext
+    public class UserDbContext
     {
         private readonly string _connectionString;
 
-        public DbContext(string connectionString)
+        public UserDbContext(string connectionString)
         {
             _connectionString = connectionString;
         }
