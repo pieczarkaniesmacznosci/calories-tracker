@@ -25,7 +25,8 @@ namespace CaloriesAPI.Mediator.Handlers
 
         public async Task<IEnumerable<ProductDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
         {
-            var result = _mapper.Map<IEnumerable<ProductDto>>(await _productAsyncRepository.FindAsync(x => (x.UserId == request.UserId || x.IsDefault == true) && x.IsAvailable));
+            var a = await _productAsyncRepository.FindAsync(x => (x.UserId == request.UserId || x.IsDefault == true) && x.IsAvailable);
+            var result = _mapper.Map<IEnumerable<ProductDto>>(a);
             return result;
         }
     }

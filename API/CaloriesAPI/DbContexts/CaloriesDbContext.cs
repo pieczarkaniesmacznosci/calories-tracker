@@ -4,9 +4,9 @@ using System;
 
 namespace DbContexts
 {
-    public class TraclyDbContext : DbContext
+    public class CaloriesDbContext : DbContext
     {
-        public TraclyDbContext(DbContextOptions<TraclyDbContext> options) : base(options)
+        public CaloriesDbContext(DbContextOptions<CaloriesDbContext> options) : base(options)
         {
         }
 
