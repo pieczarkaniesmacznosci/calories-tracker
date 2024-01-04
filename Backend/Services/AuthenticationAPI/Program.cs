@@ -1,5 +1,4 @@
 using AuthenticationAPI.Data;
-using AuthenticationAPI.Identity;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -34,7 +33,6 @@ namespace AuthenticationAPI
                 options.UseSqlServer(connectionString);
             });
 
-            builder.Services.AddTransient<IUserManager, UserManager>();
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddControllers();
 

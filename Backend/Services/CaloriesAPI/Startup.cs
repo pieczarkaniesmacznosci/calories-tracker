@@ -83,7 +83,6 @@ namespace API
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            //app.UseHttpsRedirection();
             app.UseRouting();
             ApplyMigration(app);
             app.UseAuthentication();
@@ -97,14 +96,12 @@ namespace API
 
         static void ApplyMigration(IApplicationBuilder app)
         {
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var _db = scope.ServiceProvider.GetRequiredService<CaloriesDbContext>();
+            using var scope = app.ApplicationServices.CreateScope();
+            var _db = scope.ServiceProvider.GetRequiredService<CaloriesDbContext>();
 
-                if (_db.Database.GetPendingMigrations().Count() > 0)
-                {
-                    _db.Database.Migrate();
-                }
+            if (_db.Database.GetPendingMigrations().Any())
+            {
+                _db.Database.Migrate();
             }
         }
     }

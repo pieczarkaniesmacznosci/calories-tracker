@@ -1,17 +1,43 @@
 using JwtAuthenticationManager;
+using Microsoft.EntityFrameworkCore;
+using System.Text;
+using UserAPI.DbContexts;
 using UserService.Endpoints;
 using UserService.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton(serviceProvider =>
 {
-    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var connectionString = configuration.GetConnectionString("SQL");
+    var configuration = builder.Configuration;
+    string connectionStingName = "SqlServer";
+    if (builder.Configuration["TRACLY_PROFILE"] == "Local")
+        connectionStingName = "SqlServerLocal";
+
+    var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));
+    var connectionString = rawConnectionString
+        .Replace("ENVID", builder.Configuration["DB_UID"])
+        .Replace("ENVDBPW", builder.Configuration["DB_PW"])
+        .ToString();
     return new SqlConnectionFactory(connectionString);
 });
+
+builder.Services.AddDbContext<UserDbContext>(options =>
+{
+    string connectionStingName = "SqlServer";
+    if (builder.Configuration["TRACLY_PROFILE"] == "Local")
+        connectionStingName = "SqlServerLocal";
+
+    var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));
+    var connectionString = rawConnectionString
+        .Replace("ENVID", builder.Configuration["DB_UID"])
+        .Replace("ENVDBPW", builder.Configuration["DB_PW"])
+        .ToString();
+    options.UseSqlServer(connectionString);
+});
+
+
 builder.Services.AddCustomJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerGenWithBearerToken();
 builder.Services.AddAuthorization();
@@ -27,6 +53,17 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapUserEndpoints(app.Services);
-
+app.MapUserEndpoints();
+ApplyMigration(app);
 app.Run();
+
+static void ApplyMigration(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var _db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+
+    if (_db.Database.GetPendingMigrations().Any())
+    {
+        _db.Database.Migrate();
+    }
+}

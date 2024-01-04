@@ -1,3 +1,4 @@
+using AuthenticationAPI.Extensions;
 using CaloriesAPI.Dtos;
 using CaloriesAPI.Mediator.Command;
 using CaloriesAPI.Mediator.Query;
@@ -15,6 +16,7 @@ namespace CaloriesAPI.Controllers
     public class MealController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private int _userId => Request.HttpContext.User.GetLoggedInUserSub();
         public MealController(
             IMediator mediator)
         {
@@ -25,7 +27,7 @@ namespace CaloriesAPI.Controllers
         [Route("meals")]
         public async Task<IActionResult> GetMeals()
         {
-            GetMealsQuery query = new() { UserId = 1 };
+            GetMealsQuery query = new() { UserId = _userId };
             IEnumerable<MealDto> result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -34,7 +36,7 @@ namespace CaloriesAPI.Controllers
         [Route("meal/{id}")]
         public async Task<IActionResult> GetMeal(int id)
         {
-            GetMealByIdQuery query = new() { MealId = id, UserId = 1 };
+            GetMealByIdQuery query = new() { MealId = id, UserId = _userId };
             MealDto result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -43,7 +45,7 @@ namespace CaloriesAPI.Controllers
         [Route("meals/{mealName}")]
         public async Task<IActionResult> FindProductByName(string mealName)
         {
-            GetMealsByNameQuery query = new() { MealName = mealName, UserId = 1 };
+            GetMealsByNameQuery query = new() { MealName = mealName, UserId = _userId };
             IEnumerable<MealDto> result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -52,7 +54,7 @@ namespace CaloriesAPI.Controllers
         [Route("meal")]
         public async Task<IActionResult> CreateMeal(MealDto meal)
         {
-            CreateMealCommand command = new() { Meal = meal, UserId = 1 };
+            CreateMealCommand command = new() { Meal = meal, UserId = _userId };
             await _mediator.Send(command);
             return Ok();
         }
@@ -61,7 +63,7 @@ namespace CaloriesAPI.Controllers
         [Route("meal")]
         public async Task<IActionResult> EditMeal(int mealId, MealDto meal)
         {
-            EditMealCommand command = new() { MealId = mealId, Meal = meal, UserId = 1 };
+            EditMealCommand command = new() { MealId = mealId, Meal = meal, UserId = _userId };
             await _mediator.Send(command);
             return Ok();
         }
@@ -70,7 +72,7 @@ namespace CaloriesAPI.Controllers
         [Route("meal/{mealId:int}")]
         public async Task<IActionResult> DeleteMeal(int mealId)
         {
-            DeleteMealCommand command = new() { MealId = mealId, UserId = 1 };
+            DeleteMealCommand command = new() { MealId = mealId, UserId = _userId };
             await _mediator.Send(command);
             return Ok();
         }

@@ -46,12 +46,12 @@ namespace AuthenticationAPI.Controllers
                 return Unauthorized();
             }
 
-            List<Claim> claims = new()
-            {
-                new (JwtRegisteredClaimNames.Sub, user.Email ),
-                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new (JwtRegisteredClaimNames.Email, user.Email),
-            };
+            List<Claim> claims =
+            [
+                new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Email, user.Email),
+            ];
 
             SigningCredentials credentials = new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TOKEN_KEY"])), SecurityAlgorithms.HmacSha256);
             JwtSecurityTokenHandler tokenHandler = new();
