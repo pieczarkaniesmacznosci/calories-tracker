@@ -81,7 +81,10 @@ namespace API
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CaloriesAPI v1");
+            });
 
             app.UseRouting();
             ApplyMigration(app);

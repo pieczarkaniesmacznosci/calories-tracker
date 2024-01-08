@@ -1,0 +1,84 @@
+{
+  "Routes": [
+    //TODO configure other endpoints
+    //"AuthenticationAPI": "http://localhost:5001",
+    {
+      "DownstreamPathTemplate": "/api/identity",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/identity",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "authentication"
+    },
+    //"CaloriesAPI": "http://localhost:5002",
+    {
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "calories"
+    },
+    //"UserAPI": "http://localhost:5002",
+    {
+      "DownstreamPathTemplate": "/api/userWeight",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/userWeight",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "user"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "authentication",
+      "Config": [
+        {
+          "Name": "AuthenticationAPI",
+          "Version": "v1",
+          "Url": "http://localhost:5001/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "calories",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "CaloriesAPI",
+          "Version": "v1",
+          "Url": "http://localhost:5002/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "user",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "UserAPI",
+          "Version": "v1",
+          "Url": "http://localhost:5003/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+  }
+}

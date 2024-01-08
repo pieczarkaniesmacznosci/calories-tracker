@@ -2,8 +2,6 @@
   "profiles": {
     "CaloriesAPI": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TRACLY_PROFILE": "Local"
