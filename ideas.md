@@ -8,6 +8,7 @@
 -  [ ] release strategy
 -  [ ] message broker
 -  [ ] create gRPC service
+-  [ ] create microservices
 -  [x] implement mediator
 -  [ ] implement GraphQL
 

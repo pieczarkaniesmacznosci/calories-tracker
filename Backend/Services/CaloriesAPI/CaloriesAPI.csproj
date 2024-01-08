@@ -21,7 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.8" />
     <PackageReference Include="SQLite.CodeFirst" Version="1.7.0.34" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />

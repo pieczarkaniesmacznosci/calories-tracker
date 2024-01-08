@@ -17,14 +17,6 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TRACLY_PROFILE": "Local"
       }
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
     }
   }
 }
