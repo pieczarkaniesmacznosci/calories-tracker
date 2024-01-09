@@ -11,9 +11,9 @@ namespace UserService.Endpoints
     {
         public static void MapUserEndpoints(this IEndpointRouteBuilder builder)
         {
-            var userWeightGroup = builder.MapGroup("userWeight").RequireAuthorization();
+            var userWeightGroup = builder.MapGroup("api/userweight").RequireAuthorization();
 
-            userWeightGroup.MapGet("userWeights", async (SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userWeightGroup.MapGet("all", async (SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
@@ -44,77 +44,77 @@ namespace UserService.Endpoints
                 return Results.Ok();
             });
 
-            userWeightGroup.MapPut("{userWeightId}", async (int userWeightId, UserWeightDto userWeight, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userWeightGroup.MapPut("{userweightid}", async (int userweightid, UserWeightDto userWeight, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"UPDATE UserWeight SET Weight = @Weight, Date = @Date WHERE Id = @UserWeightId AND UserId = @UserId";
-                await connection.ExecuteAsync(sql, new { Weight = userWeight.Weight, Date = userWeight.Date, UserWeightId = userWeightId, UserId = userId });
+                await connection.ExecuteAsync(sql, new { Weight = userWeight.Weight, Date = userWeight.Date, UserWeightId = userweightid, UserId = userId });
                 return Results.NoContent();
             });
 
-            userWeightGroup.MapDelete("{userWeightId}", async (int userWeightId, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userWeightGroup.MapDelete("{userweightid}", async (int userweightid, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"DELETE FROM UserWeight WHERE Id = @UserWeightId AND UserId = @UserId";
-                await connection.ExecuteAsync(sql, new { UserWeightId = userWeightId, UserId = userId });
+                await connection.ExecuteAsync(sql, new { UserWeightId = userweightid, UserId = userId });
                 return Results.NoContent();
             });
 
 
-            var UserNutritionGroup = builder.MapGroup("UserNutrition").RequireAuthorization();
+            var userNutritionGroup = builder.MapGroup("api/usernutrition").RequireAuthorization();
 
-            UserNutritionGroup.MapGet("UserNutritions", async (SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userNutritionGroup.MapGet("all", async (SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
-                const string sql = $"SELECT UserId, Weight, Date FROM UserNutrition WHERE UserId = @UserId";
+                const string sql = $"SELECT UserId, Kcal, Protein, Carbohydrates, Fat, Date FROM UserNutrition WHERE UserId = @UserId";
                 var result = await connection.QueryAsync<UserNutrition>(sql, new { UserId = userId });
                 return Results.Ok(result);
             });
 
-            UserNutritionGroup.MapGet("{UserNutritionId}", async (int userNutritionId, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userNutritionGroup.MapGet("{usernutritionid}", async (int usernutritionid, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
-                const string sql = $"SELECT UserId, Weight, Date FROM UserNutrition WHERE Id = @UserNutritionId AND UserId = @UserId";
-                var result = await connection.QuerySingleOrDefaultAsync<UserNutrition>(sql, new { UserNutritionId = userNutritionId, UserId = userId });
+                const string sql = $"SELECT UserId, Kcal, Protein, Carbohydrates, Fat, Date FROM UserNutrition WHERE Id = @UserNutritionId AND UserId = @UserId";
+                var result = await connection.QuerySingleOrDefaultAsync<UserNutrition>(sql, new { UserNutritionId = usernutritionid, UserId = userId });
                 return Results.Ok(result);
             });
 
-            UserNutritionGroup.MapPost("", async (UserNutritionDto userNutrition, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userNutritionGroup.MapPost("", async (UserNutritionDto userNutrition, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
-                const string sql = $"INSERT INTO UserNutrition (Protein, Carbohydrates, Fat, UserId, Date)" +
+                const string sql = $"INSERT INTO UserNutrition (Kcal, Protein, Carbohydrates, Fat, UserId, Date)" +
                 $"VALUES(@Protein, @Carbohydrates, @Fat, @UserId, @Date)";
-                await connection.ExecuteAsync(sql, new { Protein = userNutrition.Protein, Carbohydrates = userNutrition.Carbohydrates, Fat = userNutrition.Fat, Date = userNutrition.Date, UserId = userId });
+                await connection.ExecuteAsync(sql, new { Kcal = userNutrition.Kcal, Protein = userNutrition.Protein, Carbohydrates = userNutrition.Carbohydrates, Fat = userNutrition.Fat, Date = userNutrition.Date, UserId = userId });
                 return Results.Ok();
             });
 
-            UserNutritionGroup.MapPut("{UserNutritionId}", async (int userNutritionId, UserNutritionDto userNutrition, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userNutritionGroup.MapPut("{usernutritionid}", async (int usernutritionid, UserNutritionDto userNutrition, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
-                const string sql = $"UPDATE UserNutrition SET Weight = @Weight, Date = @Date WHERE Id = @UserNutritionId AND UserId = @UserId";
-                await connection.ExecuteAsync(sql, new { Weight = userNutrition, Date = userNutrition.Date, UserNutritionId = userNutritionId, UserId = userId });
+                const string sql = $"UPDATE UserNutrition SET Kcal = @Kcal, Protein = @Protein, Carbohydrates = @Carbohydrates, Fat = @Fat, Date = @Date WHERE Id = @UserNutritionId AND UserId = @UserId";
+                await connection.ExecuteAsync(sql, new { Protein = userNutrition.Protein, Carbohydrates = userNutrition.Carbohydrates, Fat = userNutrition.Fat, Kcal = userNutrition.Kcal, Date = userNutrition.Date, UserNutritionId = usernutritionid, UserId = userId });
                 return Results.NoContent();
             });
 
-            UserNutritionGroup.MapDelete("{UserNutritionId}", async (int userNutritionId, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
+            userNutritionGroup.MapDelete("{usernutritionid}", async (int usernutritionid, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
                 int userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"DELETE FROM UserNutrition WHERE Id = @UserNutritionId AND UserId = @UserId";
-                await connection.ExecuteAsync(sql, new { UserNutritionId = userNutritionId, UserId = userId });
+                await connection.ExecuteAsync(sql, new { UserNutritionId = usernutritionid, UserId = userId });
                 return Results.NoContent();
             });
         }

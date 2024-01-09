@@ -37,7 +37,7 @@ builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddCustomJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerGenWithBearerToken();
 builder.Services.AddAuthorization();

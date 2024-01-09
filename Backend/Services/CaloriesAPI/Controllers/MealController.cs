@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace CaloriesAPI.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/[controller]")]
     [Authorize]
     public class MealController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("meals")]
+        [Route("all")]
         public async Task<IActionResult> GetMeals()
         {
             GetMealsQuery query = new() { UserId = _userId };
@@ -33,17 +33,16 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("meal/{id}")]
-        public async Task<IActionResult> GetMeal(int id)
+        [Route("{mealId}")]
+        public async Task<IActionResult> GetMealById(int mealId)
         {
-            GetMealByIdQuery query = new() { MealId = id, UserId = _userId };
+            GetMealByIdQuery query = new() { MealId = mealId, UserId = _userId };
             MealDto result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet]
-        [Route("meals/{mealName}")]
-        public async Task<IActionResult> FindProductByName(string mealName)
+        public async Task<IActionResult> FindMealByName([FromQuery] string mealName)
         {
             GetMealsByNameQuery query = new() { MealName = mealName, UserId = _userId };
             IEnumerable<MealDto> result = await _mediator.Send(query);
@@ -51,7 +50,6 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpPost]
-        [Route("meal")]
         public async Task<IActionResult> CreateMeal(MealDto meal)
         {
             CreateMealCommand command = new() { Meal = meal, UserId = _userId };
@@ -60,7 +58,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpPut]
-        [Route("meal")]
+        [Route("{mealId}")]
         public async Task<IActionResult> EditMeal(int mealId, MealDto meal)
         {
             EditMealCommand command = new() { MealId = mealId, Meal = meal, UserId = _userId };
@@ -69,7 +67,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("meal/{mealId:int}")]
+        [Route("{mealId:int}")]
         public async Task<IActionResult> DeleteMeal(int mealId)
         {
             DeleteMealCommand command = new() { MealId = mealId, UserId = _userId };

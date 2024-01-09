@@ -61,6 +61,7 @@ namespace API
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             services.AddHttpContextAccessor();
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddSwaggerGenWithBearerToken();
             services.AddAuthorization();
         }

@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 namespace CaloriesAPI.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/[controller]")]
     [Authorize]
-    public class ProductsController : ControllerBase
+    public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
         private int _userId => Request.HttpContext.User.GetLoggedInUserSub();
 
-        public ProductsController(
+        public ProductController(
             IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet]
-        [Route("products")]
+        [Route("all")]
         public async Task<IActionResult> GetProducts()
         {
             GetProductsQuery query = new() { UserId = _userId, IsUserAdmin = true };
@@ -34,7 +34,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("product/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
             GetProductByIdQuery query = new() { ProductId = id, UserId = _userId, IsUserAdmin = true };
@@ -43,8 +43,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("products/{name}")]
-        public async Task<IActionResult> FindProductsByName(string name)
+        public async Task<IActionResult> FindProductsByName([FromQuery] string name)
         {
             GetProductByNameQuery query = new() { ProductName = name, UserId = _userId, IsUserAdmin = true };
             IEnumerable<ProductDto> result = await _mediator.Send(query);
@@ -52,7 +51,6 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpPost]
-        [Route("product")]
         public async Task<IActionResult> CreateProduct(ProductDto product)
         {
             CreateProductCommand command = new() { UserId = _userId, IsUserAdmin = true, Product = product };
@@ -63,7 +61,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpPut]
-        [Route("product/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> EditProduct(int id, ProductDto product)
         {
             EditProductCommand command = new() { UserId = _userId, IsUserAdmin = true, ProductId = id, Product = product };
@@ -73,7 +71,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("product/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             DeleteProductCommand command = new() { UserId = _userId, IsUserAdmin = true, ProductId = id };

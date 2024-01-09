@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace CaloriesAPI.Controllers
 {
     [ApiController]
-    [Route("api/mealLog")]
+    [Route("api/[controller]")]
     [Authorize]
     public class MealLogController : ControllerBase
     {
@@ -25,7 +25,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("mealLogs")]
+        [Route("all")]
         public async Task<IActionResult> GetMealLogs()
         {
             GetMealLogsQuery query = new() { UserId = _userId };
@@ -34,8 +34,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{mealLogId:int}")]
-        public async Task<IActionResult> GetMealLog(int mealLogId)
+        public async Task<IActionResult> GetMealLog([FromQuery] int mealLogId)
         {
             GetMealLogByIdQuery query = new() { UserId = _userId, MealLogId = mealLogId };
             MealLogDto result = await _mediator.Send(query);
@@ -44,7 +43,7 @@ namespace CaloriesAPI.Controllers
 
         [HttpGet]
         [Route("{date:dateTime}")]
-        public async Task<IActionResult> GetMealLog(DateTime date)
+        public async Task<IActionResult> GetMealLogByDate([FromQuery] DateTime date)
         {
             GetMealLogsByDateQuery query = new() { UserId = _userId, MealLogDate = date };
             IEnumerable<MealLogDto> result = await _mediator.Send(query);
@@ -60,6 +59,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpPut]
+        [Route("{mealLogId}")]
         public async Task<IActionResult> EditMealLog(int mealLogId, MealLogDto mealLog)
         {
             EditMealLogCommand command = new() { UserId = _userId, MealLogId = mealLogId, MealLog = mealLog };
@@ -68,6 +68,7 @@ namespace CaloriesAPI.Controllers
         }
 
         [HttpDelete]
+        [Route("{mealLogId}")]
         public async Task<IActionResult> DeleteMealLog(int mealLogId)
         {
             DeleteMealLogCommand command = new() { UserId = _userId, MealLogId = mealLogId };

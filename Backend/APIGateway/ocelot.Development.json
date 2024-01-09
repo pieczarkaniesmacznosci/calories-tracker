@@ -17,7 +17,7 @@
     },
     //"CaloriesAPI": "http://localhost:5002",
     {
-      "DownstreamPathTemplate": "/api/products",
+      "DownstreamPathTemplate": "/api/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -25,13 +25,78 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/api/products",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/product/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/product",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meal/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meal/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meal",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meal",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meallog/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meallog/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meallog",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meallog",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
       "SwaggerKey": "calories"
     },
     //"UserAPI": "http://localhost:5002",
     {
-      "DownstreamPathTemplate": "/api/userWeight",
+      "DownstreamPathTemplate": "/api/userweight",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -39,8 +104,47 @@
           "Port": 5003
         }
       ],
-      "UpstreamPathTemplate": "/api/userWeight",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/userweight",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/userweight/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/userweight/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "SwaggerKey": "user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/usernutrition",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/usernutrition",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/usernutrition/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/usernutrition/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "SwaggerKey": "user"
     }
   ],
@@ -57,7 +161,6 @@
     },
     {
       "Key": "calories",
-      "TransformByOcelotConfig": false,
       "Config": [
         {
           "Name": "CaloriesAPI",
@@ -68,7 +171,6 @@
     },
     {
       "Key": "user",
-      "TransformByOcelotConfig": false,
       "Config": [
         {
           "Name": "UserAPI",
