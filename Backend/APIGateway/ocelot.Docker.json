@@ -6,7 +6,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5001
         }
       ],
@@ -20,7 +20,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5002
         }
       ],
@@ -33,7 +33,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5002
         }
       ],
@@ -46,7 +46,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5002
         }
       ],
@@ -59,7 +59,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5002
         }
       ],
@@ -72,7 +72,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5002
         }
       ],
@@ -85,7 +85,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5002
         }
       ],
@@ -99,7 +99,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5003
         }
       ],
@@ -112,7 +112,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5003
         }
       ],
@@ -125,7 +125,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5003
         }
       ],
@@ -138,7 +138,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 5003
         }
       ],
@@ -154,7 +154,7 @@
         {
           "Name": "AuthenticationAPI",
           "Version": "v1",
-          "Url": "http://localhost:5001/swagger/v1/swagger.json"
+          "Url": "http://host.docker.internal:5001/swagger/v1/swagger.json"
         }
       ]
     },
@@ -164,7 +164,7 @@
         {
           "Name": "CaloriesAPI",
           "Version": "v1",
-          "Url": "http://localhost:5002/swagger/v1/swagger.json"
+          "Url": "http://host.docker.internal:5002/swagger/v1/swagger.json"
         }
       ]
     },
@@ -174,12 +174,12 @@
         {
           "Name": "UserAPI",
           "Version": "v1",
-          "Url": "http://localhost:5003/swagger/v1/swagger.json"
+          "Url": "http://host.docker.internal:5003/swagger/v1/swagger.json"
         }
       ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
+    "BaseUrl": "http://host.docker.internal:5000"
   }
 }

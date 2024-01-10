@@ -51,14 +51,16 @@ namespace AuthenticationAPI
 
         static void ApplyMigration(WebApplication app)
         {
-            using (var scope = app.Services.CreateScope())
-            {
-                var _db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+            using var scope = app.Services.CreateScope();
+            var _db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
 
-                if (_db.Database.GetPendingMigrations().Count() > 0)
-                {
-                    _db.Database.Migrate();
-                }
+            if (_db.Database.GetPendingMigrations().Any())
+            {
+                Console.WriteLine("Waiting 10s for database initialization...");
+                Thread.Sleep(10 * 1000);
+                Console.WriteLine("Applying Migrations...");
+                _db.Database.Migrate();
+                Console.WriteLine("Migrations applied successfully.");
             }
         }
     }

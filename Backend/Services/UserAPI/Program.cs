@@ -64,6 +64,10 @@ static void ApplyMigration(WebApplication app)
 
     if (_db.Database.GetPendingMigrations().Any())
     {
+        Console.WriteLine("Waiting 10s for database initialization...");
+        Thread.Sleep(10 * 1000);
+        Console.WriteLine("Applying Migrations...");
         _db.Database.Migrate();
+        Console.WriteLine("Migrations applied successfully.");
     }
 }
