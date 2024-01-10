@@ -6,10 +6,12 @@ namespace AuthenticationAPI.Extensions
     {
         public static int GetLoggedInUserSub(this ClaimsPrincipal principal)
         {
-            if (principal == null)
-                throw new ArgumentNullException(nameof(principal));
+            ArgumentNullException.ThrowIfNull(principal);
 
-            return int.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier.ToString()));
+            var userSub = principal.FindFirstValue(ClaimTypes.NameIdentifier.ToString());
+            ArgumentNullException.ThrowIfNull(userSub);
+
+            return int.Parse(userSub);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace AuthenticationAPI.Controllers
         public async Task<IActionResult> GenerateToken([FromBody] AuthenticationRequest authenticationRequest)
         {
 
-            User user = await _userManager.FindByNameAsync(authenticationRequest.UserName);
+            User? user = await _userManager.FindByNameAsync(authenticationRequest.UserName);
 
             if (user == null)
             {
@@ -50,10 +50,10 @@ namespace AuthenticationAPI.Controllers
             [
                 new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new(JwtRegisteredClaimNames.Email, user.Email),
+                new(JwtRegisteredClaimNames.Email, user.Email!),
             ];
 
-            SigningCredentials credentials = new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TOKEN_KEY"])), SecurityAlgorithms.HmacSha256);
+            SigningCredentials credentials = new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TOKEN_KEY"]!)), SecurityAlgorithms.HmacSha256);
             JwtSecurityTokenHandler tokenHandler = new();
 
             SecurityTokenDescriptor tokenDescriptor = new()

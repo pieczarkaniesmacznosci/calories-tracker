@@ -4,13 +4,13 @@ namespace Entities
 {
     public class User : IdentityUser<int>
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
     }
 
     public class Role : IdentityRole<int>
     {
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 
     public class UserRole : IdentityUserRole<int>

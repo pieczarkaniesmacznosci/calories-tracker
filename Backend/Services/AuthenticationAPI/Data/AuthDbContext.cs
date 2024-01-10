@@ -29,7 +29,7 @@ namespace AuthenticationAPI.Data
                 LastName = "Smith",
                 Email = _config["AdminName"],
                 UserName = _config["AdminName"],
-                NormalizedUserName = _config["AdminName"].ToUpper(),
+                NormalizedUserName = _config["AdminName"]!.ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
@@ -40,13 +40,13 @@ namespace AuthenticationAPI.Data
                 LastName = "Murray",
                 Email = _config["RegularUserName"],
                 UserName = _config["RegularUserName"],
-                NormalizedUserName = _config["RegularUserName"].ToUpper(),
+                NormalizedUserName = _config["RegularUserName"]!.ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
             PasswordHasher<User> ph = new();
-            user.PasswordHash = ph.HashPassword(user, _config["AdminPassword"]);
-            regularUser.PasswordHash = ph.HashPassword(regularUser, _config["RegularUserPassword"]);
+            user.PasswordHash = ph.HashPassword(user, _config["AdminPassword"]!);
+            regularUser.PasswordHash = ph.HashPassword(regularUser, _config["RegularUserPassword"]!);
 
             modelBuilder.Entity<User>().HasData(user, regularUser);
 
