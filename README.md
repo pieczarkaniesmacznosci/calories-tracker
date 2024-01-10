@@ -7,9 +7,9 @@ To use tracly API for development purposes use docker-compose orchestration. doc
 1. Clone the solution.
 2. Run your Docker Engine (e.g. through Docker Desktop on Windows).
 3. Navigate to docker-compose files location `.\Backend`.
-4. To run API two options are configured:
+4. To run API two options are configured (for initial database creation and migration follow 4a):
     a. Running containerized API services and SQL server:
-    -  execute `docker-compose -f .\docker-compose.api.yml up --build`. This will run API and provide API documentation, which can be accessed from http://localhost:5000.
+    -  execute `docker-compose -f .\docker-compose.api.yml up --build`. This will run API and provide API documentation, which can be accessed from http://localhost:5000/swagger/index.html.
 
     b. Running local API services and containerized SQL server:
     - execute `docker-compose -f .\docker-compose.db.yml up --build`
