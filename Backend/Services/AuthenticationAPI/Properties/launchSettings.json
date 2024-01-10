@@ -4,9 +4,8 @@
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "TRACLY_PROFILE": "Local"
+        "RUN_PROFILE": "Local"
       },
-      "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5001"
     },
     "Docker": {

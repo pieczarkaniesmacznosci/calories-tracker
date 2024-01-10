@@ -12,7 +12,7 @@ builder.Services.AddSingleton(serviceProvider =>
 {
     var configuration = builder.Configuration;
     string connectionStingName = "SqlServer";
-    if (builder.Configuration["TRACLY_PROFILE"] == "Local")
+    if (builder.Configuration["RUN_PROFILE"] == "Local")
         connectionStingName = "SqlServerLocal";
 
     var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));
@@ -26,7 +26,7 @@ builder.Services.AddSingleton(serviceProvider =>
 builder.Services.AddDbContext<UserDbContext>(options =>
 {
     string connectionStingName = "SqlServer";
-    if (builder.Configuration["TRACLY_PROFILE"] == "Local")
+    if (builder.Configuration["RUN_PROFILE"] == "Local")
         connectionStingName = "SqlServerLocal";
 
     var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));

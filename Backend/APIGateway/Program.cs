@@ -9,7 +9,7 @@ namespace APIGateway
         {
             var builder = WebApplication.CreateBuilder(args);
             string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (builder.Configuration["TRACLY_PROFILE"] != "Local")
+            if (builder.Configuration["RUN_PROFILE"] != "Local")
                 env = "Docker";
             builder.Configuration.AddJsonFile($"ocelot.{env}.json");
 

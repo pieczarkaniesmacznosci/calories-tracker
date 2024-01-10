@@ -22,7 +22,7 @@ namespace AuthenticationAPI
             builder.Services.AddDbContext<AuthDbContext>(options =>
             {
                 string connectionStingName = "SqlServer";
-                if (builder.Configuration["TRACLY_PROFILE"] == "Local")
+                if (builder.Configuration["RUN_PROFILE"] == "Local")
                     connectionStingName = "SqlServerLocal";
 
                 var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));
