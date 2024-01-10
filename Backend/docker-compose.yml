@@ -1,0 +1,77 @@
+version: "3.4"
+services:
+   tracly-db:
+      image: mcr.microsoft.com/mssql/server
+      container_name: tracly_db
+      user: root
+      volumes:
+         - ~docker-volumes/tracly-db-server:/var/opt/mssql/data
+      env_file:
+      - ./../.env
+      environment:
+         SA_PASSWORD: "${DB_PW}"
+         ACCEPT_EULA: "Y"
+      ports:
+         - "1434:1433"
+      networks:
+         - tracly-network
+   api-gateway:
+      build:
+         context: .
+         dockerfile: ./APIGateway/Dockerfile
+      container_name: api_gateway
+      ports:
+         - 5000:8080
+      depends_on:
+         - tracly-db
+         - authentication-api
+         - calories-api
+         - user-api
+      env_file:
+      - ./../.env
+      networks:
+         - tracly-network
+   authentication-api:
+      build:
+         context: .
+         dockerfile: ./Services/AuthenticationAPI/Dockerfile
+      container_name: authentication_api
+      ports:
+         - 5001:8080
+      depends_on:
+         - tracly-db
+      env_file:
+      - ./../.env
+      networks:
+         - tracly-network
+   calories-api:
+      build:
+         context: .
+         dockerfile: ./Services/CaloriesAPI/Dockerfile
+      container_name: calories_api
+      ports:
+         - 5002:8080
+      depends_on:
+         - tracly-db
+      env_file:
+      - ./../.env
+      networks:
+         - tracly-network
+   user-api:
+      build:
+         context: .
+         dockerfile: ./Services/UserAPI/Dockerfile
+      container_name: user_api
+      ports:
+         - 5003:8080
+      depends_on:
+         - tracly-db
+      env_file:
+      - ./../.env
+      networks:
+         - tracly-network
+volumes:
+   tracly-db-server:
+networks:
+  tracly-network:
+    driver: bridge
