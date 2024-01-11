@@ -24,18 +24,18 @@ services:
          - 5000:8080
       depends_on:
          - tracly-db
-         - authentication-api
+         - identity-api
          - calories-api
          - user-api
       env_file:
       - ./../.env
       networks:
          - tracly-network
-   authentication-api:
+   identity-api:
       build:
          context: .
-         dockerfile: ./Services/AuthenticationAPI/Dockerfile
-      container_name: authentication_api
+         dockerfile: ./Services/IdentityAPI/Dockerfile
+      container_name: identity_api
       ports:
          - 5001:8080
       depends_on:

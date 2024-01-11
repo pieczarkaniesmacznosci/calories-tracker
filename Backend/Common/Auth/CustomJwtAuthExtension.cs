@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-namespace JwtAuthenticationManager
+namespace Common.Auth
 {
     public static class CustomJwtAuthExtension
     {

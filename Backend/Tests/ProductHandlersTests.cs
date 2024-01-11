@@ -17,6 +17,7 @@ namespace Tests
 {
     public class ProductHandlersTests
     {
+        private readonly Guid _userGuid = new("99000000-0000-0000-0000-000000000000");
         private Mock<IAsyncRepository<Product>> _productRepository;
         private Mock<IMapper> _mapper;
 
@@ -30,18 +31,17 @@ namespace Tests
         [Test]
         public async Task GetProductsQueryHandler_WhenValid_ReturnsSuccessResultWithCollectionOfUserAndDefaultProducts()
         {
-            int userId = 1;
             List<Product> products = new(){
                 new(){
-                    UserId = userId,
+                    UserId = _userGuid,
                     IsDefault = false
                 },
                 new(){
-                    UserId = userId,
+                    UserId = _userGuid,
                     IsDefault = false
                 },
                 new(){
-                    UserId = userId,
+                    UserId = _userGuid,
                     IsDefault = true
                 }
             };
@@ -76,12 +76,11 @@ namespace Tests
         {
             int productId = It.IsAny<int>();
             string productName = "Test1";
-            int userId = 1;
             bool isUserAdmin = false;
 
             List<Product> products = new(){
                 new(){
-                    UserId = userId,
+                    UserId = _userGuid,
                     Name = productName,
                     IsDefault = false
                     }
@@ -103,7 +102,7 @@ namespace Tests
                 _productRepository.Object,
                 _mapper.Object);
 
-            ProductDto result = await getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { IsUserAdmin = isUserAdmin, UserId = userId, ProductId = productId }, CancellationToken.None);
+            ProductDto result = await getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { IsUserAdmin = isUserAdmin, UserId = _userGuid, ProductId = productId }, CancellationToken.None);
 
             Assert.That(4, Is.EqualTo(result.Id));
             Assert.That(productName, Is.EqualTo(result.Name));
@@ -114,11 +113,10 @@ namespace Tests
         {
             int productId = It.IsAny<int>();
             string productName = "Test1";
-            int userId = 1;
 
             Product product = new()
             {
-                UserId = It.Is<int>(x => x != userId),
+                UserId = It.Is<Guid>(x => x != _userGuid),
                 Name = productName,
                 IsDefault = false
             };
@@ -139,7 +137,7 @@ namespace Tests
                 _mapper.Object
                 );
 
-            var result = await getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { UserId = userId, IsUserAdmin = true, ProductId = productId }, CancellationToken.None);
+            var result = await getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { UserId = _userGuid, IsUserAdmin = true, ProductId = productId }, CancellationToken.None);
 
             Assert.That(productName, Is.EqualTo(result.Name));
         }
@@ -148,7 +146,6 @@ namespace Tests
         public void GetProductByIdQueryHandler_WhenInvalidIdUserHasAdminRole_ReturnsNotFoundResult()
         {
             int productId = It.IsAny<int>();
-            int userId = 1;
             bool isUserAdmin = true;
 
             _productRepository.Setup(x => x.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult((Product)null));
@@ -157,7 +154,7 @@ namespace Tests
                 _productRepository.Object,
                 _mapper.Object);
 
-            Assert.ThrowsAsync<KeyNotFoundException>(() => getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { UserId = userId, IsUserAdmin = isUserAdmin, ProductId = productId }, CancellationToken.None));
+            Assert.ThrowsAsync<KeyNotFoundException>(() => getProductByIdQueryHandler.Handle(new GetProductByIdQuery() { UserId = _userGuid, IsUserAdmin = isUserAdmin, ProductId = productId }, CancellationToken.None));
         }
     }
 }

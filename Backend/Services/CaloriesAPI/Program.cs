@@ -1,17 +1,16 @@
 using AutoMapper;
 using CaloriesAPI.Validators;
+using Common;
+using Common.Auth;
 using DbContexts;
-using JwtAuthenticationManager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repositories;
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 
 namespace API
@@ -27,15 +26,7 @@ namespace API
 
             builder.Services.AddDbContext<CaloriesDbContext>(options =>
             {
-                string connectionStingName = "SqlServer";
-                if (builder.Configuration["RUN_PROFILE"] == "Local")
-                    connectionStingName = "SqlServerLocal";
-
-                var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));
-                var connectionString = rawConnectionString
-                    .Replace("ENVID", builder.Configuration["DB_UID"])
-                    .Replace("ENVDBPW", builder.Configuration["DB_PW"])
-                    .ToString();
+                var connectionString = builder.Configuration.GetConnectionStringWithLoginCredentials("SqlServerLocal", "SqlServer");
                 options.UseSqlServer(connectionString);
             });
 

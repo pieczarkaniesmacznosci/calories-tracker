@@ -1,21 +1,23 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AuthenticationAPI.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace IdentityAPI.Migrations
 {
+    /// <inheritdoc />
     public partial class InitialCreate : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -29,10 +31,9 @@ namespace AuthenticationAPI.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -59,7 +60,7 @@ namespace AuthenticationAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -80,7 +81,7 @@ namespace AuthenticationAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -102,7 +103,7 @@ namespace AuthenticationAPI.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,10 +120,10 @@ namespace AuthenticationAPI.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(34)", maxLength: 34, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -145,7 +146,7 @@ namespace AuthenticationAPI.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -166,8 +167,8 @@ namespace AuthenticationAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "Administration role", "Admin", "ADMIN" },
-                    { 2, null, "User role", "User", "USER" }
+                    { new Guid("00000000-1000-0000-0000-000000000000"), null, "Administration role", "Admin", "ADMIN" },
+                    { new Guid("00000000-2000-0000-0000-000000000000"), null, "User role", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -175,19 +176,18 @@ namespace AuthenticationAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, "236ac578-40ff-4a1b-b09a-f3839f4fb6c2", "admin@tracly.com", false, "Mike", "Smith", false, null, null, "ADMIN@TRACLY.COM", "AQAAAAIAAYagAAAAEKwL/EJDbr5MTAcpttTUZZYgJ5vkbY4U0z17bNG4RP2+ohabbw3psidRafaIajSe7A==", null, false, "1abed63d-749d-4425-9487-f8cd44c03c7a", false, "admin@tracly.com" },
-                    { 2, 0, "a709fe32-bfec-47c9-b5d3-c222f582c67a", "user@tracly.com", false, "Dave", "Murray", false, null, null, "USER@TRACLY.COM", "AQAAAAIAAYagAAAAEDhbpAWP246dHH7z0fyuFbHIZfGrgjQgcZHHfEwjUZMIkB7oDJ5eSqxUJ4ZroRlHzQ==", null, false, "8e97d52f-7d73-4f50-b529-0ea012d321a4", false, "user@tracly.com" }
+                    { new Guid("10000000-0000-0000-0000-000000000000"), 0, "feb17d0d-f17a-41ae-8f4c-0f429b290c9a", "admin@tracly.com", false, "Mike", "Smith", false, null, null, "ADMIN@TRACLY.COM", "AQAAAAIAAYagAAAAEIu6vsneEOh8ny2ZkRrZ+deM26dGnmEVRsrg53cfgEvJgyIBCUwUBuB1gjz1VcC2Mg==", null, false, "3ab53527-b4d1-45ac-a56e-e9925b5aba56", false, "admin@tracly.com" },
+                    { new Guid("20000000-0000-0000-0000-000000000000"), 0, "9888e9e0-f262-4d9d-b3b2-be1b3c1ac506", "user@tracly.com", false, "Dave", "Murray", false, null, null, "USER@TRACLY.COM", "AQAAAAIAAYagAAAAEHu1krVqWRbdG2k3ceBHY4gT/CxWMZa1ES327EA8U8Tnz/FBwEqH9w9GE+ve8mODQg==", null, false, "7e258388-ebdb-496b-ad0e-bbc61e38f337", false, "user@tracly.com" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId", "Discriminator", "Id" },
-                values: new object[] { 1, 1, "UserRole", 1 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId", "Discriminator", "Id" },
-                values: new object[] { 2, 2, "UserRole", 2 });
+                values: new object[,]
+                {
+                    { new Guid("00000000-1000-0000-0000-000000000000"), new Guid("10000000-0000-0000-0000-000000000000"), "UserRole", new Guid("fe226ff9-5e70-492e-bc88-106f8abf5c68") },
+                    { new Guid("00000000-2000-0000-0000-000000000000"), new Guid("20000000-0000-0000-0000-000000000000"), "UserRole", new Guid("896ed755-036e-4f9f-9e1a-193a55aa699f") }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -229,6 +229,7 @@ namespace AuthenticationAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

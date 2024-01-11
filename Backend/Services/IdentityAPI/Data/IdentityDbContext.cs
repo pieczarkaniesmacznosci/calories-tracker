@@ -3,13 +3,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthenticationAPI.Data
+namespace IdentityAPI.Data
 {
-    public class AuthDbContext : IdentityDbContext<User, Role, int>
+    public class IdentityDbContext : IdentityDbContext<User, Role, Guid>
     {
+        private static readonly Guid _adminGuid = new("10000000-0000-0000-0000-000000000000");
+        private static readonly Guid _userGuid = new("20000000-0000-0000-0000-000000000000");
+        private static readonly Guid _adminRoleGuid = new("00000000-1000-0000-0000-000000000000");
+        private static readonly Guid _userRoleGuid = new("00000000-2000-0000-0000-000000000000");
         private readonly IConfiguration _config;
 
-        public AuthDbContext(DbContextOptions<AuthDbContext> options, IConfiguration configuration) : base(options)
+        public IdentityDbContext(DbContextOptions<IdentityDbContext> options, IConfiguration configuration) : base(options)
         {
             _config = configuration;
         }
@@ -24,7 +28,7 @@ namespace AuthenticationAPI.Data
         {
             var user = new User
             {
-                Id = 1,
+                Id = _adminGuid,
                 FirstName = "Mike",
                 LastName = "Smith",
                 Email = _config["AdminName"],
@@ -35,7 +39,7 @@ namespace AuthenticationAPI.Data
 
             var regularUser = new User
             {
-                Id = 2,
+                Id = _userGuid,
                 FirstName = "Dave",
                 LastName = "Murray",
                 Email = _config["RegularUserName"],
@@ -51,13 +55,13 @@ namespace AuthenticationAPI.Data
             modelBuilder.Entity<User>().HasData(user, regularUser);
 
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Admin", NormalizedName = "ADMIN", Description = "Administration role" },
-                new Role { Id = 2, Name = "User", NormalizedName = "USER", Description = "User role" }
+                new Role { Id = _adminRoleGuid, Name = "Admin", NormalizedName = "ADMIN", Description = "Administration role" },
+                new Role { Id = _userRoleGuid, Name = "User", NormalizedName = "USER", Description = "User role" }
             );
 
             modelBuilder.Entity<UserRole>().HasData(
-                new UserRole { Id = 1, RoleId = 1, UserId = 1 },
-                new UserRole { Id = 2, RoleId = 2, UserId = 2 }
+                new UserRole { Id = Guid.NewGuid(), RoleId = _adminRoleGuid, UserId = _adminGuid },
+                new UserRole { Id = Guid.NewGuid(), RoleId = _userRoleGuid, UserId = _userGuid }
             );
         }
     }

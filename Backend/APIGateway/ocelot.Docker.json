@@ -1,158 +1,10 @@
 {
-  "Routes": [
-    //"AuthenticationAPI": "http://localhost:5001",
-    {
-      "DownstreamPathTemplate": "/api/identity",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5001
-        }
-      ],
-      "UpstreamPathTemplate": "/api/identity",
-      "UpstreamHttpMethod": [ "Post" ],
-      "SwaggerKey": "authentication"
-    },
-    //"CaloriesAPI": "http://localhost:5002",
-    {
-      "DownstreamPathTemplate": "/api/product/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/product/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
-      "SwaggerKey": "calories"
-    },
-    {
-      "DownstreamPathTemplate": "/api/product",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/product",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "SwaggerKey": "calories"
-    },
-    {
-      "DownstreamPathTemplate": "/api/meal/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/meal/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
-      "SwaggerKey": "calories"
-    },
-    {
-      "DownstreamPathTemplate": "/api/meal",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/meal",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "SwaggerKey": "calories"
-    },
-    {
-      "DownstreamPathTemplate": "/api/meallog/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/meallog/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
-      "SwaggerKey": "calories"
-    },
-    {
-      "DownstreamPathTemplate": "/api/meallog",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/meallog",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "SwaggerKey": "calories"
-    },
-    //"UserAPI": "http://localhost:5002",
-    {
-      "DownstreamPathTemplate": "/api/userweight",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5003
-        }
-      ],
-      "UpstreamPathTemplate": "/api/userweight",
-      "UpstreamHttpMethod": [ "Post" ],
-      "SwaggerKey": "user"
-    },
-    {
-      "DownstreamPathTemplate": "/api/userweight/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5003
-        }
-      ],
-      "UpstreamPathTemplate": "/api/userweight/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "SwaggerKey": "user"
-    },
-    {
-      "DownstreamPathTemplate": "/api/usernutrition",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5003
-        }
-      ],
-      "UpstreamPathTemplate": "/api/usernutrition",
-      "UpstreamHttpMethod": [ "Post" ],
-      "SwaggerKey": "user"
-    },
-    {
-      "DownstreamPathTemplate": "/api/usernutrition/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 5003
-        }
-      ],
-      "UpstreamPathTemplate": "/api/usernutrition/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "SwaggerKey": "user"
-    }
-  ],
   "SwaggerEndPoints": [
     {
-      "Key": "authentication",
+      "Key": "identity",
       "Config": [
         {
-          "Name": "AuthenticationAPI",
+          "Name": "IdentityAPI",
           "Version": "v1",
           "Url": "http://host.docker.internal:5001/swagger/v1/swagger.json"
         }
@@ -180,6 +32,11 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://host.docker.internal:5000"
+    "BaseUrl": "http://localhost:5000",
+    "Hosts": {
+      "IdentityService": "http://host.docker.internal:5001",
+      "CaloriesService": "http://host.docker.internal:5002",
+      "UserService": "http://host.docker.internal:5003"
+    }
   }
 }

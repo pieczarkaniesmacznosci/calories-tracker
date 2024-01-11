@@ -12,7 +12,7 @@ using UserAPI.DbContexts;
 namespace UserAPI.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20240104223252_InitialCreate")]
+    [Migration("20240111181145_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace UserAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -48,8 +48,8 @@ namespace UserAPI.Migrations
                     b.Property<double>("Protein")
                         .HasColumnType("float");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -64,7 +64,7 @@ namespace UserAPI.Migrations
                             Fat = 57.509999999999998,
                             Kcal = 2070.0,
                             Protein = 142.0,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -79,8 +79,8 @@ namespace UserAPI.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Weight")
                         .HasColumnType("float");
@@ -94,7 +94,7 @@ namespace UserAPI.Migrations
                         {
                             Id = 1,
                             Date = new DateTime(2020, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = 1,
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000"),
                             Weight = 71.5
                         });
                 });

@@ -54,7 +54,7 @@ namespace CaloriesAPI.Mediator.Handlers
             await _productAsyncRepository.AddAsync(productEntity);
         }
 
-        private async Task<bool> IsProductNameValid(int userId, int? productId, string productName)
+        private async Task<bool> IsProductNameValid(Guid userId, int? productId, string productName)
         {
             if ((await _productAsyncRepository.FindAsync(x => x.Name == productName && x.IsAvailable && (x.UserId == userId || x.IsDefault) && (productId.HasValue ? x.Id != productId : true))).FirstOrDefault() != null)
             {

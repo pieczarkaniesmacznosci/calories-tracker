@@ -8,18 +8,18 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Services/CaloriesAPI/CaloriesAPI.csproj", "Services/CaloriesAPI/"]
+COPY ["Services/IdentityAPI/IdentityAPI.csproj", "Services/IdentityAPI/"]
 COPY ["Common/Common.csproj", "Common/"]
-RUN dotnet restore "./Services/CaloriesAPI/./CaloriesAPI.csproj"
+RUN dotnet restore "./Services/IdentityAPI/./IdentityAPI.csproj"
 COPY . .
-WORKDIR "/src/Services/CaloriesAPI"
-RUN dotnet build "./CaloriesAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Services/IdentityAPI"
+RUN dotnet build "./IdentityAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./CaloriesAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./IdentityAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CaloriesAPI.dll"]
+ENTRYPOINT ["dotnet", "IdentityAPI.dll"]

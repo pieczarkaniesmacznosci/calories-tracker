@@ -1,5 +1,6 @@
 ﻿using CaloriesAPI.Dtos;
 using MediatR;
+using System;
 using System.Collections.Generic;
 
 namespace CaloriesAPI.Mediator.Queries
@@ -8,6 +9,6 @@ namespace CaloriesAPI.Mediator.Queries
     {
         public string ProductName { get; set; }
         public bool IsUserAdmin { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

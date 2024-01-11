@@ -1,4 +1,4 @@
-﻿namespace JwtAuthenticationManager.Model
+﻿namespace Common.Auth.Model
 {
     public class AuthenticationRequest
     {

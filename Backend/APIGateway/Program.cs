@@ -11,16 +11,18 @@ namespace APIGateway
             string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!;
             if (builder.Configuration["RUN_PROFILE"] != "Local")
                 env = "Docker";
+            Console.WriteLine(env);
+            builder.Configuration.AddJsonFile($"ocelot.json");
             builder.Configuration.AddJsonFile($"ocelot.{env}.json");
 
-            // Add services to the container.
             builder.Services.AddAuthorization();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSwaggerForOcelot(builder.Configuration);
-            builder.Services.AddOcelot();
+            builder.Services.AddOcelot(builder.Configuration);
+
+            builder.Services.ConfigureDownstreamHostAndPortsPlaceholders(builder.Configuration);
 
             var app = builder.Build();
 

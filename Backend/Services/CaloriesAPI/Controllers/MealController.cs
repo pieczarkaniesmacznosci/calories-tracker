@@ -1,10 +1,11 @@
-using AuthenticationAPI.Extensions;
 using CaloriesAPI.Dtos;
 using CaloriesAPI.Mediator.Command;
 using CaloriesAPI.Mediator.Query;
+using Common.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace CaloriesAPI.Controllers
     public class MealController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private int _userId => Request.HttpContext.User.GetLoggedInUserSub();
+        private Guid _userId => Request.HttpContext.User.GetLoggedInUserSub();
         public MealController(
             IMediator mediator)
         {

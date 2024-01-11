@@ -9,12 +9,12 @@ To use tracly API for development purposes use docker-compose orchestration. doc
 3. Navigate to docker-compose files location `.\Backend`.
 4. To run API two options are configured (for initial database creation and migration follow 4a):
     a. Running containerized API services and SQL server:
-    -  execute `docker-compose -f .\docker-compose.api.yml up --build`. This will run API and provide API documentation, which can be accessed from http://localhost:5000/swagger/index.html.
+    -  execute `docker-compose -f .\docker-compose.yml up --build`. This will run API and provide API documentation, which can be accessed from http://localhost:5000/swagger/index.html.
 
     b. Running local API services and containerized SQL server:
     - execute `docker-compose -f .\docker-compose.db.yml up --build`
-    - navigate to each service folder containing .csproj files (`.\Services\AuthenticationAPI`, `.\Services\CaloriesAPI`, `.\Services\UserAPI`) and run the following commands to create secrets.json entries: 
+    - navigate to each service folder containing .csproj files (`.\Services\IdentityAPI`, `.\Services\CaloriesAPI`, `.\Services\UserAPI`) and run the following commands to create secrets.json entries: 
         - `dotnet user-secrets set "DB_PW" "<DB_PW value from .env>"`
         - `dotnet user-secrets set "DB_UID" "<DB_UID value from .env>"`
         - `dotnet user-secrets set "TOKEN_KEY" "<some very long token key that will be used.>"`
-    - run dotnet API projects using Multiple startup projects (APIGateway, AuthenticationAPI, CaloriesAPI, UserAPI).
+    - run dotnet API projects using Multiple startup projects (APIGateway, IdentityAPI, CaloriesAPI, UserAPI).

@@ -1,10 +1,10 @@
-using AuthenticationAPI.Data;
+using Common;
 using Entities;
+using IdentityAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Text;
 
-namespace AuthenticationAPI
+namespace IdentityAPI
 {
     public class Program
     {
@@ -12,24 +12,14 @@ namespace AuthenticationAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddIdentity<User, Role>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<AuthDbContext>();
+            }).AddEntityFrameworkStores<IdentityDbContext>();
 
-            builder.Services.AddDbContext<AuthDbContext>(options =>
+            builder.Services.AddDbContext<IdentityDbContext>(options =>
             {
-                string connectionStingName = "SqlServer";
-                if (builder.Configuration["RUN_PROFILE"] == "Local")
-                    connectionStingName = "SqlServerLocal";
-
-                var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));
-                var connectionString = rawConnectionString
-                    .Replace("ENVID", builder.Configuration["DB_UID"])
-                    .Replace("ENVDBPW", builder.Configuration["DB_PW"])
-                    .ToString();
+                var connectionString = builder.Configuration.GetConnectionStringWithLoginCredentials("SqlServerLocal", "SqlServer");
                 options.UseSqlServer(connectionString);
             });
 
@@ -52,7 +42,7 @@ namespace AuthenticationAPI
         static void ApplyMigration(WebApplication app)
         {
             using var scope = app.Services.CreateScope();
-            var _db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+            var _db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
 
             if (_db.Database.GetPendingMigrations().Any())
             {

@@ -1,5 +1,5 @@
-﻿using Entities;
-using JwtAuthenticationManager.Model;
+﻿using Common.Auth.Model;
+using Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace AuthenticationAPI.Controllers
+namespace IdentityAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
