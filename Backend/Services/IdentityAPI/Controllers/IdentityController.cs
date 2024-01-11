@@ -1,5 +1,5 @@
-﻿using Entities;
-using JwtAuthenticationManager.Model;
+﻿using Common.Auth.Model;
+using Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

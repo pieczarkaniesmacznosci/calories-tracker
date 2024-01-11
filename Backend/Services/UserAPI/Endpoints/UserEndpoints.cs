@@ -1,4 +1,4 @@
-﻿using IdentityAPI.Extensions;
+﻿using Common.Auth;
 using Dapper;
 using Entities;
 using System.Security.Claims;

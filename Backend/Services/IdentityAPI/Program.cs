@@ -1,8 +1,8 @@
+using Common;
 using Entities;
 using IdentityAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Text;
 
 namespace IdentityAPI
 {
@@ -12,8 +12,6 @@ namespace IdentityAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddIdentity<User, Role>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
@@ -21,15 +19,7 @@ namespace IdentityAPI
 
             builder.Services.AddDbContext<IdentityDbContext>(options =>
             {
-                string connectionStingName = "SqlServer";
-                if (builder.Configuration["RUN_PROFILE"] == "Local")
-                    connectionStingName = "SqlServerLocal";
-
-                var rawConnectionString = new StringBuilder(builder.Configuration.GetConnectionString(connectionStingName));
-                var connectionString = rawConnectionString
-                    .Replace("ENVID", builder.Configuration["DB_UID"])
-                    .Replace("ENVDBPW", builder.Configuration["DB_PW"])
-                    .ToString();
+                var connectionString = builder.Configuration.GetConnectionStringWithLoginCredentials("SqlServerLocal", "SqlServer");
                 options.UseSqlServer(connectionString);
             });
 

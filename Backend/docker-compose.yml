@@ -35,7 +35,7 @@ services:
       build:
          context: .
          dockerfile: ./Services/IdentityAPI/Dockerfile
-      container_name: authentication_api
+      container_name: identity_api
       ports:
          - 5001:8080
       depends_on:

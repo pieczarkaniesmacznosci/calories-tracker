@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace IdentityAPI.Extensions
+namespace Common.Auth
 {
     public static class ClaimsPrincipalExtensions
     {

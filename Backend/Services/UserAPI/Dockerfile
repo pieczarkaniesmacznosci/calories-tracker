@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/UserAPI/UserAPI.csproj", "Services/UserAPI/"]
-COPY ["JwtAuthenticationManager/JwtAuthenticationManager.csproj", "JwtAuthenticationManager/"]
+COPY ["Common/Common.csproj", "Common/"]
 RUN dotnet restore "./Services/UserAPI/./UserAPI.csproj"
 COPY . .
 WORKDIR "/src/Services/UserAPI"

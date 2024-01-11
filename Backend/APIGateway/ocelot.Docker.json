@@ -34,11 +34,9 @@
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5000",
     "Hosts": {
-      "Hosts": {
-        "IdentityService": "http://host.docker.internal:5001",
-        "CaloriesService": "http://host.docker.internal:5002",
-        "UserService": "http://host.docker.internal:5003"
-      }
+      "IdentityService": "http://host.docker.internal:5001",
+      "CaloriesService": "http://host.docker.internal:5002",
+      "UserService": "http://host.docker.internal:5003"
     }
   }
 }

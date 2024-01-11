@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/IdentityAPI/IdentityAPI.csproj", "Services/IdentityAPI/"]
-COPY ["JwtAuthenticationManager/JwtAuthenticationManager.csproj", "JwtAuthenticationManager/"]
+COPY ["Common/Common.csproj", "Common/"]
 RUN dotnet restore "./Services/IdentityAPI/./IdentityAPI.csproj"
 COPY . .
 WORKDIR "/src/Services/IdentityAPI"

@@ -1,7 +1,7 @@
-﻿using IdentityAPI.Extensions;
-using CaloriesAPI.Dtos;
+﻿using CaloriesAPI.Dtos;
 using CaloriesAPI.Mediator.Commands;
 using CaloriesAPI.Mediator.Queries;
+using Common.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

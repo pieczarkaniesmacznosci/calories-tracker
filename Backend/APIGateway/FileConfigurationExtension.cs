@@ -14,6 +14,7 @@ namespace APIGateway
                     .GetSection($"{nameof(FileConfiguration.GlobalConfiguration)}:Hosts")
                     .Get<GlobalHosts>()!;
 
+                Console.WriteLine("--------------------------------------------");
                 foreach (var route in fileConfiguration.Routes)
                 {
                     ConfigureRoute(route, globalHosts);
@@ -36,6 +37,8 @@ namespace APIGateway
                         route.DownstreamScheme = uri.Scheme;
                         hostAndPort.Host = uri.Host;
                         hostAndPort.Port = uri.Port;
+                        Console.WriteLine(hostAndPort.Host);
+                        Console.WriteLine(hostAndPort.Port);
                     }
                 }
             }
