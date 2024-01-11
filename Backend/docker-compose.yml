@@ -34,7 +34,7 @@ services:
    authentication-api:
       build:
          context: .
-         dockerfile: ./Services/AuthenticationAPI/Dockerfile
+         dockerfile: ./Services/IdentityAPI/Dockerfile
       container_name: authentication_api
       ports:
          - 5001:8080

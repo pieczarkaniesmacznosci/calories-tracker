@@ -1,4 +1,4 @@
-﻿using AuthenticationAPI.Extensions;
+﻿using IdentityAPI.Extensions;
 using CaloriesAPI.Dtos;
 using CaloriesAPI.Mediator.Command;
 using CaloriesAPI.Mediator.Query;
@@ -17,7 +17,7 @@ namespace CaloriesAPI.Controllers
     public class MealLogController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private int _userId => Request.HttpContext.User.GetLoggedInUserSub();
+        private Guid _userId => Request.HttpContext.User.GetLoggedInUserSub();
         public MealLogController(
             IMediator mediator)
         {

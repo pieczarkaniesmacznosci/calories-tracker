@@ -1,10 +1,10 @@
-using AuthenticationAPI.Data;
 using Entities;
+using IdentityAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text;
 
-namespace AuthenticationAPI
+namespace IdentityAPI
 {
     public class Program
     {
@@ -17,9 +17,9 @@ namespace AuthenticationAPI
             builder.Services.AddIdentity<User, Role>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<AuthDbContext>();
+            }).AddEntityFrameworkStores<IdentityDbContext>();
 
-            builder.Services.AddDbContext<AuthDbContext>(options =>
+            builder.Services.AddDbContext<IdentityDbContext>(options =>
             {
                 string connectionStingName = "SqlServer";
                 if (builder.Configuration["RUN_PROFILE"] == "Local")
@@ -52,7 +52,7 @@ namespace AuthenticationAPI
         static void ApplyMigration(WebApplication app)
         {
             using var scope = app.Services.CreateScope();
-            var _db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+            var _db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
 
             if (_db.Database.GetPendingMigrations().Any())
             {

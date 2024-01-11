@@ -1,11 +1,12 @@
 ﻿using CaloriesAPI.Dtos;
 using MediatR;
+using System;
 
 namespace CaloriesAPI.Mediator.Command
 {
     public class CreateMealLogCommand : IRequest
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public MealLogDto MealLog { get; set; }
     }
 }

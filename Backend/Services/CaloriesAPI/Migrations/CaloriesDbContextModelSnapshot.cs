@@ -17,7 +17,7 @@ namespace CaloriesAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,8 +39,8 @@ namespace CaloriesAPI.Migrations
                     b.Property<string>("MealName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -52,15 +52,15 @@ namespace CaloriesAPI.Migrations
                             Id = 1,
                             Deleted = true,
                             MealName = "Initial meal",
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
-                            DateEaten = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(6101),
+                            DateEaten = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(214),
                             Deleted = false,
                             MealName = "Chicken stew",
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -78,8 +78,8 @@ namespace CaloriesAPI.Migrations
                     b.Property<int>("MealId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -91,23 +91,23 @@ namespace CaloriesAPI.Migrations
                         new
                         {
                             Id = 1,
-                            DateEaten = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(6123),
+                            DateEaten = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(234),
                             MealId = 1,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
-                            DateEaten = new DateTime(2024, 1, 3, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(6126),
+                            DateEaten = new DateTime(2024, 1, 10, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(238),
                             MealId = 1,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 3,
-                            DateEaten = new DateTime(2024, 1, 2, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(6129),
+                            DateEaten = new DateTime(2024, 1, 9, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(241),
                             MealId = 2,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -213,8 +213,8 @@ namespace CaloriesAPI.Migrations
                     b.Property<double>("Protein")
                         .HasColumnType("float");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -225,131 +225,131 @@ namespace CaloriesAPI.Migrations
                         {
                             Id = 1,
                             Carbohydrates = 0.0,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5900),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(53),
                             Fat = 3.0,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 111.0,
                             Name = "Chicken",
                             Protein = 21.0,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
                             Carbohydrates = 76.599999999999994,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5948),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(102),
                             Fat = 0.69999999999999996,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 339.5,
                             Name = "Rice",
                             Protein = 6.7000000000000002,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 3,
                             Carbohydrates = 51.100000000000001,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5951),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(105),
                             Fat = 38.399999999999999,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 580.79999999999995,
                             Name = "Milky Chocolate",
                             Protein = 7.7000000000000002,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 4,
                             Carbohydrates = 52.5,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5953),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(107),
                             Fat = 1.3,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 237.69999999999999,
                             Name = "White bread",
                             Protein = 4.0,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 5,
                             Carbohydrates = 20.0,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5956),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(110),
                             Fat = 0.90000000000000002,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 94.5,
                             Name = "Tomato ketchup",
                             Protein = 1.6000000000000001,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 6,
                             Carbohydrates = 0.10000000000000001,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5958),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(112),
                             Fat = 20.699999999999999,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 288.69999999999999,
                             Name = "Gouda cheese",
                             Protein = 25.5,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 7,
                             Carbohydrates = 4.4000000000000004,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5961),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(114),
                             Fat = 0.5,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 28.899999999999999,
                             Name = "Passata - Sottile Gusto",
                             Protein = 1.7,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 8,
                             Carbohydrates = 4.7000000000000002,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5963),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(116),
                             Fat = 0.40000000000000002,
                             IsAvailable = false,
                             IsDefault = true,
                             Kcal = 27.199999999999999,
                             Name = "Onion",
                             Protein = 1.2,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 9,
                             Carbohydrates = 0.0,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5966),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(118),
                             Fat = 2.2999999999999998,
                             IsAvailable = true,
                             IsDefault = true,
                             Kcal = 107.8,
                             Name = "Beef",
                             Protein = 20.100000000000001,
-                            UserId = 1
+                            UserId = new Guid("10000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 10,
                             Carbohydrates = 0.0,
-                            DateAdded = new DateTime(2024, 1, 4, 19, 10, 33, 918, DateTimeKind.Local).AddTicks(5968),
+                            DateAdded = new DateTime(2024, 1, 11, 19, 12, 6, 294, DateTimeKind.Local).AddTicks(120),
                             Fat = 3.0,
                             IsAvailable = true,
                             IsDefault = false,
                             Kcal = 123.0,
                             Name = "Turkey",
                             Protein = 21.0,
-                            UserId = 2
+                            UserId = new Guid("20000000-0000-0000-0000-000000000000")
                         });
                 });
 

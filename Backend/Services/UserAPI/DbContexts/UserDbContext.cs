@@ -5,6 +5,8 @@ namespace UserAPI.DbContexts
 {
     public class UserDbContext : DbContext
     {
+        private static readonly Guid _adminUserGuid = new("10000000-0000-0000-0000-000000000000");
+
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
         {
 
@@ -31,7 +33,7 @@ namespace UserAPI.DbContexts
                 new UserWeight
                 {
                     Id = 1,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Weight = 71.5,
                     Date = new DateTime(2020, 6, 1)
                 }
@@ -44,7 +46,7 @@ namespace UserAPI.DbContexts
                 new UserNutrition()
                 {
                     Id = 1,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Kcal = 2070,
                     Protein = 142,
                     Carbohydrates = 246,

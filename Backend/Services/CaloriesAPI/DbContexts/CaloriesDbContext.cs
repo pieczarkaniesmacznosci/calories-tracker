@@ -6,6 +6,9 @@ namespace DbContexts
 {
     public class CaloriesDbContext : DbContext
     {
+        private static readonly Guid _adminUserGuid = new("10000000-0000-0000-0000-000000000000");
+        private static readonly Guid _userUserGuid = new("20000000-0000-0000-0000-000000000000");
+
         public CaloriesDbContext(DbContextOptions<CaloriesDbContext> options) : base(options)
         {
         }
@@ -44,7 +47,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 1,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Chicken",
                     Kcal = 111.0d,
                     Protein = 21.0d,
@@ -57,7 +60,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 2,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Rice",
                     Kcal = 339.5d,
                     Protein = 6.7d,
@@ -70,7 +73,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 3,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Milky Chocolate",
                     Kcal = 580.8d,
                     Protein = 7.7d,
@@ -83,7 +86,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 4,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "White bread",
                     Kcal = 237.7d,
                     Protein = 4.0d,
@@ -96,7 +99,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 5,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Tomato ketchup",
                     Kcal = 94.5d,
                     Protein = 1.6d,
@@ -109,7 +112,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 6,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Gouda cheese",
                     Kcal = 288.7d,
                     Protein = 25.5d,
@@ -122,7 +125,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 7,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Passata - Sottile Gusto",
                     Kcal = 28.9d,
                     Protein = 1.7d,
@@ -135,7 +138,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 8,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Onion",
                     Kcal = 27.2d,
                     Protein = 1.2d,
@@ -148,7 +151,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 9,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     Name = "Beef",
                     Kcal = 107.8d,
                     Protein = 20.1d,
@@ -161,7 +164,7 @@ namespace DbContexts
                 new Product()
                 {
                     Id = 10,
-                    UserId = 2,
+                    UserId = _userUserGuid,
                     Name = "Turkey",
                     Kcal = 123.0d,
                     Protein = 21.0d,
@@ -181,14 +184,14 @@ namespace DbContexts
                 {
                     Id = 1,
                     Deleted = true,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     MealName = "Initial meal"
                 },
                 new Meal()
                 {
                     Id = 2,
                     DateEaten = DateTime.Now,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                     MealName = "Chicken stew"
                 }
             );
@@ -202,21 +205,21 @@ namespace DbContexts
                     Id = 1,
                     MealId = 1,
                     DateEaten = DateTime.Now,
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                 },
                 new MealLog()
                 {
                     Id = 2,
                     MealId = 1,
                     DateEaten = DateTime.Now.AddDays(-1),
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                 },
                 new MealLog()
                 {
                     Id = 3,
                     MealId = 2,
                     DateEaten = DateTime.Now.AddDays(-2),
-                    UserId = 1,
+                    UserId = _adminUserGuid,
                 }
             );
         }

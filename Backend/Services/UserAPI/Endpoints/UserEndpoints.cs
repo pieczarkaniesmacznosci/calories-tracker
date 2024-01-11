@@ -1,4 +1,4 @@
-﻿using AuthenticationAPI.Extensions;
+﻿using IdentityAPI.Extensions;
 using Dapper;
 using Entities;
 using System.Security.Claims;
@@ -15,7 +15,7 @@ namespace UserService.Endpoints
 
             userWeightGroup.MapGet("all", async (SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"SELECT UserId, Weight, Date FROM UserWeight WHERE UserId = @UserId";
@@ -25,7 +25,7 @@ namespace UserService.Endpoints
 
             userWeightGroup.MapGet("{userWeightId}", async (int userWeightId, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"SELECT UserId, Weight, Date FROM UserWeight WHERE Id = @UserWeightId AND UserId = @UserId";
@@ -35,7 +35,7 @@ namespace UserService.Endpoints
 
             userWeightGroup.MapPost("", async (UserWeightDto userWeight, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"INSERT INTO UserWeight (Weight, Date)" +
@@ -46,7 +46,7 @@ namespace UserService.Endpoints
 
             userWeightGroup.MapPut("{userweightid}", async (int userweightid, UserWeightDto userWeight, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"UPDATE UserWeight SET Weight = @Weight, Date = @Date WHERE Id = @UserWeightId AND UserId = @UserId";
@@ -56,7 +56,7 @@ namespace UserService.Endpoints
 
             userWeightGroup.MapDelete("{userweightid}", async (int userweightid, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"DELETE FROM UserWeight WHERE Id = @UserWeightId AND UserId = @UserId";
@@ -69,7 +69,7 @@ namespace UserService.Endpoints
 
             userNutritionGroup.MapGet("all", async (SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"SELECT UserId, Kcal, Protein, Carbohydrates, Fat, Date FROM UserNutrition WHERE UserId = @UserId";
@@ -79,7 +79,7 @@ namespace UserService.Endpoints
 
             userNutritionGroup.MapGet("{usernutritionid}", async (int usernutritionid, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"SELECT UserId, Kcal, Protein, Carbohydrates, Fat, Date FROM UserNutrition WHERE Id = @UserNutritionId AND UserId = @UserId";
@@ -89,7 +89,7 @@ namespace UserService.Endpoints
 
             userNutritionGroup.MapPost("", async (UserNutritionDto userNutrition, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"INSERT INTO UserNutrition (Kcal, Protein, Carbohydrates, Fat, UserId, Date)" +
@@ -100,7 +100,7 @@ namespace UserService.Endpoints
 
             userNutritionGroup.MapPut("{usernutritionid}", async (int usernutritionid, UserNutritionDto userNutrition, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"UPDATE UserNutrition SET Kcal = @Kcal, Protein = @Protein, Carbohydrates = @Carbohydrates, Fat = @Fat, Date = @Date WHERE Id = @UserNutritionId AND UserId = @UserId";
@@ -110,7 +110,7 @@ namespace UserService.Endpoints
 
             userNutritionGroup.MapDelete("{usernutritionid}", async (int usernutritionid, SqlConnectionFactory sqlConnectionFactory, ClaimsPrincipal user) =>
             {
-                int userId = user.GetLoggedInUserSub();
+                Guid userId = user.GetLoggedInUserSub();
                 using var connection = sqlConnectionFactory.Create();
 
                 const string sql = $"DELETE FROM UserNutrition WHERE Id = @UserNutritionId AND UserId = @UserId";

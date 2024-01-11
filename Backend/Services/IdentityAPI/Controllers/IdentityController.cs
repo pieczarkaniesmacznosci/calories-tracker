@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace AuthenticationAPI.Controllers
+namespace IdentityAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

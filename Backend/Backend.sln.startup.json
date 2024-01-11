@@ -15,8 +15,8 @@
         "APIGateway": {
           "ProfileName": "APIGateway"
         },
-        "AuthenticationAPI": {
-          "ProfileName": "AuthenticationAPI"
+        "IdentityAPI": {
+          "ProfileName": "IdentityAPI"
         },
         "CaloriesAPI": {
           "ProfileName": "CaloriesAPI"

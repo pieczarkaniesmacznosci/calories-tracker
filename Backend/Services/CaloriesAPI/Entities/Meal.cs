@@ -6,7 +6,7 @@ namespace Entities
 {
     public class Meal : Entity
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public double Weight => MealProducts.Sum(x => x.Weight);
         public bool Deleted { get; set; }
         public string MealName { get; set; }
