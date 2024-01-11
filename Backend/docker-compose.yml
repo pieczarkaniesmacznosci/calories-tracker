@@ -24,14 +24,14 @@ services:
          - 5000:8080
       depends_on:
          - tracly-db
-         - authentication-api
+         - identity-api
          - calories-api
          - user-api
       env_file:
       - ./../.env
       networks:
          - tracly-network
-   authentication-api:
+   identity-api:
       build:
          context: .
          dockerfile: ./Services/IdentityAPI/Dockerfile

@@ -1,2 +1,142 @@
 {
+  "Routes": [
+
+    //"IdentityAPI"
+    {
+      "DownstreamPathTemplate": "/api/identity",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{IdentityService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/identity",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "identity"
+    },
+
+    //"CaloriesAPI"
+    {
+      "DownstreamPathTemplate": "/api/product/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{CaloriesService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/product",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{CaloriesService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meal/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{CaloriesService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meal/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meal",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{CaloriesService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meal",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meallog/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{CaloriesService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meallog/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+      "SwaggerKey": "calories"
+    },
+    {
+      "DownstreamPathTemplate": "/api/meallog",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{CaloriesService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/meallog",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "SwaggerKey": "calories"
+    },
+
+    //"UserAPI"
+    {
+      "DownstreamPathTemplate": "/api/userweight",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{UserService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/userweight",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/userweight/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{UserService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/userweight/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "SwaggerKey": "user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/usernutrition",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{UserService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/usernutrition",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/usernutrition/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "{UserService}"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/usernutrition/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "SwaggerKey": "user"
+    }
+  ]
 }
